@@ -1,0 +1,51 @@
+@import url('https://fonts.googleapis.com/css?family=Lato');
+
+@import 'navbar.less';
+@import 'textbox-container.less';
+
+body {
+  font-family: 'Lato', sans-serif;
+  background-color: #edebde;
+}
+
+#home {
+
+  height: 100vh;
+  //background-color: #DFDBC3;
+  background-image: url('../images/spoketIKoketText.png');
+  background-size: 70%;
+  background-repeat: no-repeat;
+  background-position: center center;
+  position: relative;
+
+  #on-site-navigation {
+
+    position: absolute;
+    bottom: 10%;
+    width: 100%;
+    //left: 40%;
+    //z-index: 100;
+
+  }
+
+  #off-site-navigation {
+
+    position: absolute;
+    top: 50%;
+    -webkit-transform: translateY(-50%);
+    -moz-transform: translateY(-50%);
+    -ms-transform: translateY(-50%);
+    -o-transform: translateY(-50%);
+    transform: translateY(-50%);
+    left: 10%;
+
+  }
+
+  .textbox-container {
+
+    width: 70%;
+    margin-left: 15%;
+
+  }
+}
+
