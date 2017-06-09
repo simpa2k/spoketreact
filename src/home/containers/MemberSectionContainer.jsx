@@ -1,5 +1,6 @@
 import React from 'react';
 import SectionContainer from './SectionContainer.jsx';
+import Member from '../presentational/Member.jsx';
 
 class MemberSectionContainer extends SectionContainer {
 
@@ -10,7 +11,8 @@ class MemberSectionContainer extends SectionContainer {
     parseData(data) {
 
         return data.map((member, index) => {
-            return <p key={index}>{member.firstname} {member.lastname} - {member.instrument}</p>;
+            //return <p key={index}>{member.firstname} {member.lastname} - {member.instrument}</p>;
+            return <Member key={member + '-' + index} data={member} index={index} />
         });
     }
 }

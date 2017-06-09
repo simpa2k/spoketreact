@@ -2,6 +2,7 @@ import React from 'react';
 
 import SectionContainer from './SectionContainer.jsx';
 import Gig from '../presentational/Gig.jsx';
+import Gigs from '../presentational/Gigs.jsx';
 
 class GigsSectionContainer extends SectionContainer {
 
@@ -11,9 +12,10 @@ class GigsSectionContainer extends SectionContainer {
 
     parseData(data) {
 
-        return data.map((gig, index) => {
+        /*return data.map((gig, index) => {
             return <Gig key={index} data={gig} />
-        });
+        });*/
+        return <Gigs gigs={data} />
     }
 }
 

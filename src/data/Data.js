@@ -101,6 +101,28 @@ class Data {
         successCallback(members);
 
     }
+
+    getContactInfo(successCallback, errorCallback) {
+
+        return successCallback({
+
+            email: 'spoketikoket@gmail.com',
+            contactPersons: [
+
+                {
+                    country: 'SE',
+                    phonenumber: '46 (0)73 55 91 230',
+                    name: 'Nisse Blomster'
+
+                },
+                {
+                    country: 'DK',
+                    phonenumber: '+45 50 42 18 35',
+                    name: 'Mads Kjøller-Henningsen'
+                }
+            ]
+        });
+    }
 }
 
 export default Data;

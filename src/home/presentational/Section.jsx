@@ -6,8 +6,8 @@ class Section extends React.Component {
 
         return (
 
-            <div>
-                <h1>{this.props.heading}</h1>
+            <div className="section">
+                <h1 className="section-heading">{this.props.heading}</h1>
                 {this.props.children}
             </div>
         )

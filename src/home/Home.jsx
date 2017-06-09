@@ -10,6 +10,7 @@ import StickyNavbar from "../stickyNavbar/StickyNavbar.jsx";
 import GigsSectionContainer from "./containers/GigsSectionContainer.jsx";
 import MemberSectionContainer from "./containers/MemberSectionContainer.jsx";
 import DescriptionSectionContainer from "./containers/DescriptionSectionContainer.jsx";
+import ContactSectionContainer from './containers/ContactSectionContainer.jsx';
 
 class Home extends React.Component {
 
@@ -125,9 +126,9 @@ class Home extends React.Component {
                                       data={this.state.data}
                                       ref={(mediaSection) => { this.mediaSection = mediaSection; }}/>
 
-                    <SectionContainer heading="KONTAKT"
-                                      data={this.state.data}
-                                      ref={(contactSection) => {this.contactSection = contactSection; }}/>
+                    <ContactSectionContainer heading="KONTAKT"
+                                             data={this.state.data}
+                                             ref={(contactSection) => {this.contactSection = contactSection; }}/>
 
                 </div>
             </div>
