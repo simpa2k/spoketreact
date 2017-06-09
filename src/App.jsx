@@ -3,7 +3,7 @@ import { Switch, Route } from 'react-router-dom';
 
 import AdminContainer from './admin/containers/AdminContainer.jsx';
 import Login from './admin/Login.jsx';
-import Home from './public/Home.jsx';
+import Home from './home/Home.jsx';
 
 class App extends React.Component {
 

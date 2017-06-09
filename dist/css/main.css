@@ -91,8 +91,6 @@
   display: inline-block;
   width: 48%;
 }
-/*@import '../../../../bower_components/bootstrap/less/variables.less';
-@import '../../../../bower_components/bootstrap/less/bootstrap.less';*/
 /*!
  * Bootstrap v3.3.7 (http://getbootstrap.com)
  * Copyright 2011-2016 Twitter, Inc.
@@ -7050,7 +7048,7 @@ button.close {
   padding-bottom: 10px;
 }
 body {
-  font-family: 'Lato', sans-serif;
+  font-family: 'Oswald', sans-serif;
   margin: 0;
 }
 .react-parallax {

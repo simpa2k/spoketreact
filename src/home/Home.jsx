@@ -69,18 +69,19 @@ class Home extends React.Component {
         ];
 
         this.offSiteNavItems = [
+
             {
-                src: 'facebooklogga_29.png',
+                src: require('../../dist/images/socialmedia/facebooklogga_29.png'),
                 destination: 'https://www.facebook.com',
                 imageText: ''
             },
             {
-                src: 'spotify_29.png',
+                src: require('../../dist/images/socialmedia/spotify_29.png'),
                 destination: 'https://www.spotify.com',
                 imageText: ''
             },
             {
-                src: 'yt29.png',
+                src: require('../../dist/images/socialmedia/yt29.png'),
                 destination: 'https://www.youtube.com',
                 imageText: ''
             }
@@ -111,9 +112,7 @@ class Home extends React.Component {
 
                     <SectionContainer heading="OM SPÖKET"
                                       ref={(aboutSection) => { this.aboutSection = aboutSection; }}
-                                      getContent={() => {
-                        return <p>{this.state.data.getDescription()}</p>
-                    }} />
+                                      getContent={() => { return <p>{this.state.data.getDescription() }</p> }} />
 
                     <SectionContainer heading="SPÖKET ÄR"
                                       data={this.state.data}
