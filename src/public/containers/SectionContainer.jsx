@@ -1,5 +1,6 @@
 import React from 'react';
 import Section from '../presentational/Section.jsx';
+import offset from '../../utils/offset.js';
 
 class SectionContainer extends React.Component {
 
@@ -9,6 +10,10 @@ class SectionContainer extends React.Component {
        this.state = {
            data: this.props.data
        };
+    }
+
+    getTop() {
+        return offset(this.sectionDiv).top;
     }
 
     getHeading() {
@@ -25,7 +30,9 @@ class SectionContainer extends React.Component {
     render() {
 
         return (
-            <Section heading={this.getHeading()}>{this.getContent()}</Section>
+            <div ref={(sectionDiv) => { this.sectionDiv = sectionDiv }}>
+                <Section heading={this.getHeading()}>{this.getContent()}</Section>
+            </div>
         )
     }
 }
