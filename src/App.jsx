@@ -1,15 +1,17 @@
 import React from 'react';
 import { Switch, Route } from 'react-router-dom';
 
-import Home from './Home.jsx';
-import Test from './presentational/Test.jsx';
+import AdminContainer from './admin/containers/AdminContainer.jsx';
+import Login from './admin/Login.jsx';
+import Home from './public/Home.jsx';
 
 class App extends React.Component {
 
     render() {
         return (
             <Switch>
-                <Route exact path="/test" component={Test} />
+                <Route path="/admin" component={AdminContainer} />
+                <Route path="/login" component={Login} />
                 <Route path="/" component={Home} />
             </Switch>
         );
