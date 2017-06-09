@@ -5,10 +5,14 @@ import Gig from '../presentational/Gig.jsx';
 
 class GigsSectionContainer extends SectionContainer {
 
-    getContent() {
+    getContent(successCallback, errorCallback) {
+        this.state.data.getGigs(successCallback, errorCallback);
+    }
 
-        return this.state.data.getGigs().map((gig, index) => {
-            return <Gig key={index} data={gig} />;
+    parseData(data) {
+
+        return data.map((gig, index) => {
+            return <Gig key={index} data={gig} />
         });
     }
 }

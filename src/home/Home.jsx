@@ -3,10 +3,13 @@ import { Parallax } from "react-parallax";
 
 import Data from '../data/Data.js';
 import SectionContainer from "./containers/SectionContainer.jsx";
-import GigsSectionContainer from "./containers/GigsSectionContainer.jsx";
 import ParallaxImageContainer from "./containers/ParallaxImageContainer.jsx";
 import offset from '../utils/offset.js';
 import StickyNavbar from "../stickyNavbar/StickyNavbar.jsx";
+
+import GigsSectionContainer from "./containers/GigsSectionContainer.jsx";
+import MemberSectionContainer from "./containers/MemberSectionContainer.jsx";
+import DescriptionSectionContainer from "./containers/DescriptionSectionContainer.jsx";
 
 class Home extends React.Component {
 
@@ -110,13 +113,13 @@ class Home extends React.Component {
 
                     <ParallaxImageContainer imageName={'about.jpg'} />
 
-                    <SectionContainer heading="OM SPÖKET"
-                                      ref={(aboutSection) => { this.aboutSection = aboutSection; }}
-                                      getContent={() => { return <p>{this.state.data.getDescription() }</p> }} />
+                    <DescriptionSectionContainer heading="OM SPÖKET"
+                                                 data={this.state.data}
+                                                 ref={(aboutSection) => { this.aboutSection = aboutSection; }} />
 
-                    <SectionContainer heading="SPÖKET ÄR"
-                                      data={this.state.data}
-                                      ref={(memberSection) => { this.memberSection = memberSection; }} />
+                    <MemberSectionContainer heading="SPÖKET ÄR"
+                                            data={this.state.data}
+                                            ref={(memberSection) => { this.memberSection = memberSection; }} />
 
                     <SectionContainer heading="MUSIK OCH MEDIA"
                                       data={this.state.data}

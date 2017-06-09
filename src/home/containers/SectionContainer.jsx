@@ -7,9 +7,18 @@ class SectionContainer extends React.Component {
     constructor(props) {
 
        super(props);
+
        this.state = {
-           data: this.props.data
+           data: this.props.data,
+           content: []
        };
+    }
+
+    componentDidMount() {
+
+        this.getContent((content) => {
+            this.setState({content: this.parseData(content)});
+        });
     }
 
     getTop() {
@@ -20,18 +29,22 @@ class SectionContainer extends React.Component {
         return this.props.heading;
     }
 
-    getContent() {
+    getContent(successCallback, errorCallback) {
 
         if (typeof(this.props.getContent) === 'function') {
-            return this.props.getContent();
+            return this.props.getContent(successCallback, errorCallback);
         }
+    }
+
+    parseData(data) {
+        return data;
     }
 
     render() {
 
         return (
             <div ref={(sectionDiv) => { this.sectionDiv = sectionDiv }}>
-                <Section heading={this.getHeading()}>{this.getContent()}</Section>
+                <Section heading={this.getHeading()}>{this.state.content}</Section>
             </div>
         )
     }

@@ -21,9 +21,9 @@ class Data {
         ];
     }
 
-    getGigs() {
+    getGigs(successCallback, errorCallback) {
 
-        return [
+        let gigs = [
 
             {
                 ticketlink: 'http://www.hässleholmsfesten.se',
@@ -33,10 +33,73 @@ class Data {
             }
 
         ];
+
+        successCallback(gigs);
+
     }
 
-    getDescription() {
-        return 'This is the description.';
+    getDescription(successCallback, errorCallback) {
+        successCallback('This is the description.');
+    }
+
+    getMembers(successCallback, errorCallback) {
+
+        let members = [
+
+            {
+                firstname: 'Clara',
+                lastname: 'Tesch',
+                instrument: 'fiol'
+            },
+            {
+                firstname: 'Mads',
+                lastname: 'Kjøller-Henningsen',
+                instrument: 'flöjter, vevlira, sång'
+            },
+            {
+                firstname: 'Emma',
+                lastname: 'Engström',
+                instrument: 'piano'
+            },
+            {
+                firstname: 'Erik',
+                lastname: 'Bengtsson',
+                instrument: 'bas'
+            },
+            {
+                firstname: 'Troels',
+                lastname: 'Strange Lorentzen',
+                instrument: 'dragspel'
+            },
+            {
+                firstname: 'Nisse',
+                lastname: 'Blomster',
+                instrument: 'gitarr, banjo, mandolin, stomp, sång'
+            },
+            {
+                firstname: 'Albin',
+                lastname: 'Lagg',
+                instrument: 'trumpet'
+            },
+            {
+                firstname: 'Ella',
+                lastname: 'Wennerberg',
+                instrument: 'trombon'
+            },
+            {
+                firstname: 'Büller',
+                lastname: 'Henrik',
+                instrument: 'barytonsax, altsax'
+            },
+            {
+                firstname: 'Erik',
+                lastname: 'Larsson',
+                instrument: 'tenorsax, klarinett'
+            }
+        ];
+
+        successCallback(members);
+
     }
 }
 
