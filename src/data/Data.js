@@ -29,9 +29,7 @@ class Data {
                 ticketlink: 'http://www.hässleholmsfesten.se',
                 datetime: '2017-08-25 16:00:00',
                 venueName: 'Hässleholms Sommarfest'
-
             }
-
         ];
 
         successCallback(gigs);
@@ -39,7 +37,7 @@ class Data {
     }
 
     getDescription(successCallback, errorCallback) {
-        successCallback('This is the description.');
+        successCallback(require('./description.html'));
     }
 
     getMembers(successCallback, errorCallback) {
