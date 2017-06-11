@@ -1,8 +1,10 @@
 const expect = require('chai').expect;
 const sinon = require('sinon');
+
+// window.fetch polyfill
 require('whatwg-fetch');
 
-const requests = require('../../src/data/requests/requests');
+const requests = require('../../../src/data/requests/requests');
 
 describe('Requests', () => {
 
