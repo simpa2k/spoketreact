@@ -36,6 +36,12 @@ class SectionContainer extends React.Component {
         }
     }
 
+    /*
+     * Most of the implementations of this function
+     * are concerned with presentation. Might be an
+     * idea to try to delegate this to a presentational
+     * component.
+     */
     parseData(data) {
         return data;
     }

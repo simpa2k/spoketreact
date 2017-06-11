@@ -1,4 +1,19 @@
+import Endpoint from './endpoints/Endpoint';
+
 class Data {
+
+    constructor() {
+
+        this.contactPersonsEndpoint = new Endpoint('contactpersons', true, true, true);
+        this.descriptionEndpoint = new Endpoint('description', true, false, false);
+        this.embeddedItemsEndpoint = new Endpoint('embeddeditems', true, true, true);
+        this.gigsEndpoint = new Endpoint('gigs', true, true, true);
+        this.imagesEndpoint = new Endpoint('images', true, true, true);
+        this.membersEndpoint = new Endpoint('members', true, true, true);
+        this.usersEndpoint = new Endpoint('users', false, false, false);
+        this.venuesEndpoint = new Endpoint('venues', true, true, false);
+
+    }
 
     getGigsModel() {
         return {
@@ -22,104 +37,33 @@ class Data {
     }
 
     getGigs(successCallback, errorCallback) {
-
-        let gigs = [
-
-            {
-                ticketlink: 'http://www.hässleholmsfesten.se',
-                datetime: '2017-08-25 16:00:00',
-                venueName: 'Hässleholms Sommarfest'
-            }
-        ];
-
-        successCallback(gigs);
-
+        this.gigsEndpoint.getRequest(successCallback, errorCallback);
     }
 
     getDescription(successCallback, errorCallback) {
-        successCallback(require('./description.html'));
+        this.descriptionEndpoint.getRequest(successCallback, errorCallback);
     }
 
     getMembers(successCallback, errorCallback) {
+        this.membersEndpoint.getRequest(successCallback, errorCallback);
+    }
 
-        let members = [
-
-            {
-                firstname: 'Clara',
-                lastname: 'Tesch',
-                instrument: 'fiol'
-            },
-            {
-                firstname: 'Mads',
-                lastname: 'Kjøller-Henningsen',
-                instrument: 'flöjter, vevlira, sång'
-            },
-            {
-                firstname: 'Emma',
-                lastname: 'Engström',
-                instrument: 'piano'
-            },
-            {
-                firstname: 'Erik',
-                lastname: 'Bengtsson',
-                instrument: 'bas'
-            },
-            {
-                firstname: 'Troels',
-                lastname: 'Strange Lorentzen',
-                instrument: 'dragspel'
-            },
-            {
-                firstname: 'Nisse',
-                lastname: 'Blomster',
-                instrument: 'gitarr, banjo, mandolin, stomp, sång'
-            },
-            {
-                firstname: 'Albin',
-                lastname: 'Lagg',
-                instrument: 'trumpet'
-            },
-            {
-                firstname: 'Ella',
-                lastname: 'Wennerberg',
-                instrument: 'trombon'
-            },
-            {
-                firstname: 'Büller',
-                lastname: 'Henrik',
-                instrument: 'barytonsax, altsax'
-            },
-            {
-                firstname: 'Erik',
-                lastname: 'Larsson',
-                instrument: 'tenorsax, klarinett'
-            }
-        ];
-
-        successCallback(members);
-
+    getEmbeddedItems(successCallback, errorCallback) {
+        this.embeddedItemsEndpoint.getRequest(successCallback, errorCallback);
     }
 
     getContactInfo(successCallback, errorCallback) {
 
-        return successCallback({
+        this.contactPersonsEndpoint.getRequest((fulfilled) => {
 
-            email: 'spoketikoket@gmail.com',
-            contactPersons: [
+            successCallback({
 
-                {
-                    country: 'SE',
-                    phonenumber: '46 (0)73 55 91 230',
-                    name: 'Nisse Blomster'
+                email: 'spoketikoket@gmail.com',
+                contactPersons: fulfilled
 
-                },
-                {
-                    country: 'DK',
-                    phonenumber: '+45 50 42 18 35',
-                    name: 'Mads Kjøller-Henningsen'
-                }
-            ]
-        });
+            });
+
+        }, errorCallback);
     }
 }
 
