@@ -12410,7 +12410,16 @@ var deleteRequest = function deleteRequest(endpoint, parameters, options, succes
 var authenticatedRequest = function authenticatedRequest(endpoint, parameters, options, successCallback, errorCallback, format) {
 
     parameters.authToken = window.localStorage.getItem('authToken');
-    request(endpoint, parameters, options, successCallback, errorCallback, format);
+
+    // Might as well stop immediately
+    if (typeof parameters.authToken === 'undefined' || parameters.authToken === null) {
+
+        errorCallback({
+            error: 'No authentication token set'
+        });
+    } else {
+        request(endpoint, parameters, options, successCallback, errorCallback, format);
+    }
 };
 
 var request = function request(endpoint, parameters, options, successCallback, errorCallback, format) {
