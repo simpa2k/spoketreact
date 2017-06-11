@@ -8,7 +8,7 @@ class DescriptionSectionContainer extends SectionContainer {
     }
 
     parseData(data) {
-        return <td dangerouslySetInnerHTML={{__html: data[0].content}} /> ;
+        return <div dangerouslySetInnerHTML={{__html: data[0].content}} /> ;
     }
 }
 

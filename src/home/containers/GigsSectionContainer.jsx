@@ -11,10 +11,6 @@ class GigsSectionContainer extends SectionContainer {
     }
 
     parseData(data) {
-
-        /*return data.map((gig, index) => {
-            return <Gig key={index} data={gig} />
-        });*/
         return <Gigs gigs={data} />
     }
 }

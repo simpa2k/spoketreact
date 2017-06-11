@@ -40,7 +40,6 @@ const request = function(endpoint, parameters, options, successCallback, errorCa
     fetch(URI, options).then((response) => {
 
         if (typeof((format) === 'undefined') || (format === null)) {
-            console.log('Returning json');
             return response.json();
         }
         return format(response);

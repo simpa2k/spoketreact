@@ -10,7 +10,7 @@ class ContactSectionContainer extends SectionContainer {
     parseData(data) {
 
         const contactPersons = data.contactPersons.map((contactPerson, index) => {
-            return <p>Tel {contactPerson.country}: {contactPerson.name} - {contactPerson.phonenumber}</p>
+            return <p key={index}>Tel {contactPerson.country}: {contactPerson.name} - {contactPerson.phonenumber}</p>
         });
 
         return <div>

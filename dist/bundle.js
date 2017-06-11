@@ -7551,32 +7551,11 @@ var Data = function () {
                 content: 'text'
             };
         }
-    }, {
-        key: 'getNewsItems',
-        value: function getNewsItems() {
 
-            return ['Det här är den första nyheten!', 'Det här är den andra nyheten!', 'Här är en nyhet till!'];
-        }
-    }, {
-        key: 'getGigs',
-        value: function getGigs(successCallback, errorCallback) {
-            this.gigsEndpoint.getRequest(successCallback, errorCallback);
-        }
-    }, {
-        key: 'getDescription',
-        value: function getDescription(successCallback, errorCallback) {
-            this.descriptionEndpoint.getRequest(successCallback, errorCallback);
-        }
-    }, {
-        key: 'getMembers',
-        value: function getMembers(successCallback, errorCallback) {
-            this.membersEndpoint.getRequest(successCallback, errorCallback);
-        }
-    }, {
-        key: 'getEmbeddedItems',
-        value: function getEmbeddedItems(successCallback, errorCallback) {
-            this.embeddedItemsEndpoint.getRequest(successCallback, errorCallback);
-        }
+        /*
+         * Contact persons
+         */
+
     }, {
         key: 'getContactInfo',
         value: function getContactInfo(successCallback, errorCallback) {
@@ -7590,6 +7569,111 @@ var Data = function () {
 
                 });
             }, errorCallback);
+        }
+    }, {
+        key: 'putContactPerson',
+        value: function putContactPerson(contactPerson, successCallback, errorCallback) {
+            this.contactPersonsEndpoint.putRequest(contactPerson, successCallback, errorCallback);
+        }
+    }, {
+        key: 'postContactPerson',
+        value: function postContactPerson(contactPerson, successCallback, errorCallback) {
+            this.contactPersonsEndpoint.postRequest(contactPerson, successCallback, errorCallback);
+        }
+    }, {
+        key: 'deleteContactPerson',
+        value: function deleteContactPerson(contactPerson, successCallback, errorCallback) {
+            this.contactPersonsEndpoint.deleteRequest(contactPerson, successCallback, errorCallback);
+        }
+
+        /*
+         * Description
+         */
+
+    }, {
+        key: 'getDescription',
+        value: function getDescription(successCallback, errorCallback) {
+            this.descriptionEndpoint.getRequest(successCallback, errorCallback);
+        }
+    }, {
+        key: 'putDescription',
+        value: function putDescription(description, successCallback, errorCallback) {
+            this.descriptionEndpoint.putRequest(description, successCallback, errorCallback);
+        }
+
+        /*
+         * Embedded items
+         */
+
+    }, {
+        key: 'getEmbeddedItems',
+        value: function getEmbeddedItems(successCallback, errorCallback) {
+            this.embeddedItemsEndpoint.getRequest(successCallback, errorCallback);
+        }
+    }, {
+        key: 'putEmbeddedItem',
+        value: function putEmbeddedItem(embeddedItem, successCallback, errorCallback) {
+            this.embeddedItemsEndpoint.putRequest(embeddedItem, successCallback, errorCallback);
+        }
+    }, {
+        key: 'postEmbeddedItem',
+        value: function postEmbeddedItem(embeddedItem, successCallback, errorCallback) {
+            this.embeddedItemsEndpoint.postRequest(embeddedItem, successCallback, errorCallback);
+        }
+    }, {
+        key: 'deleteEmbeddedItem',
+        value: function deleteEmbeddedItem(embeddedItem, successCallback, errorCallback) {
+            this.embeddedItemsEndpoint.deleteRequest(embeddedItem, successCallback, errorCallback);
+        }
+
+        /*
+         * Gigs
+         */
+
+    }, {
+        key: 'getGigs',
+        value: function getGigs(successCallback, errorCallback) {
+            this.gigsEndpoint.getRequest(successCallback, errorCallback);
+        }
+    }, {
+        key: 'putGig',
+        value: function putGig(gig, successCallback, errorCallback) {
+            this.gigsEndpoint.putRequest(gig, successCallback, errorCallback);
+        }
+    }, {
+        key: 'postGig',
+        value: function postGig(gig, successCallback, errorCallback) {
+            this.gigsEndpoint.postRequest(gig, successCallback, errorCallback);
+        }
+    }, {
+        key: 'deleteGig',
+        value: function deleteGig(gig, successCallback, errorCallback) {
+            this.gigsEndpoint.deleteRequest(gig, successCallback, errorCallback);
+        }
+
+        /*
+         * Members
+         */
+
+    }, {
+        key: 'getMembers',
+        value: function getMembers(successCallback, errorCallback) {
+            this.membersEndpoint.getRequest(successCallback, errorCallback);
+        }
+    }, {
+        key: 'putMember',
+        value: function putMember(member, successCallback, errorCallback) {
+            this.membersEndpoint.putRequest(member, successCallback, errorCallback);
+        }
+    }, {
+        key: 'postMember',
+        value: function postMember(member, successCallback, errorCallback) {
+            this.membersEndpoint.postRequest(member, successCallback, errorCallback);
+        }
+    }, {
+        key: 'deleteMember',
+        value: function deleteMember(member, successCallback, errorCallback) {
+            this.membersEndpoint.deleteRequest(member, successCallback, errorCallback);
         }
     }]);
 
@@ -7642,14 +7726,14 @@ var Gig = function (_React$Component) {
 
             this.optionals = [];
 
-            this.createOptional('span', 'orange-brown', this.props.model.price);
-            this.createOptional('span', 'orange-brown', this.props.model.address);
-            this.createOptional('a', this.props.model.webpage, this.props.model.webpage);
-            this.createOptional('a', this.props.model.ticketLink, this.props.model.ticketLink);
+            this.createOptional('span', 'orange-brown', this.props.model.price, 1);
+            this.createOptional('span', 'orange-brown', this.props.model.address, 2);
+            this.createOptional('a', this.props.model.webpage, this.props.model.webpage, 3);
+            this.createOptional('a', this.props.model.ticketLink, this.props.model.ticketLink, 4);
         }
     }, {
         key: 'createOptional',
-        value: function createOptional(innerElement, prop, data) {
+        value: function createOptional(innerElement, prop, data, key) {
 
             if (typeof data === 'undefined') {
                 return;
@@ -7660,7 +7744,7 @@ var Gig = function (_React$Component) {
 
             var element = _react2.default.createElement(
                 'p',
-                null,
+                { key: key },
                 inner
             );
 
@@ -12230,34 +12314,6 @@ exports.default = AdminPage;
 
 var _requests = __webpack_require__(115);
 
-//const requests = require('../requests/requests');
-
-/*class Endpoint {
-
-    constructor(endpointName) {
-
-        this.host = 'http://localhost:9876/';
-        this.endpoint = this.host + endpointName;
-
-    }*/
-
-/*
- * This is the function that actually makes the call to the server.
- * Making all functions that send object to the server go through this
- * function is motivated by the fact that the server as of now is not
- * implementing the HTTP protocol properly, instead requiring put and
- * posts to send all information in the parameters and not the body.
- * When this is corrected, changes only have to be made here.
- */
-/*sendObject(sendFunction, object, parameters, options, successCallback, errorCallback, format) {
-     Object.assign(parameters, object);
-    sendFunction(this.endpoint, parameters, options, successCallback, errorCallback, format);
- }
- getRequest(successCallback, errorCallback) {
-    requests.getRequest(this.endpoint, {}, {}, successCallback, errorCallback);
-}
-}*/
-
 var HOST = 'http://localhost:8080/backend/server.php/';
 
 var Endpoint = function Endpoint(endpointName, puttable, postable, deleteable) {
@@ -12336,7 +12392,6 @@ var request = function request(endpoint, parameters, options, successCallback, e
     fetch(URI, options).then(function (response) {
 
         if (_typeof(format === 'undefined') || format === null) {
-            console.log('Returning json');
             return response.json();
         }
         return format(response);
@@ -12623,7 +12678,7 @@ var ContactSectionContainer = function (_SectionContainer) {
             var contactPersons = data.contactPersons.map(function (contactPerson, index) {
                 return _react2.default.createElement(
                     'p',
-                    null,
+                    { key: index },
                     'Tel ',
                     contactPerson.country,
                     ': ',
@@ -12703,7 +12758,7 @@ var DescriptionSectionContainer = function (_SectionContainer) {
     }, {
         key: 'parseData',
         value: function parseData(data) {
-            return _react2.default.createElement('td', { dangerouslySetInnerHTML: { __html: data[0].content } });
+            return _react2.default.createElement('div', { dangerouslySetInnerHTML: { __html: data[0].content } });
         }
     }]);
 
@@ -12766,10 +12821,6 @@ var GigsSectionContainer = function (_SectionContainer) {
     }, {
         key: 'parseData',
         value: function parseData(data) {
-
-            /*return data.map((gig, index) => {
-                return <Gig key={index} data={gig} />
-            });*/
             return _react2.default.createElement(_Gigs2.default, { gigs: data });
         }
     }]);
@@ -12831,7 +12882,6 @@ var MemberSectionContainer = function (_SectionContainer) {
         value: function parseData(data) {
 
             return data.map(function (member, index) {
-                //return <p key={index}>{member.firstname} {member.lastname} - {member.instrument}</p>;
                 return _react2.default.createElement(_Member2.default, { key: member + '-' + index, data: member, index: index });
             });
         }

@@ -13,14 +13,14 @@ class Gig extends React.Component {
 
         this.optionals = [];
 
-        this.createOptional('span', 'orange-brown', this.props.model.price);
-        this.createOptional('span', 'orange-brown', this.props.model.address);
-        this.createOptional('a', this.props.model.webpage, this.props.model.webpage);
-        this.createOptional('a', this.props.model.ticketLink, this.props.model.ticketLink);
+        this.createOptional('span', 'orange-brown', this.props.model.price, 1);
+        this.createOptional('span', 'orange-brown', this.props.model.address, 2);
+        this.createOptional('a', this.props.model.webpage, this.props.model.webpage, 3);
+        this.createOptional('a', this.props.model.ticketLink, this.props.model.ticketLink, 4);
 
     }
 
-    createOptional(innerElement, prop, data) {
+    createOptional(innerElement, prop, data, key) {
 
         if (typeof(data) === 'undefined') {
             return;
@@ -33,7 +33,7 @@ class Gig extends React.Component {
             data
         );
 
-        let element = <p>{inner}</p>;
+        let element = <p key={key}>{inner}</p>;
 
         this.optionals.push(element);
 

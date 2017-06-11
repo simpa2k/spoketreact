@@ -11,7 +11,6 @@ class MemberSectionContainer extends SectionContainer {
     parseData(data) {
 
         return data.map((member, index) => {
-            //return <p key={index}>{member.firstname} {member.lastname} - {member.instrument}</p>;
             return <Member key={member + '-' + index} data={member} index={index} />
         });
     }
