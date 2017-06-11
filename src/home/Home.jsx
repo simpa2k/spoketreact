@@ -21,7 +21,7 @@ class Home extends React.Component {
         this.setMainDivY = this.setMainDivY.bind(this);
 
         this.state = {
-            data: new Data()
+            data: this.props.data
         };
 
         this.onSiteNavItems = [];

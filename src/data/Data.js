@@ -1,17 +1,15 @@
-import Endpoint from './endpoint/Endpoint';
-
 class Data {
 
-    constructor() {
+    constructor(endpoints) {
 
-        this.contactPersonsEndpoint = new Endpoint('contactpersons', true, true, true);
-        this.descriptionEndpoint = new Endpoint('description', true, false, false);
-        this.embeddedItemsEndpoint = new Endpoint('embeddeditems', true, true, true);
-        this.gigsEndpoint = new Endpoint('gigs', true, true, true);
-        this.imagesEndpoint = new Endpoint('images', true, true, true);
-        this.membersEndpoint = new Endpoint('members', true, true, true);
-        this.usersEndpoint = new Endpoint('users', false, false, false);
-        this.venuesEndpoint = new Endpoint('venues', true, true, false);
+        this.contactPersonsEndpoint = endpoints.contactPersonsEndpoint;
+        this.descriptionEndpoint = endpoints.descriptionEndpoint;
+        this.embeddedItemsEndpoint = endpoints.embeddedItemsEndpoint;
+        this.gigsEndpoint = endpoints.gigsEndpoint;
+        this.imagesEndpoint = endpoints.imagesEndpoint;
+        this.membersEndpoint = endpoints.membersEndpoint;
+        this.usersEndpoint = endpoints.usersEndpoint;
+        this.venuesEndpoint = endpoints.venuesEndpoint;
 
     }
 
