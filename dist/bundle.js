@@ -7515,7 +7515,7 @@ Object.defineProperty(exports, "__esModule", {
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-var _Endpoint = __webpack_require__(114);
+var _Endpoint = __webpack_require__(272);
 
 var _Endpoint2 = _interopRequireDefault(_Endpoint);
 
@@ -12306,47 +12306,7 @@ var AdminPage = function (_React$Component) {
 exports.default = AdminPage;
 
 /***/ }),
-/* 114 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-var _requests = __webpack_require__(115);
-
-var HOST = 'http://localhost:8080/backend/server.php/';
-
-var Endpoint = function Endpoint(endpointName, puttable, postable, deleteable) {
-    var _this = this;
-
-    this.endpointName = HOST + endpointName;
-
-    this.sendObject = function (sendFunction, object, parameters, options, successCallback, errorCallback, format) {
-
-        Object.assign(parameters, object);
-        sendFunction(_this.endpointName, parameters, options, successCallback, errorCallback, format);
-    };
-
-    this.getRequest = function (successCallback, errorCallback, responseFormat) {
-        (0, _requests.getRequest)(_this.endpointName, {}, {}, successCallback, errorCallback, responseFormat);
-    };
-
-    this.putRequest = puttable ? function (object, successCallback, errorCallback, responseFormat) {
-        _this.sendObject(_requests.putRequest, object, {}, {}, successCallback, errorCallback, responseFormat);
-    } : undefined;
-
-    this.postRequest = postable ? function (object, successCallback, errorCallback, responseFormat) {
-        _this.sendObject(_requests.postRequest, object, {}, {}, successCallback, errorCallback, responseFormat);
-    } : undefined;
-
-    this.deleteRequest = deleteable ? function (object, successCallback, errorCallback, responseFormat) {
-        _this.sendObject(_requests.deleteRequest, object, {}, {}, successCallback, errorCallback, responseFormat);
-    } : undefined;
-};
-
-module.exports = Endpoint;
-
-/***/ }),
+/* 114 */,
 /* 115 */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -28733,6 +28693,55 @@ var valueEqual = function valueEqual(a, b) {
 };
 
 exports.default = valueEqual;
+
+/***/ }),
+/* 272 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+var _requests = __webpack_require__(115);
+
+var HOST = 'http://localhost:8080/backend/server.php/';
+
+/*
+ * The reason for using a prototype and not an ES6 class is that all
+ * endpoints might not support all methods, and creating one subclass
+ * for each endpoint that defines all the methods it does support would
+ * lead to a lot of code repetition. With a prototype, an endpoint can be
+ * instantiated with a set of boolean values indicating which methods
+ * are supported.
+ */
+var Endpoint = function Endpoint(endpointName, puttable, postable, deleteable) {
+    var _this = this;
+
+    this.endpointName = HOST + endpointName;
+
+    this.sendObject = function (sendFunction, object, parameters, options, successCallback, errorCallback, format) {
+
+        Object.assign(parameters, object);
+        sendFunction(_this.endpointName, parameters, options, successCallback, errorCallback, format);
+    };
+
+    this.getRequest = function (successCallback, errorCallback, responseFormat) {
+        (0, _requests.getRequest)(_this.endpointName, {}, {}, successCallback, errorCallback, responseFormat);
+    };
+
+    this.putRequest = puttable ? function (object, successCallback, errorCallback, responseFormat) {
+        _this.sendObject(_requests.putRequest, object, {}, {}, successCallback, errorCallback, responseFormat);
+    } : undefined;
+
+    this.postRequest = postable ? function (object, successCallback, errorCallback, responseFormat) {
+        _this.sendObject(_requests.postRequest, object, {}, {}, successCallback, errorCallback, responseFormat);
+    } : undefined;
+
+    this.deleteRequest = deleteable ? function (object, successCallback, errorCallback, responseFormat) {
+        _this.sendObject(_requests.deleteRequest, object, {}, {}, successCallback, errorCallback, responseFormat);
+    } : undefined;
+};
+
+module.exports = Endpoint;
 
 /***/ })
 /******/ ]);

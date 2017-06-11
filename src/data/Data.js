@@ -1,4 +1,4 @@
-import Endpoint from './endpoints/Endpoint';
+import Endpoint from './endpoint/Endpoint';
 
 class Data {
 

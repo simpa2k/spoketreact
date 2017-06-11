@@ -2,6 +2,14 @@ import { getRequest, putRequest, postRequest, deleteRequest } from '../requests/
 
 const HOST = 'http://localhost:8080/backend/server.php/';
 
+/*
+ * The reason for using a prototype and not an ES6 class is that all
+ * endpoints might not support all methods, and creating one subclass
+ * for each endpoint that defines all the methods it does support would
+ * lead to a lot of code repetition. With a prototype, an endpoint can be
+ * instantiated with a set of boolean values indicating which methods
+ * are supported.
+ */
 const Endpoint = function(endpointName, puttable, postable, deleteable) {
 
     this.endpointName = HOST + endpointName;
