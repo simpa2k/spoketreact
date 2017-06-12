@@ -9,9 +9,8 @@ class AdminContainer extends React.Component {
 
         super(props);
         this.state = {
-            data: new Data()
+            data: this.props.data
         };
-
     }
 
     getNavItems() {
@@ -43,8 +42,7 @@ class AdminContainer extends React.Component {
         return (
 
             <Admin navItems={this.getNavItems()}
-                   gigsModel={this.getGigsModel()}
-                   descriptionModel={this.getDescriptionModel()} />
+                   data={this.state.data} />
         )
     }
 }

@@ -11,12 +11,20 @@ class Data {
         this.usersEndpoint = endpoints.usersEndpoint;
         this.venuesEndpoint = endpoints.venuesEndpoint;
 
+        this.getGigs = this.getGigs.bind(this);
+
     }
 
-    getGigsModel() {
-        return {
-            datetime: 'datetime'
-        }
+    getGigsStructure() {
+
+        return [
+            {
+                label: 'Datum',
+                fields: {
+                    datetime: 'datetime'
+                }
+            }
+        ]
     }
 
     getDescriptionModel() {

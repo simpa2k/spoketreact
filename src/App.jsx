@@ -29,11 +29,17 @@ class App extends React.Component {
 
         return (
             <Switch>
-                <Route path="/admin" component={AdminContainer} />
+
+                <Route path="/admin" render={() => {
+                    return <AdminContainer data={data} />
+                }} />
+
                 <Route path="/login" component={Login} />
+
                 <Route path="/" render={() => {
                     return <Home data={data} />
                 }} />
+
             </Switch>
         );
     }
