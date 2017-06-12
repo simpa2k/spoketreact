@@ -69,6 +69,10 @@ class Home extends React.Component {
             {
                 name: 'KONTAKT',
                 destination: this.contactSection.getTop()
+            },
+            {
+                name: 'ADMIN',
+                destination: '/admin'
             }
         ];
 

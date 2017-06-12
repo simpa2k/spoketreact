@@ -14,6 +14,13 @@ class AdminPage extends React.Component {
 
     componentDidMount() {
 
+        this.setPostState();
+
+        /*
+         * The order here matters, since createItems
+         * relies on fieldsToDisplay being set
+         * while creating inputs in createFormGroups.
+         */
         this.createFormGroups();
         this.createItems();
 
@@ -27,8 +34,8 @@ class AdminPage extends React.Component {
 
                 return (
 
-                    <div key={index} className="admin-item selectable row">
-                        <AdminItem item={item} fields={this.fieldsToDisplay} onClick={this.setPutState()} />
+                    <div key={index} className="admin-item selectable row" onClick={(e) => this.setPutState(e)} >
+                        <AdminItem item={item} fields={this.fieldsToDisplay} />
                     </div>
 
                 )
@@ -47,7 +54,7 @@ class AdminPage extends React.Component {
 
             return (
 
-                <div id={index} className="form-group">
+                <div key={index} className="form-group">
 
                     <label htmlFor={id}>{group.label}</label>
                     <div id={id}>
@@ -62,6 +69,7 @@ class AdminPage extends React.Component {
     createInputs(group) {
 
         let inputs = [];
+        let index = 0;
 
         for (const FIELD_NAME in group) {
 
@@ -70,7 +78,7 @@ class AdminPage extends React.Component {
                 this.fieldsToDisplay.push(FIELD_NAME);
 
                 inputs.push(
-                    this.resolveInputType(FIELD_NAME, group[FIELD_NAME])
+                    this.resolveInputType(FIELD_NAME, group[FIELD_NAME], ++index)
                 )
             }
         }
@@ -78,39 +86,76 @@ class AdminPage extends React.Component {
 
     }
 
-    resolveInputType(fieldName, type) {
+    resolveInputType(fieldName, type, key) {
 
         let element;
 
         switch (type) {
 
             case 'datetime':
-                element = <input type="datetime-local" name={fieldName} />;
+                element = <input key={key} type="datetime-local" className="form-control" name={fieldName} />;
                 break;
             case 'textarea':
-                element = <textarea rows="4" cols="50" />;
+                element = <textarea key={key} rows="4" cols="50" className="form-control" />;
                 break;
             default:
-                element = <input type="text" name={fieldName} />;
+                element = <input key={key} type="text" name={fieldName} className="form-control" />;
                 break;
         }
         return element;
 
     }
 
-    send() {
+    send(e) {
+
+        /*
+         * Without preventDefault, the browser will redirect to:
+         *
+         * http://localhost:8080/admin/gigs?datetime=&ticketlink=&info=&price=&venue_name=
+         *
+         * That is, a uri with a set of empty gig query parameters, on clicking the button
+         * that this event handler is attached to. This is really strange and I haven't
+         * figured out why this is happening yet, might have something to do with React's
+         * synthetic events (see for example https://medium.com/@ericclemmons/react-event-preventdefault-78c28c950e46).
+         * preventDefault fixes it, however.
+         */
+        e.preventDefault();
+        console.log('Sending');
+
 
     }
 
     setPostState() {
 
+        this.setState({
+            addingNew: true,
+            action: 'Lägg till'
+        });
     }
 
-    setPutState() {
+    setPutState(e) {
 
+        this.setState({
+            addingNew: false,
+            action: 'Bekräfta ändringar'
+        });
     }
 
-    deleteItem() {
+    deleteItem(e) {
+
+        /*
+         * Without preventDefault, the browser will redirect to:
+         *
+         * http://localhost:8080/admin/gigs?datetime=&ticketlink=&info=&price=&venue_name=
+         *
+         * That is, a uri with a set of empty gig query parameters, on clicking the button
+         * that this event handler is attached to. This is really strange and I haven't
+         * figured out why this is happening yet, might have something to do with React's
+         * synthetic events (see for example https://medium.com/@ericclemmons/react-event-preventdefault-78c28c950e46).
+         * preventDefault fixes it, however.
+         */
+        e.preventDefault();
+        console.log('Deleting');
 
     }
 
@@ -138,10 +183,10 @@ class AdminPage extends React.Component {
 
                             {this.state.formGroups}
 
-                            <button className="btn btn-primary pull-left" onClick={this.send(this.props.formName)}>{this.action}</button>
-                            <button className="btn btn-primary pull-left" onClick={this.setPostState()}>Ny</button>
+                            <button className="btn btn-primary pull-left" onClick={(e) => { this.send(e); }}>{this.state.action}</button>
+                            {this.state.addingNew ? null : <button className="btn btn-primary pull-left" onClick={() => { this.setPostState(); }}>Ny</button>}
 
-                            <button className="btn btn-primary pull-right" onClick={this.deleteItem(this.props.formName)}>Ta bort</button>
+                            {this.state.addingNew ? null : <button className="btn btn-danger pull-right" onClick={(e) => { this.deleteItem(e); }}>Ta bort</button>}
 
                         </form>
 

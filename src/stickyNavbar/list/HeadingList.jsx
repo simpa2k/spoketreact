@@ -1,5 +1,6 @@
 import React from 'react';
 import List from './List.jsx';
+import {Link} from 'react-router-dom';
 
 class HeadingList extends List {
 
@@ -12,7 +13,8 @@ class HeadingList extends List {
     }
 
     createAnchor(element, classes) {
-        return <a className={classes} href={element.destination}>{element.name}</a>;
+        //return <a className={classes} href={element.destination}>{element.name}</a>;
+        return <Link className={classes} to={element.destination}>{element.name}</Link>;
     }
 
     createElement(element, classes) {

@@ -2,7 +2,7 @@ import React from 'react';
 import {Route, Switch} from 'react-router-dom';
 
 import AdminPage from '../adminPage/AdminPage.jsx';
-import Navbar from '../../navbar/Navbar.jsx';
+import StickyNavbar from '../../stickyNavbar/StickyNavbar.jsx';
 
 class Admin extends React.Component {
 
@@ -12,6 +12,21 @@ class Admin extends React.Component {
         this.state = {
             data: this.props.data
         };
+
+        this.findLinks();
+
+    }
+
+    findLinks() {
+
+        this.onSiteNavItems =  [
+
+            {
+                name: 'KONSERTER',
+                destination: '/admin/gigs'
+            }
+
+        ];
     }
 
     render() {
@@ -20,8 +35,9 @@ class Admin extends React.Component {
 
             <div>
 
-                <Navbar navItems={this.props.navItems} />
-                <h1>This is the admin page.</h1>
+                <StickyNavbar headings={this.onSiteNavItems}
+                              socialMedia={[]}
+                              elementToStickToY={0} />
 
                 <Switch>
                     <Route path="/admin/gigs" render={() => {

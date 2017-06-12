@@ -19,12 +19,26 @@ class Data {
 
         return [
             {
-                label: 'Datum',
+                label: 'Välj datum och tid:',
                 fields: {
                     datetime: 'datetime'
                 }
+            },
+            {
+                label: 'Annan nyttig information:',
+                fields: {
+                    ticketlink: 'text',
+                    info: 'text',
+                    price: 'text'
+                }
+            },
+            {
+                label: 'Välj spelställe:',
+                fields: {
+                    venue_name: 'text'
+                }
             }
-        ]
+        ];
     }
 
     getDescriptionModel() {

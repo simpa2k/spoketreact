@@ -27,7 +27,7 @@ class StickyNavbar extends React.Component {
 
     componentDidMount() {
 
-        if (this.props.elementToStickToY == 0) {
+        if (this.props.elementToStickToY === 0) {
 
             this.navbar.style.position = 'static';
             window.addEventListener('resize', this.setNavbarHeight);
