@@ -5206,19 +5206,19 @@ var Data = function () {
     }, {
         key: 'putGig',
         value: function putGig(gig, successCallback, errorCallback) {
-            console.log('Putting');
+            console.log('Putting ' + JSON.stringify(gig, null, 4));
             //this.gigsEndpoint.putRequest(gig, successCallback, errorCallback);
         }
     }, {
         key: 'postGig',
         value: function postGig(gig, successCallback, errorCallback) {
-            console.log('Posting');
+            console.log('Posting' + JSON.stringify(gig, null, 4));
             //this.gigsEndpoint.postRequest(gig, successCallback, errorCallback);
         }
     }, {
         key: 'deleteGig',
         value: function deleteGig(gig, successCallback, errorCallback) {
-            console.log('Deleting');
+            console.log('Deleting' + JSON.stringify(gig, null, 4));
             //this.gigsEndpoint.deleteRequest(gig, successCallback, errorCallback);
         }
     }, {
@@ -5240,7 +5240,23 @@ var Data = function () {
             }, {
                 label: 'Välj spelställe:',
                 fields: {
-                    venue_name: 'text'
+                    venue_name: 'text',
+                    address: {
+                        type: 'text',
+                        enabled: false
+                    },
+                    name: {
+                        type: 'text',
+                        enabled: false
+                    },
+                    city: {
+                        type: 'text',
+                        enabled: false
+                    },
+                    webpage: {
+                        type: 'text',
+                        enabled: false
+                    }
                 }
             }];
         }
@@ -12465,8 +12481,7 @@ var AdminItem = function (_React$Component) {
 
             for (var KEY in this.props.item) {
 
-                //if (this.props.item.hasOwnProperty(KEY) && this.props.fields.indexOf(KEY) !== -1) {
-                if (this.props.item.hasOwnProperty(KEY)) {
+                if (this.props.item.hasOwnProperty(KEY) && this.props.fields.indexOf(KEY) !== -1) {
                     fields.push(_react2.default.createElement(
                         'p',
                         { key: KEY },
@@ -12550,10 +12565,9 @@ var AdminPage = function (_React$Component) {
 
             /*
              * The order here matters, since createItems
-             * relies on fieldsToDisplay being set
-             * while creating inputs in createFormGroups.
+             * relies on fieldsToDisplay being set.
              */
-            //this.createFormGroups();
+            this.fieldsToDisplay = this.adminForm.getEditableFields();
             this.createItems();
         }
     }, {
@@ -12576,77 +12590,6 @@ var AdminPage = function (_React$Component) {
             }, function (error) {
                 console.log(error);
             });
-        }
-    }, {
-        key: 'createFormGroups',
-        value: function createFormGroups() {
-            var _this3 = this;
-
-            this.setState({ formGroups: this.props.formStructure.map(function (group, index) {
-
-                    var id = _this3.props.entityName + '-' + index;
-
-                    return _react2.default.createElement(
-                        'div',
-                        { key: index, className: 'form-group' },
-                        _react2.default.createElement(
-                            'label',
-                            { htmlFor: id },
-                            group.label
-                        ),
-                        _react2.default.createElement(
-                            'div',
-                            { id: id },
-                            _this3.createInputs(group.fields)
-                        )
-                    );
-                }) });
-        }
-    }, {
-        key: 'createInputs',
-        value: function createInputs(group) {
-
-            var inputs = [];
-            var index = 0;
-
-            for (var FIELD_NAME in group) {
-
-                if (group.hasOwnProperty(FIELD_NAME)) {
-
-                    /*
-                     * This makes sure that only fields that are supposed to be editable, that is, fields
-                     * that there will be an input element for, are displayed in the admin items generated
-                     * in createItems. Semantically, this code should probably be placed in that function but that
-                     * would require going through the fields once again. The extra time that would take really is
-                     * negligible, though.
-                     */
-                    this.fieldsToDisplay.push(FIELD_NAME);
-
-                    inputs.push(this.resolveInputType(FIELD_NAME, group[FIELD_NAME], ++index));
-                }
-            }
-            return inputs;
-        }
-    }, {
-        key: 'resolveInputType',
-        value: function resolveInputType(fieldName, type, key) {
-
-            var element = void 0;
-            console.log(this.state.itemToSend);
-
-            switch (type) {
-
-                case 'datetime':
-                    element = _react2.default.createElement('input', { key: key, type: 'datetime-local', className: 'form-control', name: fieldName });
-                    break;
-                case 'textarea':
-                    element = _react2.default.createElement('textarea', { key: key, rows: '4', cols: '50', className: 'form-control' });
-                    break;
-                default:
-                    element = _react2.default.createElement('input', { key: key, type: 'text', name: fieldName, className: 'form-control' });
-                    break;
-            }
-            return element;
         }
     }, {
         key: 'postItem',
@@ -12682,36 +12625,33 @@ var AdminPage = function (_React$Component) {
              * preventDefault fixes it, however, so going with that for now.
              */
             e.preventDefault();
-
-            console.log(this.adminForm.getModel());
-
-            this.props.putItem({}, null, null);
+            this.props.putItem(this.adminForm.getModel(), null, null);
         }
     }, {
         key: 'setPostState',
         value: function setPostState() {
-            var _this4 = this;
+            var _this3 = this;
 
             this.setState({
                 addingNew: true,
                 action: 'Lägg till',
                 itemToSend: {},
                 send: function send(e) {
-                    _this4.postItem(e);
+                    _this3.postItem(e);
                 }
             });
         }
     }, {
         key: 'setPutState',
         value: function setPutState(item) {
-            var _this5 = this;
+            var _this4 = this;
 
             this.setState({
                 addingNew: false,
                 action: 'Bekräfta ändringar',
                 itemToSend: item,
                 send: function send(e) {
-                    _this5.putItem(e);
+                    _this4.putItem(e);
                 }
             });
         }
@@ -12736,7 +12676,7 @@ var AdminPage = function (_React$Component) {
     }, {
         key: 'render',
         value: function render() {
-            var _this6 = this;
+            var _this5 = this;
 
             return _react2.default.createElement(
                 'div',
@@ -12769,27 +12709,30 @@ var AdminPage = function (_React$Component) {
                                 { className: 'non-bordered-large-section-heading text-center' },
                                 this.props.heading
                             ),
-                            _react2.default.createElement(_AdminForm2.default, { formStructure: this.props.formStructure, model: this.state.itemToSend, entityName: this.props.entityName, ref: function ref(adminForm) {
-                                    _this6.adminForm = adminForm;
+                            _react2.default.createElement(_AdminForm2.default, { formStructure: this.props.formStructure,
+                                model: this.state.itemToSend,
+                                entityName: this.props.entityName,
+                                ref: function ref(adminForm) {
+                                    _this5.adminForm = adminForm;
                                 } }),
                             _react2.default.createElement(
                                 'button',
                                 { className: 'btn btn-primary pull-left', onClick: function onClick(e) {
-                                        _this6.state.send(e);
+                                        _this5.state.send(e);
                                     } },
                                 this.state.action
                             ),
                             this.state.addingNew ? null : _react2.default.createElement(
                                 'button',
                                 { className: 'btn btn-primary pull-left', onClick: function onClick() {
-                                        _this6.setPostState();
+                                        _this5.setPostState();
                                     } },
                                 'Ny'
                             ),
                             this.state.addingNew ? null : _react2.default.createElement(
                                 'button',
                                 { className: 'btn btn-danger pull-right', onClick: function onClick(e) {
-                                        _this6.deleteItem(e);
+                                        _this5.deleteItem(e);
                                     } },
                                 'Ta bort'
                             )
@@ -29564,6 +29507,8 @@ var AdminForm = function (_React$Component) {
         var _this = _possibleConstructorReturn(this, (AdminForm.__proto__ || Object.getPrototypeOf(AdminForm)).call(this, props));
 
         _this.state = { model: _this.props.model };
+        _this.editableFields = [];
+
         return _this;
     }
 
@@ -29571,6 +29516,11 @@ var AdminForm = function (_React$Component) {
         key: 'getModel',
         value: function getModel() {
             return this.state.model;
+        }
+    }, {
+        key: 'getEditableFields',
+        value: function getEditableFields() {
+            return this.editableFields;
         }
     }, {
         key: 'componentWillReceiveProps',
@@ -29619,11 +29569,11 @@ var AdminForm = function (_React$Component) {
                     /*
                      * This makes sure that only fields that are supposed to be editable, that is, fields
                      * that there will be an input element for, are displayed in the admin items generated
-                     * in createItems. Semantically, this code should probably be placed in that function but that
+                     * in AdminPage.createItems. Semantically, this code should probably be placed in that function but that
                      * would require going through the fields once again. The extra time that would take really is
                      * negligible, though.
                      */
-                    //this.fieldsToDisplay.push(FIELD_NAME);
+                    this.editableFields.push(FIELD_NAME);
 
                     inputs.push(this.resolveInputType(FIELD_NAME, group[FIELD_NAME], ++index));
                 }
@@ -29636,36 +29586,63 @@ var AdminForm = function (_React$Component) {
             var _this3 = this;
 
             var element = void 0;
-
             var value = this.state.model[fieldName];
 
             if (typeof value === 'undefined' || value === null) {
                 value = '';
             }
 
-            var handleChange = function handleChange(event) {
-                _this3.updateModel(event, fieldName);
+            var props = {
+
+                key: key,
+                className: 'form-control',
+                value: value,
+                onChange: function onChange(event) {
+                    _this3.updateModel(event, fieldName);
+                }
             };
 
             switch (type) {
 
                 case 'datetime':
-                    element = _react2.default.createElement('input', { key: key, type: 'datetime-local', className: 'form-control', name: fieldName, value: value, onChange: handleChange });
+
+                    element = 'input';
+
+                    props.type = 'datetime-local';
+                    props.name = fieldName;
+
                     break;
+
                 case 'textarea':
-                    element = _react2.default.createElement('textarea', { key: key, rows: '4', cols: '50', className: 'form-control', value: value, onChange: handleChange });
+
+                    element = 'textarea';
+
+                    props.rows = '4';
+                    props.cols = '50';
+
                     break;
+
                 default:
-                    element = _react2.default.createElement('input', { key: key, type: 'text', name: fieldName, className: 'form-control', value: value, onChange: handleChange });
+
+                    element = 'input';
+
+                    props.type = 'text';
+                    props.name = fieldName;
+
                     break;
             }
-            return element;
+
+            if (typeof type.enabled !== 'undefined') {
+                props.disabled = !type.enabled;
+            }
+
+            return _react2.default.createElement(element, props);
         }
     }, {
         key: 'updateModel',
         value: function updateModel(event, fieldName) {
 
-            var model = Object.assign({}, this.state.model);
+            var model = this.state.model;
             model[fieldName] = event.target.value;
 
             this.setState({ model: model });

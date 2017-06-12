@@ -21,10 +21,9 @@ class AdminPage extends React.Component {
 
         /*
          * The order here matters, since createItems
-         * relies on fieldsToDisplay being set
-         * while creating inputs in createFormGroups.
+         * relies on fieldsToDisplay being set.
          */
-        //this.createFormGroups();
+        this.fieldsToDisplay = this.adminForm.getEditableFields();
         this.createItems();
 
     }
@@ -47,74 +46,6 @@ class AdminPage extends React.Component {
         }, (error) => {
             console.log(error);
         });
-    }
-
-    createFormGroups() {
-
-        this.setState({formGroups: this.props.formStructure.map((group, index) => {
-
-            let id = this.props.entityName + '-' + index;
-
-            return (
-
-                <div key={index} className="form-group">
-
-                    <label htmlFor={id}>{group.label}</label>
-                    <div id={id}>
-                        {this.createInputs(group.fields)}
-                    </div>
-
-                </div>
-            )
-        })});
-    }
-
-    createInputs(group) {
-
-        let inputs = [];
-        let index = 0;
-
-        for (const FIELD_NAME in group) {
-
-            if (group.hasOwnProperty(FIELD_NAME)) {
-
-                /*
-                 * This makes sure that only fields that are supposed to be editable, that is, fields
-                 * that there will be an input element for, are displayed in the admin items generated
-                 * in createItems. Semantically, this code should probably be placed in that function but that
-                 * would require going through the fields once again. The extra time that would take really is
-                 * negligible, though.
-                 */
-                this.fieldsToDisplay.push(FIELD_NAME);
-
-                inputs.push(
-                    this.resolveInputType(FIELD_NAME, group[FIELD_NAME], ++index)
-                )
-            }
-        }
-        return inputs;
-
-    }
-
-    resolveInputType(fieldName, type, key) {
-
-        let element;
-        console.log(this.state.itemToSend);
-
-        switch (type) {
-
-            case 'datetime':
-                element = <input key={key} type="datetime-local" className="form-control" name={fieldName} />;
-                break;
-            case 'textarea':
-                element = <textarea key={key} rows="4" cols="50" className="form-control" />;
-                break;
-            default:
-                element = <input key={key} type="text" name={fieldName} className="form-control" />;
-                break;
-        }
-        return element;
-
     }
 
     postItem(e, item) {
@@ -149,10 +80,7 @@ class AdminPage extends React.Component {
          * preventDefault fixes it, however, so going with that for now.
          */
         e.preventDefault();
-
-        console.log(this.adminForm.getModel());
-
-        this.props.putItem({}, null, null);
+        this.props.putItem(this.adminForm.getModel(), null, null);
 
     }
 
@@ -220,7 +148,10 @@ class AdminPage extends React.Component {
 
                             <p className="non-bordered-large-section-heading text-center">{this.props.heading}</p>
 
-                            <AdminForm formStructure={this.props.formStructure} model={this.state.itemToSend} entityName={this.props.entityName} ref={(adminForm) => {this.adminForm = adminForm; }} />
+                            <AdminForm formStructure={this.props.formStructure}
+                                       model={this.state.itemToSend}
+                                       entityName={this.props.entityName}
+                                       ref={(adminForm) => {this.adminForm = adminForm; }} />
 
                             <button className="btn btn-primary pull-left" onClick={(e) => { this.state.send(e); }}>{this.state.action}</button>
                             {this.state.addingNew ? null : <button className="btn btn-primary pull-left" onClick={() => { this.setPostState(); }}>Ny</button>}

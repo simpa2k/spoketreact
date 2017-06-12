@@ -5,11 +5,17 @@ class AdminForm extends React.Component {
     constructor(props) {
 
         super(props);
-        this.state = {model: this.props.model}
+        this.state = {model: this.props.model};
+        this.editableFields = [];
+
     }
 
     getModel() {
         return this.state.model;
+    }
+
+    getEditableFields() {
+        return this.editableFields;
     }
 
     componentWillReceiveProps(nextProps) {
@@ -51,11 +57,11 @@ class AdminForm extends React.Component {
                 /*
                  * This makes sure that only fields that are supposed to be editable, that is, fields
                  * that there will be an input element for, are displayed in the admin items generated
-                 * in createItems. Semantically, this code should probably be placed in that function but that
+                 * in AdminPage.createItems. Semantically, this code should probably be placed in that function but that
                  * would require going through the fields once again. The extra time that would take really is
                  * negligible, though.
                  */
-                //this.fieldsToDisplay.push(FIELD_NAME);
+                this.editableFields.push(FIELD_NAME);
 
                 inputs.push(
                     this.resolveInputType(FIELD_NAME, group[FIELD_NAME], ++index)
@@ -69,36 +75,65 @@ class AdminForm extends React.Component {
     resolveInputType(fieldName, type, key) {
 
         let element;
-
         let value = this.state.model[fieldName];
 
         if (typeof(value) === 'undefined' || value === null) {
             value = '';
         }
 
-        let handleChange = (event) => {
-            this.updateModel(event, fieldName);
+        let props = {
+
+            key: key,
+            className: 'form-control',
+            value: value,
+            onChange: (event) => {
+                this.updateModel(event, fieldName)
+            }
         };
 
         switch (type) {
 
             case 'datetime':
-                element = <input key={key} type="datetime-local" className="form-control" name={fieldName} value={value} onChange={handleChange} />;
+
+                element = 'input';
+
+                props.type = 'datetime-local';
+                props.name = fieldName;
+
                 break;
+
             case 'textarea':
-                element = <textarea key={key} rows="4" cols="50" className="form-control" value={value} onChange={handleChange} />;
+
+                element = 'textarea';
+
+                props.rows = '4';
+                props.cols = '50';
+
                 break;
+
             default:
-                element = <input key={key} type="text" name={fieldName} className="form-control" value={value} onChange={handleChange}/>;
+
+                element = 'input';
+
+                props.type = 'text';
+                props.name = fieldName;
+
                 break;
         }
-        return element;
 
+        if (typeof(type.enabled) !== 'undefined') {
+            props.disabled = !type.enabled;
+        }
+
+        return React.createElement(
+            element,
+            props
+        );
     }
 
     updateModel(event, fieldName) {
 
-        let model = Object.assign({}, this.state.model);
+        let model = this.state.model;
         model[fieldName] = event.target.value;
 
         this.setState({model: model});

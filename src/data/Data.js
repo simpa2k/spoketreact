@@ -92,17 +92,17 @@ class Data {
     }
 
     putGig(gig, successCallback, errorCallback) {
-        console.log('Putting');
+        console.log('Putting ' + JSON.stringify(gig, null, 4));
         //this.gigsEndpoint.putRequest(gig, successCallback, errorCallback);
     }
 
     postGig(gig, successCallback, errorCallback) {
-        console.log('Posting');
+        console.log('Posting' + JSON.stringify(gig, null, 4));
         //this.gigsEndpoint.postRequest(gig, successCallback, errorCallback);
     }
 
     deleteGig(gig, successCallback, errorCallback) {
-        console.log('Deleting');
+        console.log('Deleting' + JSON.stringify(gig, null, 4));
         //this.gigsEndpoint.deleteRequest(gig, successCallback, errorCallback);
     }
 
@@ -126,7 +126,23 @@ class Data {
             {
                 label: 'Välj spelställe:',
                 fields: {
-                    venue_name: 'text'
+                    venue_name: 'text',
+                    address: {
+                        type: 'text',
+                        enabled: false
+                    },
+                    name: {
+                        type: 'text',
+                        enabled: false
+                    },
+                    city: {
+                        type: 'text',
+                        enabled: false
+                    },
+                    webpage: {
+                        type: 'text',
+                        enabled: false
+                    }
                 }
             }
         ];
