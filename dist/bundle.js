@@ -12603,6 +12603,13 @@ var AdminPage = function (_React$Component) {
 
                 if (group.hasOwnProperty(FIELD_NAME)) {
 
+                    /*
+                     * This makes sure that only fields that are supposed to be editable, that is, fields
+                     * that there will be an input element for, are displayed in the admin items generated
+                     * in createItems. Semantically, this code should probably be placed in that function but that
+                     * would require going through the fields once again. The extra time that would take really is
+                     * negligible, though.
+                     */
                     this.fieldsToDisplay.push(FIELD_NAME);
 
                     inputs.push(this.resolveInputType(FIELD_NAME, group[FIELD_NAME], ++index));
@@ -12643,7 +12650,7 @@ var AdminPage = function (_React$Component) {
              * that this event handler is attached to. This is really strange and I haven't
              * figured out why this is happening yet, might have something to do with React's
              * synthetic events (see for example https://medium.com/@ericclemmons/react-event-preventdefault-78c28c950e46).
-             * preventDefault fixes it, however.
+             * preventDefault fixes it, however, so going with that for now.
              */
             e.preventDefault();
             console.log('Sending');
@@ -12679,7 +12686,7 @@ var AdminPage = function (_React$Component) {
              * that this event handler is attached to. This is really strange and I haven't
              * figured out why this is happening yet, might have something to do with React's
              * synthetic events (see for example https://medium.com/@ericclemmons/react-event-preventdefault-78c28c950e46).
-             * preventDefault fixes it, however.
+             * preventDefault fixes it, however, so going with that for now.
              */
             e.preventDefault();
             console.log('Deleting');
