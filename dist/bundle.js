@@ -5113,29 +5113,6 @@ var Data = function () {
     }
 
     _createClass(Data, [{
-        key: 'getGigsStructure',
-        value: function getGigsStructure() {
-
-            return [{
-                label: 'Välj datum och tid:',
-                fields: {
-                    datetime: 'datetime'
-                }
-            }, {
-                label: 'Annan nyttig information:',
-                fields: {
-                    ticketlink: 'text',
-                    info: 'text',
-                    price: 'text'
-                }
-            }, {
-                label: 'Välj spelställe:',
-                fields: {
-                    venue_name: 'text'
-                }
-            }];
-        }
-    }, {
         key: 'getDescriptionModel',
         value: function getDescriptionModel() {
             return {
@@ -5229,17 +5206,43 @@ var Data = function () {
     }, {
         key: 'putGig',
         value: function putGig(gig, successCallback, errorCallback) {
-            this.gigsEndpoint.putRequest(gig, successCallback, errorCallback);
+            console.log('Putting');
+            //this.gigsEndpoint.putRequest(gig, successCallback, errorCallback);
         }
     }, {
         key: 'postGig',
         value: function postGig(gig, successCallback, errorCallback) {
-            this.gigsEndpoint.postRequest(gig, successCallback, errorCallback);
+            console.log('Posting');
+            //this.gigsEndpoint.postRequest(gig, successCallback, errorCallback);
         }
     }, {
         key: 'deleteGig',
         value: function deleteGig(gig, successCallback, errorCallback) {
-            this.gigsEndpoint.deleteRequest(gig, successCallback, errorCallback);
+            console.log('Deleting');
+            //this.gigsEndpoint.deleteRequest(gig, successCallback, errorCallback);
+        }
+    }, {
+        key: 'getGigsStructure',
+        value: function getGigsStructure() {
+
+            return [{
+                label: 'Välj datum och tid:',
+                fields: {
+                    datetime: 'datetime'
+                }
+            }, {
+                label: 'Annan nyttig information:',
+                fields: {
+                    ticketlink: 'text',
+                    info: 'text',
+                    price: 'text'
+                }
+            }, {
+                label: 'Välj spelställe:',
+                fields: {
+                    venue_name: 'text'
+                }
+            }];
         }
 
         /*
@@ -12462,7 +12465,8 @@ var AdminItem = function (_React$Component) {
 
             for (var KEY in this.props.item) {
 
-                if (this.props.item.hasOwnProperty(KEY) && this.props.fields.indexOf(KEY) !== -1) {
+                //if (this.props.item.hasOwnProperty(KEY) && this.props.fields.indexOf(KEY) !== -1) {
+                if (this.props.item.hasOwnProperty(KEY)) {
                     fields.push(_react2.default.createElement(
                         'p',
                         { key: KEY },
@@ -12478,7 +12482,7 @@ var AdminItem = function (_React$Component) {
 
             return _react2.default.createElement(
                 'div',
-                null,
+                { onClick: this.props.onClick },
                 this.createFields()
             );
         }
@@ -12510,6 +12514,10 @@ var _AdminItem = __webpack_require__(112);
 
 var _AdminItem2 = _interopRequireDefault(_AdminItem);
 
+var _AdminForm = __webpack_require__(272);
+
+var _AdminForm2 = _interopRequireDefault(_AdminForm);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -12526,7 +12534,9 @@ var AdminPage = function (_React$Component) {
 
         var _this = _possibleConstructorReturn(this, (AdminPage.__proto__ || Object.getPrototypeOf(AdminPage)).call(this, props));
 
-        _this.state = {};
+        _this.state = {
+            itemToSend: {}
+        };
         _this.fieldsToDisplay = [];
 
         return _this;
@@ -12543,7 +12553,7 @@ var AdminPage = function (_React$Component) {
              * relies on fieldsToDisplay being set
              * while creating inputs in createFormGroups.
              */
-            this.createFormGroups();
+            //this.createFormGroups();
             this.createItems();
         }
     }, {
@@ -12557,10 +12567,10 @@ var AdminPage = function (_React$Component) {
 
                         return _react2.default.createElement(
                             'div',
-                            { key: index, className: 'admin-item selectable row', onClick: function onClick(e) {
-                                    return _this2.setPutState(e);
-                                } },
-                            _react2.default.createElement(_AdminItem2.default, { item: item, fields: _this2.fieldsToDisplay })
+                            { key: index, className: 'admin-item selectable row' },
+                            _react2.default.createElement(_AdminItem2.default, { item: item, fields: _this2.fieldsToDisplay, onClick: function onClick() {
+                                    return _this2.setPutState(item);
+                                } })
                         );
                     }) });
             }, function (error) {
@@ -12622,6 +12632,7 @@ var AdminPage = function (_React$Component) {
         value: function resolveInputType(fieldName, type, key) {
 
             var element = void 0;
+            console.log(this.state.itemToSend);
 
             switch (type) {
 
@@ -12638,8 +12649,8 @@ var AdminPage = function (_React$Component) {
             return element;
         }
     }, {
-        key: 'send',
-        value: function send(e) {
+        key: 'postItem',
+        value: function postItem(e, item) {
 
             /*
              * Without preventDefault, the browser will redirect to:
@@ -12653,24 +12664,55 @@ var AdminPage = function (_React$Component) {
              * preventDefault fixes it, however, so going with that for now.
              */
             e.preventDefault();
-            console.log('Sending');
+            this.props.postItem({}, null, null);
+        }
+    }, {
+        key: 'putItem',
+        value: function putItem(e, item) {
+
+            /*
+             * Without preventDefault, the browser will redirect to:
+             *
+             * http://localhost:8080/admin/gigs?datetime=&ticketlink=&info=&price=&venue_name=
+             *
+             * That is, a uri with a set of empty gig query parameters, on clicking the button
+             * that this event handler is attached to. This is really strange and I haven't
+             * figured out why this is happening yet, might have something to do with React's
+             * synthetic events (see for example https://medium.com/@ericclemmons/react-event-preventdefault-78c28c950e46).
+             * preventDefault fixes it, however, so going with that for now.
+             */
+            e.preventDefault();
+
+            console.log(this.adminForm.getModel());
+
+            this.props.putItem({}, null, null);
         }
     }, {
         key: 'setPostState',
         value: function setPostState() {
+            var _this4 = this;
 
             this.setState({
                 addingNew: true,
-                action: 'Lägg till'
+                action: 'Lägg till',
+                itemToSend: {},
+                send: function send(e) {
+                    _this4.postItem(e);
+                }
             });
         }
     }, {
         key: 'setPutState',
-        value: function setPutState(e) {
+        value: function setPutState(item) {
+            var _this5 = this;
 
             this.setState({
                 addingNew: false,
-                action: 'Bekräfta ändringar'
+                action: 'Bekräfta ändringar',
+                itemToSend: item,
+                send: function send(e) {
+                    _this5.putItem(e);
+                }
             });
         }
     }, {
@@ -12689,12 +12731,12 @@ var AdminPage = function (_React$Component) {
              * preventDefault fixes it, however, so going with that for now.
              */
             e.preventDefault();
-            console.log('Deleting');
+            this.props.deleteItem({}, null, null);
         }
     }, {
         key: 'render',
         value: function render() {
-            var _this4 = this;
+            var _this6 = this;
 
             return _react2.default.createElement(
                 'div',
@@ -12727,25 +12769,27 @@ var AdminPage = function (_React$Component) {
                                 { className: 'non-bordered-large-section-heading text-center' },
                                 this.props.heading
                             ),
-                            this.state.formGroups,
+                            _react2.default.createElement(_AdminForm2.default, { formStructure: this.props.formStructure, model: this.state.itemToSend, entityName: this.props.entityName, ref: function ref(adminForm) {
+                                    _this6.adminForm = adminForm;
+                                } }),
                             _react2.default.createElement(
                                 'button',
                                 { className: 'btn btn-primary pull-left', onClick: function onClick(e) {
-                                        _this4.send(e);
+                                        _this6.state.send(e);
                                     } },
                                 this.state.action
                             ),
                             this.state.addingNew ? null : _react2.default.createElement(
                                 'button',
                                 { className: 'btn btn-primary pull-left', onClick: function onClick() {
-                                        _this4.setPostState();
+                                        _this6.setPostState();
                                     } },
                                 'Ny'
                             ),
                             this.state.addingNew ? null : _react2.default.createElement(
                                 'button',
                                 { className: 'btn btn-danger pull-right', onClick: function onClick(e) {
-                                        _this4.deleteItem(e);
+                                        _this6.deleteItem(e);
                                     } },
                                 'Ta bort'
                             )
@@ -12921,17 +12965,20 @@ var Admin = function (_React$Component) {
                     null,
                     _react2.default.createElement(_reactRouterDom.Route, { path: '/admin/gigs', render: function render() {
                             return _react2.default.createElement(_AdminPage2.default, { getItems: _this2.state.data.getGigs,
+                                putItem: _this2.state.data.putGig,
+                                postItem: _this2.state.data.postGig,
+                                deleteItem: _this2.state.data.deleteGig,
                                 formStructure: _this2.state.data.getGigsStructure(),
                                 formName: 'gigs-form',
                                 entityName: 'KONSERTER',
                                 refreshCallback: _this2.refreshGigs,
                                 createObject: _this2.createGig });
-                        } }),
-                    _react2.default.createElement(_reactRouterDom.Route, { path: '/admin/description', render: function render() {
-                            return _react2.default.createElement(_AdminPage2.default, { model: _this2.props.descriptionModel });
                         } })
                 )
             );
+            /*<Route path="/admin/description" render={() => {
+            return <AdminPage model={this.props.descriptionModel} />
+            }} />*/
         }
     }]);
 
@@ -29482,6 +29529,163 @@ exports.default = valueEqual;
   self.fetch.polyfill = true
 })(typeof self !== 'undefined' ? self : this);
 
+
+/***/ }),
+/* 272 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _react = __webpack_require__(2);
+
+var _react2 = _interopRequireDefault(_react);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+var AdminForm = function (_React$Component) {
+    _inherits(AdminForm, _React$Component);
+
+    function AdminForm(props) {
+        _classCallCheck(this, AdminForm);
+
+        var _this = _possibleConstructorReturn(this, (AdminForm.__proto__ || Object.getPrototypeOf(AdminForm)).call(this, props));
+
+        _this.state = { model: _this.props.model };
+        return _this;
+    }
+
+    _createClass(AdminForm, [{
+        key: 'getModel',
+        value: function getModel() {
+            return this.state.model;
+        }
+    }, {
+        key: 'componentWillReceiveProps',
+        value: function componentWillReceiveProps(nextProps) {
+
+            this.setState({
+                model: nextProps.model
+            });
+        }
+    }, {
+        key: 'createFormGroups',
+        value: function createFormGroups() {
+            var _this2 = this;
+
+            return this.props.formStructure.map(function (group, index) {
+
+                var id = _this2.props.entityName + '-' + index;
+
+                return _react2.default.createElement(
+                    'div',
+                    { key: index, className: 'form-group' },
+                    _react2.default.createElement(
+                        'label',
+                        { htmlFor: id },
+                        group.label
+                    ),
+                    _react2.default.createElement(
+                        'div',
+                        { id: id },
+                        _this2.createInputs(group.fields)
+                    )
+                );
+            });
+        }
+    }, {
+        key: 'createInputs',
+        value: function createInputs(group) {
+
+            var inputs = [];
+            var index = 0;
+
+            for (var FIELD_NAME in group) {
+
+                if (group.hasOwnProperty(FIELD_NAME)) {
+
+                    /*
+                     * This makes sure that only fields that are supposed to be editable, that is, fields
+                     * that there will be an input element for, are displayed in the admin items generated
+                     * in createItems. Semantically, this code should probably be placed in that function but that
+                     * would require going through the fields once again. The extra time that would take really is
+                     * negligible, though.
+                     */
+                    //this.fieldsToDisplay.push(FIELD_NAME);
+
+                    inputs.push(this.resolveInputType(FIELD_NAME, group[FIELD_NAME], ++index));
+                }
+            }
+            return inputs;
+        }
+    }, {
+        key: 'resolveInputType',
+        value: function resolveInputType(fieldName, type, key) {
+            var _this3 = this;
+
+            var element = void 0;
+
+            var value = this.state.model[fieldName];
+
+            if (typeof value === 'undefined' || value === null) {
+                value = '';
+            }
+
+            var handleChange = function handleChange(event) {
+                _this3.updateModel(event, fieldName);
+            };
+
+            switch (type) {
+
+                case 'datetime':
+                    element = _react2.default.createElement('input', { key: key, type: 'datetime-local', className: 'form-control', name: fieldName, value: value, onChange: handleChange });
+                    break;
+                case 'textarea':
+                    element = _react2.default.createElement('textarea', { key: key, rows: '4', cols: '50', className: 'form-control', value: value, onChange: handleChange });
+                    break;
+                default:
+                    element = _react2.default.createElement('input', { key: key, type: 'text', name: fieldName, className: 'form-control', value: value, onChange: handleChange });
+                    break;
+            }
+            return element;
+        }
+    }, {
+        key: 'updateModel',
+        value: function updateModel(event, fieldName) {
+
+            var model = Object.assign({}, this.state.model);
+            model[fieldName] = event.target.value;
+
+            this.setState({ model: model });
+        }
+    }, {
+        key: 'render',
+        value: function render() {
+
+            return _react2.default.createElement(
+                'div',
+                null,
+                this.createFormGroups()
+            );
+        }
+    }]);
+
+    return AdminForm;
+}(_react2.default.Component);
+
+exports.default = AdminForm;
 
 /***/ })
 /******/ ]);

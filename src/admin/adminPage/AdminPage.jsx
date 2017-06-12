@@ -1,5 +1,6 @@
 import React from 'react';
 import AdminItem from './AdminItem.jsx';
+import AdminForm from "./AdminForm.jsx";
 
 class AdminPage extends React.Component {
 
@@ -7,7 +8,9 @@ class AdminPage extends React.Component {
 
         super(props);
 
-        this.state = {};
+        this.state = {
+            itemToSend: {}
+        };
         this.fieldsToDisplay = [];
 
     }
@@ -21,7 +24,7 @@ class AdminPage extends React.Component {
          * relies on fieldsToDisplay being set
          * while creating inputs in createFormGroups.
          */
-        this.createFormGroups();
+        //this.createFormGroups();
         this.createItems();
 
     }
@@ -34,8 +37,8 @@ class AdminPage extends React.Component {
 
                 return (
 
-                    <div key={index} className="admin-item selectable row" onClick={(e) => this.setPutState(e)} >
-                        <AdminItem item={item} fields={this.fieldsToDisplay} />
+                    <div key={index} className="admin-item selectable row" >
+                        <AdminItem item={item} fields={this.fieldsToDisplay} onClick={() => this.setPutState(item)} />
                     </div>
 
                 )
@@ -96,6 +99,7 @@ class AdminPage extends React.Component {
     resolveInputType(fieldName, type, key) {
 
         let element;
+        console.log(this.state.itemToSend);
 
         switch (type) {
 
@@ -113,7 +117,7 @@ class AdminPage extends React.Component {
 
     }
 
-    send(e) {
+    postItem(e, item) {
 
         /*
          * Without preventDefault, the browser will redirect to:
@@ -127,8 +131,28 @@ class AdminPage extends React.Component {
          * preventDefault fixes it, however, so going with that for now.
          */
         e.preventDefault();
-        console.log('Sending');
+        this.props.postItem({}, null, null);
 
+    }
+
+    putItem(e, item) {
+
+        /*
+         * Without preventDefault, the browser will redirect to:
+         *
+         * http://localhost:8080/admin/gigs?datetime=&ticketlink=&info=&price=&venue_name=
+         *
+         * That is, a uri with a set of empty gig query parameters, on clicking the button
+         * that this event handler is attached to. This is really strange and I haven't
+         * figured out why this is happening yet, might have something to do with React's
+         * synthetic events (see for example https://medium.com/@ericclemmons/react-event-preventdefault-78c28c950e46).
+         * preventDefault fixes it, however, so going with that for now.
+         */
+        e.preventDefault();
+
+        console.log(this.adminForm.getModel());
+
+        this.props.putItem({}, null, null);
 
     }
 
@@ -136,15 +160,23 @@ class AdminPage extends React.Component {
 
         this.setState({
             addingNew: true,
-            action: 'Lägg till'
+            action: 'Lägg till',
+            itemToSend: {},
+            send: (e) => {
+                this.postItem(e);
+            }
         });
     }
 
-    setPutState(e) {
+    setPutState(item) {
 
         this.setState({
             addingNew: false,
-            action: 'Bekräfta ändringar'
+            action: 'Bekräfta ändringar',
+            itemToSend: item,
+            send: (e) => {
+                this.putItem(e);
+            }
         });
     }
 
@@ -162,7 +194,7 @@ class AdminPage extends React.Component {
          * preventDefault fixes it, however, so going with that for now.
          */
         e.preventDefault();
-        console.log('Deleting');
+        this.props.deleteItem({}, null, null);
 
     }
 
@@ -188,9 +220,9 @@ class AdminPage extends React.Component {
 
                             <p className="non-bordered-large-section-heading text-center">{this.props.heading}</p>
 
-                            {this.state.formGroups}
+                            <AdminForm formStructure={this.props.formStructure} model={this.state.itemToSend} entityName={this.props.entityName} ref={(adminForm) => {this.adminForm = adminForm; }} />
 
-                            <button className="btn btn-primary pull-left" onClick={(e) => { this.send(e); }}>{this.state.action}</button>
+                            <button className="btn btn-primary pull-left" onClick={(e) => { this.state.send(e); }}>{this.state.action}</button>
                             {this.state.addingNew ? null : <button className="btn btn-primary pull-left" onClick={() => { this.setPostState(); }}>Ny</button>}
 
                             {this.state.addingNew ? null : <button className="btn btn-danger pull-right" onClick={(e) => { this.deleteItem(e); }}>Ta bort</button>}

@@ -15,32 +15,6 @@ class Data {
 
     }
 
-    getGigsStructure() {
-
-        return [
-            {
-                label: 'Välj datum och tid:',
-                fields: {
-                    datetime: 'datetime'
-                }
-            },
-            {
-                label: 'Annan nyttig information:',
-                fields: {
-                    ticketlink: 'text',
-                    info: 'text',
-                    price: 'text'
-                }
-            },
-            {
-                label: 'Välj spelställe:',
-                fields: {
-                    venue_name: 'text'
-                }
-            }
-        ];
-    }
-
     getDescriptionModel() {
         return {
             content: 'text'
@@ -118,15 +92,44 @@ class Data {
     }
 
     putGig(gig, successCallback, errorCallback) {
-        this.gigsEndpoint.putRequest(gig, successCallback, errorCallback);
+        console.log('Putting');
+        //this.gigsEndpoint.putRequest(gig, successCallback, errorCallback);
     }
 
     postGig(gig, successCallback, errorCallback) {
-        this.gigsEndpoint.postRequest(gig, successCallback, errorCallback);
+        console.log('Posting');
+        //this.gigsEndpoint.postRequest(gig, successCallback, errorCallback);
     }
 
     deleteGig(gig, successCallback, errorCallback) {
-        this.gigsEndpoint.deleteRequest(gig, successCallback, errorCallback);
+        console.log('Deleting');
+        //this.gigsEndpoint.deleteRequest(gig, successCallback, errorCallback);
+    }
+
+    getGigsStructure() {
+
+        return [
+            {
+                label: 'Välj datum och tid:',
+                fields: {
+                    datetime: 'datetime'
+                }
+            },
+            {
+                label: 'Annan nyttig information:',
+                fields: {
+                    ticketlink: 'text',
+                    info: 'text',
+                    price: 'text'
+                }
+            },
+            {
+                label: 'Välj spelställe:',
+                fields: {
+                    venue_name: 'text'
+                }
+            }
+        ];
     }
 
     /*

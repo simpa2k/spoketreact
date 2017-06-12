@@ -8,7 +8,8 @@ class AdminItem extends React.Component {
 
         for (const KEY in this.props.item) {
 
-            if (this.props.item.hasOwnProperty(KEY) && this.props.fields.indexOf(KEY) !== -1) {
+            //if (this.props.item.hasOwnProperty(KEY) && this.props.fields.indexOf(KEY) !== -1) {
+            if (this.props.item.hasOwnProperty(KEY)) {
                 fields.push(<p key={KEY}>{KEY + ': ' + this.props.item[KEY]}</p>)
             }
         }
@@ -19,7 +20,7 @@ class AdminItem extends React.Component {
     render() {
 
         return (
-            <div>{this.createFields()}</div>
+            <div onClick={this.props.onClick}>{this.createFields()}</div>
         )
     }
 }

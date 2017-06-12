@@ -42,6 +42,9 @@ class Admin extends React.Component {
                 <Switch>
                     <Route path="/admin/gigs" render={() => {
                         return <AdminPage getItems={this.state.data.getGigs}
+                                          putItem={this.state.data.putGig}
+                                          postItem={this.state.data.postGig}
+                                          deleteItem={this.state.data.deleteGig}
                                           formStructure={this.state.data.getGigsStructure()}
                                           formName="gigs-form"
                                           entityName="KONSERTER"
@@ -49,13 +52,13 @@ class Admin extends React.Component {
                                           createObject={this.createGig} />
                     }} />
 
-                    <Route path="/admin/description" render={() => {
-                        return <AdminPage model={this.props.descriptionModel} />
-                    }} />
                 </Switch>
 
             </div>
         )
+            /*<Route path="/admin/description" render={() => {
+            return <AdminPage model={this.props.descriptionModel} />
+        }} />*/
     }
 }
 
