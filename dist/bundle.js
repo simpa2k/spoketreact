@@ -12562,17 +12562,11 @@ var AdminPage = function (_React$Component) {
         value: function componentDidMount() {
 
             this.setPostState();
-
-            /*
-             * The order here matters, since createItems
-             * relies on fieldsToDisplay being set.
-             */
-            this.fieldsToDisplay = this.adminForm.getEditableFields();
-            this.createItems();
+            this.createItems(this.adminForm.getEditableFields());
         }
     }, {
         key: 'createItems',
-        value: function createItems() {
+        value: function createItems(fieldsToDisplay) {
             var _this2 = this;
 
             this.props.getItems(function (items) {
@@ -12582,7 +12576,7 @@ var AdminPage = function (_React$Component) {
                         return _react2.default.createElement(
                             'div',
                             { key: index, className: 'admin-item selectable row' },
-                            _react2.default.createElement(_AdminItem2.default, { item: item, fields: _this2.fieldsToDisplay, onClick: function onClick() {
+                            _react2.default.createElement(_AdminItem2.default, { item: item, fields: fieldsToDisplay, onClick: function onClick() {
                                     return _this2.setPutState(item);
                                 } })
                         );

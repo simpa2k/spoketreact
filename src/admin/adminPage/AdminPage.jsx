@@ -18,17 +18,11 @@ class AdminPage extends React.Component {
     componentDidMount() {
 
         this.setPostState();
-
-        /*
-         * The order here matters, since createItems
-         * relies on fieldsToDisplay being set.
-         */
-        this.fieldsToDisplay = this.adminForm.getEditableFields();
-        this.createItems();
+        this.createItems(this.adminForm.getEditableFields());
 
     }
 
-    createItems() {
+    createItems(fieldsToDisplay) {
 
         this.props.getItems((items) => {
 
@@ -37,7 +31,7 @@ class AdminPage extends React.Component {
                 return (
 
                     <div key={index} className="admin-item selectable row" >
-                        <AdminItem item={item} fields={this.fieldsToDisplay} onClick={() => this.setPutState(item)} />
+                        <AdminItem item={item} fields={fieldsToDisplay} onClick={() => this.setPutState(item)} />
                     </div>
 
                 )
