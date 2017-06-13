@@ -27,9 +27,43 @@ class AdminPage extends React.Component {
         this.props.getFormStructure((formStructure) => {
 
             this.setState({formStructure: formStructure});
-            this.createItems(this.adminForm.getEditableFields());
+            this.createItems(this.pickOutFieldsToDisplay(formStructure));
 
         });
+    }
+
+    /*
+     * It's a bit inefficient to go through the form structure
+     * once again here when it's already being done in AdminForm.
+     * However, since AdminForm creates the form structure on
+     * setState (that is, asynchronously) any solution that
+     * tries to get the displayed fields from AdminForm
+     * may run into the problem of the form not being created yet.
+     * This is the easiest solution, elegantly avoids duplicate fields
+     * and the extra time taken is negligible.
+     */
+    pickOutFieldsToDisplay(formStructure) {
+
+        // From: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/Reduce?v=example
+        let flatten = arr => arr.reduce(
+            (acc, val) => acc.concat(
+                Array.isArray(val) ? flatten(val) : val
+            ), []);
+
+        return flatten(formStructure.map((formGroup) => {
+
+            let fields = [];
+
+            for (const KEY in formGroup.fields) {
+
+                if (formGroup.fields.hasOwnProperty(KEY)) {
+                    fields.push(KEY);
+                }
+            }
+
+            return fields;
+
+        }));
     }
 
     createItems(fieldsToDisplay) {

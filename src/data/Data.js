@@ -13,15 +13,37 @@ class Data {
         this.usersEndpoint = endpoints.usersEndpoint;
         this.venuesEndpoint = endpoints.venuesEndpoint;
 
+        this.bindGigFunctions();
+        this.bindDescriptionFunctions();
+        this.bindMemberFunctions();
+
+    }
+
+    bindDescriptionFunctions() {
+
+        this.getDescription = this.getDescription.bind(this);
+        this.putDescription = this.putDescription.bind(this);
+        this.getDescriptionStructure = this.getDescriptionStructure.bind(this);
+
+    }
+
+    bindGigFunctions() {
+
         this.getGigs = this.getGigs.bind(this);
         this.putGig = this.putGig.bind(this);
         this.postGig = this.postGig.bind(this);
         this.deleteGig = this.deleteGig.bind(this);
         this.getGigsStructure = this.getGigsStructure.bind(this);
 
-        this.getDescription = this.getDescription.bind(this);
-        this.putDescription = this.putDescription.bind(this);
-        this.getDescriptionStructure = this.getDescriptionStructure.bind(this);
+    }
+
+    bindMemberFunctions() {
+
+        this.getMembers = this.getMembers.bind(this);
+        this.putMember = this.putMember.bind(this);
+        this.postMember = this.postMember.bind(this);
+        this.deleteMember = this.deleteMember.bind(this);
+        this.getMemberStructure = this.getMemberStructure.bind(this);
 
     }
 
@@ -183,6 +205,20 @@ class Data {
 
     deleteMember(member, successCallback, errorCallback) {
         this.membersEndpoint.deleteRequest(member, successCallback, errorCallback);
+    }
+
+    getMemberStructure(callback) {
+
+        callback([
+            {
+                label: '',
+                fields: {
+                    firstname: text,
+                    lastname: text,
+                    instrument: text
+                }
+            }
+        ]);
     }
 
     /*

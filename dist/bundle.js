@@ -5111,22 +5111,45 @@ var Data = function () {
         this.usersEndpoint = endpoints.usersEndpoint;
         this.venuesEndpoint = endpoints.venuesEndpoint;
 
-        this.getGigs = this.getGigs.bind(this);
-        this.putGig = this.putGig.bind(this);
-        this.postGig = this.postGig.bind(this);
-        this.deleteGig = this.deleteGig.bind(this);
-        this.getGigsStructure = this.getGigsStructure.bind(this);
-
-        this.getDescription = this.getDescription.bind(this);
-        this.putDescription = this.putDescription.bind(this);
-        this.getDescriptionStructure = this.getDescriptionStructure.bind(this);
+        this.bindGigFunctions();
+        this.bindDescriptionFunctions();
+        this.bindMemberFunctions();
     }
 
-    /*
-     * Contact persons
-     */
-
     _createClass(Data, [{
+        key: 'bindDescriptionFunctions',
+        value: function bindDescriptionFunctions() {
+
+            this.getDescription = this.getDescription.bind(this);
+            this.putDescription = this.putDescription.bind(this);
+            this.getDescriptionStructure = this.getDescriptionStructure.bind(this);
+        }
+    }, {
+        key: 'bindGigFunctions',
+        value: function bindGigFunctions() {
+
+            this.getGigs = this.getGigs.bind(this);
+            this.putGig = this.putGig.bind(this);
+            this.postGig = this.postGig.bind(this);
+            this.deleteGig = this.deleteGig.bind(this);
+            this.getGigsStructure = this.getGigsStructure.bind(this);
+        }
+    }, {
+        key: 'bindMemberFunctions',
+        value: function bindMemberFunctions() {
+
+            this.getMembers = this.getMembers.bind(this);
+            this.putMember = this.putMember.bind(this);
+            this.postMember = this.postMember.bind(this);
+            this.deleteMember = this.deleteMember.bind(this);
+            this.getMemberStructure = this.getMemberStructure.bind(this);
+        }
+
+        /*
+         * Contact persons
+         */
+
+    }, {
         key: 'getContactInfo',
         value: function getContactInfo(successCallback, errorCallback) {
 
@@ -5297,6 +5320,19 @@ var Data = function () {
         key: 'deleteMember',
         value: function deleteMember(member, successCallback, errorCallback) {
             this.membersEndpoint.deleteRequest(member, successCallback, errorCallback);
+        }
+    }, {
+        key: 'getMemberStructure',
+        value: function getMemberStructure(callback) {
+
+            callback([{
+                label: '',
+                fields: {
+                    firstname: _inputs.text,
+                    lastname: _inputs.text,
+                    instrument: _inputs.text
+                }
+            }]);
         }
 
         /*
@@ -12606,11 +12642,6 @@ var AdminForm = function (_React$Component) {
             return this.state.model;
         }
     }, {
-        key: 'getEditableFields',
-        value: function getEditableFields() {
-            return this.editableFields;
-        }
-    }, {
         key: 'componentWillReceiveProps',
         value: function componentWillReceiveProps(nextProps) {
 
@@ -12648,21 +12679,7 @@ var AdminForm = function (_React$Component) {
         value: function createInputs(group) {
 
             var visitor = new _FormGroupVisitor2.default(this.state.model, this.updateModel);
-
-            var inputs = visitor.visit(group);
-
-            /*
-             * This makes sure that only fields that are supposed to be editable, that is, fields
-             * that there will be an input element for, are displayed in the admin items generated
-             * in AdminPage.createItems. Semantically, this code should probably be placed in that function but that
-             * would require going through the fields once again. The extra time that would take really is
-             * negligible, though. Also, it results in a lot of duplicates, but since indexOf checks should return
-             * true on the first occurrence of a value this shouldn't be a problem. Space complexity really
-             * isn't an issue in this case.
-             */
-            this.editableFields = this.editableFields.concat(visitor.getVisitedFields());
-
-            return inputs;
+            return visitor.visit(group);
         }
     }, {
         key: 'updateModel',
@@ -12828,8 +12845,45 @@ var AdminPage = function (_React$Component) {
             this.props.getFormStructure(function (formStructure) {
 
                 _this2.setState({ formStructure: formStructure });
-                _this2.createItems(_this2.adminForm.getEditableFields());
+                _this2.createItems(_this2.pickOutFieldsToDisplay(formStructure));
             });
+        }
+
+        /*
+         * It's a bit inefficient to go through the form structure
+         * once again here when it's already being done in AdminForm.
+         * However, since AdminForm creates the form structure on
+         * setState (that is, asynchronously) any solution that
+         * tries to get the displayed fields from AdminForm
+         * may run into the problem of the form not being created yet.
+         * This is the easiest solution, elegantly avoids duplicate fields
+         * and the extra time taken is negligible.
+         */
+
+    }, {
+        key: 'pickOutFieldsToDisplay',
+        value: function pickOutFieldsToDisplay(formStructure) {
+
+            // From: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/Reduce?v=example
+            var flatten = function flatten(arr) {
+                return arr.reduce(function (acc, val) {
+                    return acc.concat(Array.isArray(val) ? flatten(val) : val);
+                }, []);
+            };
+
+            return flatten(formStructure.map(function (formGroup) {
+
+                var fields = [];
+
+                for (var KEY in formGroup.fields) {
+
+                    if (formGroup.fields.hasOwnProperty(KEY)) {
+                        fields.push(KEY);
+                    }
+                }
+
+                return fields;
+            }));
         }
     }, {
         key: 'createItems',
@@ -13348,6 +13402,9 @@ var Admin = function (_React$Component) {
             }, {
                 name: 'BESKRIVNING',
                 destination: '/admin/description'
+            }, {
+                name: 'MEDLEMMAR',
+                destination: '/admin/members'
             }];
         }
     }, {
@@ -13383,12 +13440,20 @@ var Admin = function (_React$Component) {
                                 entityName: 'BESKRIVNING',
                                 refreshCallback: _this2.refreshDescription,
                                 createObject: _this2.createDescription });
+                        } }),
+                    _react2.default.createElement(_reactRouterDom.Route, { path: '/admin/members', render: function render() {
+                            return _react2.default.createElement(_AdminPage2.default, { getItems: _this2.state.data.getMembers,
+                                putItem: _this2.state.data.putMember,
+                                postItem: _this2.state.data.postMember,
+                                deleteItem: _this2.state.data.deleteMember,
+                                getFormStructure: _this2.state.data.getMemberStructure,
+                                formName: 'member-form',
+                                entityName: 'MEDLEMMAR',
+                                refreshCallback: _this2.refreshMembers,
+                                createObject: _this2.createMember });
                         } })
                 )
             );
-            /*<Route path="/admin/description" render={() => {
-            return <AdminPage model={this.props.descriptionModel} />
-            }} />*/
         }
     }]);
 

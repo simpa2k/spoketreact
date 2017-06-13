@@ -29,6 +29,10 @@ class Admin extends React.Component {
             {
                 name: 'BESKRIVNING',
                 destination: '/admin/description'
+            },
+            {
+                name: 'MEDLEMMAR',
+                destination: '/admin/members'
             }
 
         ];
@@ -45,6 +49,7 @@ class Admin extends React.Component {
                               elementToStickToY={0} />
 
                 <Switch>
+
                     <Route path="/admin/gigs" render={() => {
                         return <AdminPage getItems={this.state.data.getGigs}
                                           putItem={this.state.data.putGig}
@@ -67,13 +72,22 @@ class Admin extends React.Component {
                                                      createObject={this.createDescription} />
                     }} />
 
+                    <Route path="/admin/members" render={() => {
+                        return <AdminPage getItems={this.state.data.getMembers}
+                                          putItem={this.state.data.putMember}
+                                          postItem={this.state.data.postMember}
+                                          deleteItem={this.state.data.deleteMember}
+                                          getFormStructure={this.state.data.getMemberStructure}
+                                          formName="member-form"
+                                          entityName="MEDLEMMAR"
+                                          refreshCallback={this.refreshMembers}
+                                          createObject={this.createMember} />
+                    }} />
+
                 </Switch>
 
             </div>
         )
-            /*<Route path="/admin/description" render={() => {
-            return <AdminPage model={this.props.descriptionModel} />
-        }} />*/
     }
 }
 

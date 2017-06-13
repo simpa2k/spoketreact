@@ -17,10 +17,6 @@ class AdminForm extends React.Component {
         return this.state.model;
     }
 
-    getEditableFields() {
-        return this.editableFields;
-    }
-
     componentWillReceiveProps(nextProps) {
 
         this.setState({
@@ -51,21 +47,7 @@ class AdminForm extends React.Component {
     createInputs(group) {
 
         let visitor = new FormGroupVisitor(this.state.model, this.updateModel);
-
-        let inputs = visitor.visit(group);
-
-        /*
-         * This makes sure that only fields that are supposed to be editable, that is, fields
-         * that there will be an input element for, are displayed in the admin items generated
-         * in AdminPage.createItems. Semantically, this code should probably be placed in that function but that
-         * would require going through the fields once again. The extra time that would take really is
-         * negligible, though. Also, it results in a lot of duplicates, but since indexOf checks should return
-         * true on the first occurrence of a value this shouldn't be a problem. Space complexity really
-         * isn't an issue in this case.
-         */
-        this.editableFields = this.editableFields.concat(visitor.getVisitedFields());
-
-        return inputs;
+        return visitor.visit(group);
 
     }
 
