@@ -5328,6 +5328,16 @@ var Data = function () {
                 console.error('Error while updating venue with function: ' + modifyingFunction + ': ' + JSON.stringify(error, null, 4));
             });
         }
+
+        /*
+         * Having this kind of logic here could be discussed. The reason for it is mainly to simplify
+         * automatic generation of admin pages. The kind of foreign key relationship between gigs and
+         * venues that require venues to be sent before gigs is hard to generalize in a good way.
+         * This is mainly because of the fact that the relationship is not apparent when getting data from the
+         * server, only when modifying it, which of course was a pretty poor design choice. The fact that
+         * this is a backend quirk suggests handling it in the interface towards the backend.
+         */
+
     }, {
         key: 'sendVenue',
         value: function sendVenue(gig) {
