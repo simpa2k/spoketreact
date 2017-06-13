@@ -1,4 +1,6 @@
 import React from 'react';
+import TinyMCE from 'tinymce-react';
+import secrets from '../../secrets';
 
 class FormGroupVisitor {
 
@@ -36,7 +38,7 @@ class FormGroupVisitor {
 
     }
 
-    getProps(key, fieldName, onChange) {
+    getValue(fieldName) {
 
         let value = this.formContents[fieldName];
 
@@ -44,14 +46,24 @@ class FormGroupVisitor {
             value = '';
         }
 
+        return value;
+
+    }
+
+    getOnChange(onChange, fieldName) {
+        return (event) => {
+            onChange(event, fieldName);
+        }
+    }
+
+    getProps(key, fieldName, onChange) {
+
         return {
 
             key: key,
             className: 'form-control',
-            value: value,
-            onChange: (event) => {
-                onChange(event, fieldName)
-            }
+            value: this.getValue(fieldName),
+            onChange: this.getOnChange(onChange, fieldName)
         }
     };
 
@@ -112,13 +124,12 @@ class FormGroupVisitor {
 
     createTextarea() {
 
-        let props = this.getProps(this.currentKey, this.currentFieldName, this.onChange);
+        return (
 
-        props.rows = '4';
-        props.cols = '50';
-
-        return this.createElement('textarea', props);
-
+            <TinyMCE apiKey={secrets.tinyMCEAPIKey}
+                     content={this.getValue(this.currentFieldName)}
+                     onChange={this.getOnChange(this.onChange, this.currentFieldName)} />
+        )
     }
 }
 

@@ -2,6 +2,7 @@ import React from 'react';
 import {Route, Switch} from 'react-router-dom';
 
 import AdminPage from '../adminPage/AdminPage.jsx';
+import SingleItemAdminPage from '../adminPage/SingleItemAdminPage.jsx';
 import StickyNavbar from '../../stickyNavbar/StickyNavbar.jsx';
 
 class Admin extends React.Component {
@@ -24,6 +25,10 @@ class Admin extends React.Component {
             {
                 name: 'KONSERTER',
                 destination: '/admin/gigs'
+            },
+            {
+                name: 'BESKRIVNING',
+                destination: '/admin/description'
             }
 
         ];
@@ -50,6 +55,16 @@ class Admin extends React.Component {
                                           entityName="KONSERTER"
                                           refreshCallback={this.refreshGigs}
                                           createObject={this.createGig} />
+                    }} />
+
+                    <Route path="/admin/description" render={() => {
+                        return <SingleItemAdminPage  getItems={this.state.data.getDescription}
+                                                     putItem={this.state.data.putDescription}
+                                                     getFormStructure={this.state.data.getDescriptionStructure}
+                                                     formName="description-form"
+                                                     entityName="BESKRIVNING"
+                                                     refreshCallback={this.refreshDescription}
+                                                     createObject={this.createDescription} />
                     }} />
 
                 </Switch>

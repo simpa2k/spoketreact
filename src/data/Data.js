@@ -19,12 +19,10 @@ class Data {
         this.deleteGig = this.deleteGig.bind(this);
         this.getGigsStructure = this.getGigsStructure.bind(this);
 
-    }
+        this.getDescription = this.getDescription.bind(this);
+        this.putDescription = this.putDescription.bind(this);
+        this.getDescriptionStructure = this.getDescriptionStructure.bind(this);
 
-    getDescriptionModel() {
-        return {
-            content: 'text'
-        }
     }
 
     /*
@@ -67,6 +65,19 @@ class Data {
 
     putDescription(description, successCallback, errorCallback) {
         this.descriptionEndpoint.putRequest(description, successCallback, errorCallback);
+    }
+
+    getDescriptionStructure(callback) {
+
+        callback([
+            {
+                label: '',
+                fields: {
+                    description: textarea
+                }
+            }
+        ]);
+
     }
 
     /*
@@ -238,7 +249,7 @@ class Data {
                 console.log('Posting venue: ' + JSON.stringify(selectedVenue));
                 //this.modifyVenueAndUpdate(selectedVenue, this.postVenue);
 
-            } else if (JSON.stringify(selectedVenue) !== JSON.stringify(venueForComparison)) { // The order of the attributes in selectedVenue matters here
+            } else if (JSON.stringify(selectedVenue) !== JSON.stringify(venueForComparison)) { // The order of the properties in selectedVenue matters here
 
                 /*
                  * If there is a venue with the specified name, but some of the other fields have been changed,

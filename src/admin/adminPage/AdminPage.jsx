@@ -18,7 +18,11 @@ class AdminPage extends React.Component {
 
     componentDidMount() {
 
-        this.setPostState();
+        if (typeof(this.props.postItem) !== 'undefined') {
+            this.setPostState();
+        } else {
+            this.setPutState({});
+        }
 
         this.props.getFormStructure((formStructure) => {
 
@@ -32,16 +36,18 @@ class AdminPage extends React.Component {
 
         this.props.getItems((items) => {
 
-            this.setState({items: items.map((item, index) => {
+            this.setState({
+                items: items.map((item, index) => {
 
-                return (
+                    return (
 
-                    <div key={index} className="admin-item selectable row" >
-                        <AdminItem item={item} fields={fieldsToDisplay} onClick={() => this.setPutState(item)} />
-                    </div>
+                        <div key={index} className="admin-item selectable row">
+                            <AdminItem item={item} fields={fieldsToDisplay} onClick={() => this.setPutState(item)}/>
+                        </div>
 
-                )
-            })});
+                    )
+                })
+            });
 
         }, (error) => {
             console.log(error);
@@ -126,6 +132,29 @@ class AdminPage extends React.Component {
 
     }
 
+    createDeleteButton() {
+
+        if (this.state.addingNew || (typeof(this.props.deleteItem) === 'undefined')) {
+            return null;
+        }
+
+        return <button className="btn btn-danger pull-right" onClick={(e) => {
+            this.deleteItem(e);
+        }}>Ta bort</button>
+    }
+
+    createNewButton() {
+
+        if (this.state.addingNew || (typeof(this.props.postItem) === 'undefined')) {
+            return null;
+        }
+
+        return <button className="btn btn-primary pull-left" onClick={() => {
+            this.setPostState();
+        }}>Ny</button>
+    }
+
+
     render() {
 
         return (
@@ -154,9 +183,9 @@ class AdminPage extends React.Component {
                                        ref={(adminForm) => {this.adminForm = adminForm; }} />
 
                             <button className="btn btn-primary pull-left" onClick={(e) => { this.state.send(e); }}>{this.state.action}</button>
-                            {this.state.addingNew ? null : <button className="btn btn-primary pull-left" onClick={() => { this.setPostState(); }}>Ny</button>}
+                            {this.createNewButton()}
 
-                            {this.state.addingNew ? null : <button className="btn btn-danger pull-right" onClick={(e) => { this.deleteItem(e); }}>Ta bort</button>}
+                            {this.createDeleteButton()}
 
                         </form>
 
