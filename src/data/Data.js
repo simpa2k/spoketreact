@@ -1,4 +1,4 @@
-import { text, datetime, textarea } from './formStructure/inputs';
+import { text, AutocompletedText, datetime, textarea } from './formStructure/inputs';
 
 class Data {
 
@@ -17,6 +17,7 @@ class Data {
         this.putGig = this.putGig.bind(this);
         this.postGig = this.postGig.bind(this);
         this.deleteGig = this.deleteGig.bind(this);
+        this.getGigsStructure = this.getGigsStructure.bind(this);
 
     }
 
@@ -119,34 +120,38 @@ class Data {
         //this.gigsEndpoint.deleteRequest(gig, successCallback, errorCallback);
     }
 
-    getGigsStructure() {
+    getGigsStructure(callback) {
 
-        return [
-            {
-                label: 'Välj datum och tid:',
-                fields: {
-                    datetime: datetime
+        this.setVenues((venues) => {
+
+            callback([
+                {
+                    label: 'Välj datum och tid:',
+                    fields: {
+                        datetime: datetime
+                    }
+                },
+                {
+                    label: 'Annan nyttig information:',
+                    fields: {
+                        ticketlink: text,
+                        info: text,
+                        price: text
+                    }
+                },
+                {
+                    label: 'Välj spelställe:',
+                    fields: {
+                        address: text,
+                        name: new AutocompletedText(venues, (venue, targetValue) => {
+                            return venue.name === targetValue;
+                        }),
+                        city: text,
+                        webpage: text
+                    }
                 }
-            },
-            {
-                label: 'Annan nyttig information:',
-                fields: {
-                    ticketlink: text,
-                    info: text,
-                    price: text
-                }
-            },
-            {
-                label: 'Välj spelställe:',
-                fields: {
-                    venue_name: text,
-                    address: text,
-                    name: text,
-                    city: text,
-                    webpage: text
-                }
-            }
-        ];
+            ]);
+        })
     }
 
     /*
@@ -173,12 +178,23 @@ class Data {
      * Venues
      */
 
-    setVenues() {
+    setVenues(successCallback, errorCallback) {
 
         this.getVenues((venues) => {
+
             this.venues = venues;
+
+            if (typeof(successCallback) !== 'undefined') {
+                successCallback(venues)
+            }
+
         }, (error) => {
+
             console.error('Error while getting venues: ' + JSON.stringify(error, null, 4));
+
+            if (typeof(errorCallback) !== 'undefined') {
+                errorCallback(error);
+            }
         });
     }
 
@@ -196,7 +212,7 @@ class Data {
         let selectedVenue = {
 
             address: gig.address,
-            name: gig.venue_name, // Note that it is not possible to use gig.name, since that field is not being updated in the form
+            name: gig.name,
             city: gig.city,
             webpage: gig.webpage
 

@@ -70,7 +70,32 @@ class FormGroupVisitor {
 
     }
 
-    createAutoCompletedTextInput() {
+    createAutoCompletedTextInput(collection, comparisonFunction) {
+
+        let fieldName = this.currentFieldName;
+
+        let props = this.getProps(this.currentKey, this.currentFieldName, (event) => {
+
+            let autoCompleted = collection.find((item) => {
+                return comparisonFunction(item, event.target.value);
+            });
+
+            let fieldsToUpdate;
+
+            if (typeof(autoCompleted) !== 'undefined') {
+                fieldsToUpdate = Object.assign({}, autoCompleted);
+            } else {
+                fieldsToUpdate = fieldName
+            }
+
+            this.onChange(event, fieldsToUpdate);
+
+        });
+
+        props.type = 'text';
+        props.name = this.currentFieldName;
+
+        return this.createElement('input', props);
 
     }
 

@@ -5115,6 +5115,7 @@ var Data = function () {
         this.putGig = this.putGig.bind(this);
         this.postGig = this.postGig.bind(this);
         this.deleteGig = this.deleteGig.bind(this);
+        this.getGigsStructure = this.getGigsStructure.bind(this);
     }
 
     _createClass(Data, [{
@@ -5236,30 +5237,34 @@ var Data = function () {
         }
     }, {
         key: 'getGigsStructure',
-        value: function getGigsStructure() {
+        value: function getGigsStructure(callback) {
 
-            return [{
-                label: 'Välj datum och tid:',
-                fields: {
-                    datetime: _inputs.datetime
-                }
-            }, {
-                label: 'Annan nyttig information:',
-                fields: {
-                    ticketlink: _inputs.text,
-                    info: _inputs.text,
-                    price: _inputs.text
-                }
-            }, {
-                label: 'Välj spelställe:',
-                fields: {
-                    venue_name: _inputs.text,
-                    address: _inputs.text,
-                    name: _inputs.text,
-                    city: _inputs.text,
-                    webpage: _inputs.text
-                }
-            }];
+            this.setVenues(function (venues) {
+
+                callback([{
+                    label: 'Välj datum och tid:',
+                    fields: {
+                        datetime: _inputs.datetime
+                    }
+                }, {
+                    label: 'Annan nyttig information:',
+                    fields: {
+                        ticketlink: _inputs.text,
+                        info: _inputs.text,
+                        price: _inputs.text
+                    }
+                }, {
+                    label: 'Välj spelställe:',
+                    fields: {
+                        address: _inputs.text,
+                        name: new _inputs.AutocompletedText(venues, function (venue, targetValue) {
+                            return venue.name === targetValue;
+                        }),
+                        city: _inputs.text,
+                        webpage: _inputs.text
+                    }
+                }]);
+            });
         }
 
         /*
@@ -5293,13 +5298,23 @@ var Data = function () {
 
     }, {
         key: 'setVenues',
-        value: function setVenues() {
+        value: function setVenues(successCallback, errorCallback) {
             var _this2 = this;
 
             this.getVenues(function (venues) {
+
                 _this2.venues = venues;
+
+                if (typeof successCallback !== 'undefined') {
+                    successCallback(venues);
+                }
             }, function (error) {
+
                 console.error('Error while getting venues: ' + JSON.stringify(error, null, 4));
+
+                if (typeof errorCallback !== 'undefined') {
+                    errorCallback(error);
+                }
             });
         }
     }, {
@@ -5320,7 +5335,7 @@ var Data = function () {
             var selectedVenue = {
 
                 address: gig.address,
-                name: gig.venue_name, // Note that it is not possible to use gig.name, since that field is not being updated in the form
+                name: gig.name,
                 city: gig.city,
                 webpage: gig.webpage
 
@@ -12532,6 +12547,8 @@ Object.defineProperty(exports, "__esModule", {
     value: true
 });
 
+var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
+
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
 var _react = __webpack_require__(2);
@@ -12632,10 +12649,15 @@ var AdminForm = function (_React$Component) {
         }
     }, {
         key: 'updateModel',
-        value: function updateModel(event, fieldName) {
+        value: function updateModel(event, fieldsToUpdate) {
 
             var model = this.state.model;
-            model[fieldName] = event.target.value;
+
+            if ((typeof fieldsToUpdate === 'undefined' ? 'undefined' : _typeof(fieldsToUpdate)) === 'object') {
+                model = fieldsToUpdate;
+            } else {
+                model[fieldsToUpdate] = event.target.value;
+            }
 
             this.setState({ model: model });
         }
@@ -12767,7 +12789,8 @@ var AdminPage = function (_React$Component) {
         var _this = _possibleConstructorReturn(this, (AdminPage.__proto__ || Object.getPrototypeOf(AdminPage)).call(this, props));
 
         _this.state = {
-            itemToSend: {}
+            itemToSend: {},
+            formStructure: []
         };
         _this.fieldsToDisplay = [];
 
@@ -12777,24 +12800,30 @@ var AdminPage = function (_React$Component) {
     _createClass(AdminPage, [{
         key: 'componentDidMount',
         value: function componentDidMount() {
+            var _this2 = this;
 
             this.setPostState();
-            this.createItems(this.adminForm.getEditableFields());
+
+            this.props.getFormStructure(function (formStructure) {
+
+                _this2.setState({ formStructure: formStructure });
+                _this2.createItems(_this2.adminForm.getEditableFields());
+            });
         }
     }, {
         key: 'createItems',
         value: function createItems(fieldsToDisplay) {
-            var _this2 = this;
+            var _this3 = this;
 
             this.props.getItems(function (items) {
 
-                _this2.setState({ items: items.map(function (item, index) {
+                _this3.setState({ items: items.map(function (item, index) {
 
                         return _react2.default.createElement(
                             'div',
                             { key: index, className: 'admin-item selectable row' },
                             _react2.default.createElement(_AdminItem2.default, { item: item, fields: fieldsToDisplay, onClick: function onClick() {
-                                    return _this2.setPutState(item);
+                                    return _this3.setPutState(item);
                                 } })
                         );
                     }) });
@@ -12841,28 +12870,28 @@ var AdminPage = function (_React$Component) {
     }, {
         key: 'setPostState',
         value: function setPostState() {
-            var _this3 = this;
+            var _this4 = this;
 
             this.setState({
                 addingNew: true,
                 action: 'Lägg till',
                 itemToSend: {},
                 send: function send(e) {
-                    _this3.postItem(e);
+                    _this4.postItem(e);
                 }
             });
         }
     }, {
         key: 'setPutState',
         value: function setPutState(item) {
-            var _this4 = this;
+            var _this5 = this;
 
             this.setState({
                 addingNew: false,
                 action: 'Bekräfta ändringar',
                 itemToSend: item,
                 send: function send(e) {
-                    _this4.putItem(e);
+                    _this5.putItem(e);
                 }
             });
         }
@@ -12887,7 +12916,7 @@ var AdminPage = function (_React$Component) {
     }, {
         key: 'render',
         value: function render() {
-            var _this5 = this;
+            var _this6 = this;
 
             return _react2.default.createElement(
                 'div',
@@ -12920,30 +12949,30 @@ var AdminPage = function (_React$Component) {
                                 { className: 'non-bordered-large-section-heading text-center' },
                                 this.props.heading
                             ),
-                            _react2.default.createElement(_AdminForm2.default, { formStructure: this.props.formStructure,
+                            _react2.default.createElement(_AdminForm2.default, { formStructure: this.state.formStructure,
                                 model: this.state.itemToSend,
                                 entityName: this.props.entityName,
                                 ref: function ref(adminForm) {
-                                    _this5.adminForm = adminForm;
+                                    _this6.adminForm = adminForm;
                                 } }),
                             _react2.default.createElement(
                                 'button',
                                 { className: 'btn btn-primary pull-left', onClick: function onClick(e) {
-                                        _this5.state.send(e);
+                                        _this6.state.send(e);
                                     } },
                                 this.state.action
                             ),
                             this.state.addingNew ? null : _react2.default.createElement(
                                 'button',
                                 { className: 'btn btn-primary pull-left', onClick: function onClick() {
-                                        _this5.setPostState();
+                                        _this6.setPostState();
                                     } },
                                 'Ny'
                             ),
                             this.state.addingNew ? null : _react2.default.createElement(
                                 'button',
                                 { className: 'btn btn-danger pull-right', onClick: function onClick(e) {
-                                        _this5.deleteItem(e);
+                                        _this6.deleteItem(e);
                                     } },
                                 'Ta bort'
                             )
@@ -13122,7 +13151,7 @@ var Admin = function (_React$Component) {
                                 putItem: _this2.state.data.putGig,
                                 postItem: _this2.state.data.postGig,
                                 deleteItem: _this2.state.data.deleteGig,
-                                formStructure: _this2.state.data.getGigsStructure(),
+                                getFormStructure: _this2.state.data.getGigsStructure,
                                 formName: 'gigs-form',
                                 entityName: 'KONSERTER',
                                 refreshCallback: _this2.refreshGigs,
@@ -29701,6 +29730,15 @@ var text = {
     }
 };
 
+var AutocompletedText = function AutocompletedText(collection, comparisonFunction, assignmentFunction) {
+    var _this = this;
+
+    this.collection = collection;
+    this.accept = function (visitor) {
+        return visitor.createAutoCompletedTextInput(_this.collection, comparisonFunction, assignmentFunction);
+    };
+};
+
 var datetime = {
 
     accept: function accept(visitor) {
@@ -29709,12 +29747,14 @@ var datetime = {
 };
 
 var textarea = {
+
     accept: function accept(visitor) {
         return visitor.createTextarea();
     }
 };
 
 exports.text = text;
+exports.AutocompletedText = AutocompletedText;
 exports.datetime = datetime;
 exports.textarea = textarea;
 
@@ -29812,7 +29852,33 @@ var FormGroupVisitor = function () {
         }
     }, {
         key: 'createAutoCompletedTextInput',
-        value: function createAutoCompletedTextInput() {}
+        value: function createAutoCompletedTextInput(collection, comparisonFunction) {
+            var _this = this;
+
+            var fieldName = this.currentFieldName;
+
+            var props = this.getProps(this.currentKey, this.currentFieldName, function (event) {
+
+                var autoCompleted = collection.find(function (item) {
+                    return comparisonFunction(item, event.target.value);
+                });
+
+                var fieldsToUpdate = void 0;
+
+                if (typeof autoCompleted !== 'undefined') {
+                    fieldsToUpdate = Object.assign({}, autoCompleted);
+                } else {
+                    fieldsToUpdate = fieldName;
+                }
+
+                _this.onChange(event, fieldsToUpdate);
+            });
+
+            props.type = 'text';
+            props.name = this.currentFieldName;
+
+            return this.createElement('input', props);
+        }
     }, {
         key: 'createDateTimeInput',
         value: function createDateTimeInput() {

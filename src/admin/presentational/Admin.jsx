@@ -45,7 +45,7 @@ class Admin extends React.Component {
                                           putItem={this.state.data.putGig}
                                           postItem={this.state.data.postGig}
                                           deleteItem={this.state.data.deleteGig}
-                                          formStructure={this.state.data.getGigsStructure()}
+                                          getFormStructure={this.state.data.getGigsStructure}
                                           formName="gigs-form"
                                           entityName="KONSERTER"
                                           refreshCallback={this.refreshGigs}

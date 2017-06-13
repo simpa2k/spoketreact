@@ -9,7 +9,8 @@ class AdminPage extends React.Component {
         super(props);
 
         this.state = {
-            itemToSend: {}
+            itemToSend: {},
+            formStructure: []
         };
         this.fieldsToDisplay = [];
 
@@ -18,8 +19,13 @@ class AdminPage extends React.Component {
     componentDidMount() {
 
         this.setPostState();
-        this.createItems(this.adminForm.getEditableFields());
 
+        this.props.getFormStructure((formStructure) => {
+
+            this.setState({formStructure: formStructure});
+            this.createItems(this.adminForm.getEditableFields());
+
+        });
     }
 
     createItems(fieldsToDisplay) {
@@ -142,7 +148,7 @@ class AdminPage extends React.Component {
 
                             <p className="non-bordered-large-section-heading text-center">{this.props.heading}</p>
 
-                            <AdminForm formStructure={this.props.formStructure}
+                            <AdminForm formStructure={this.state.formStructure}
                                        model={this.state.itemToSend}
                                        entityName={this.props.entityName}
                                        ref={(adminForm) => {this.adminForm = adminForm; }} />
