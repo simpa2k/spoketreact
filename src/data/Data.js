@@ -1,3 +1,5 @@
+import { text, datetime, textarea } from './formStructure/inputs';
+
 class Data {
 
     constructor(endpoints) {
@@ -12,6 +14,9 @@ class Data {
         this.venuesEndpoint = endpoints.venuesEndpoint;
 
         this.getGigs = this.getGigs.bind(this);
+        this.putGig = this.putGig.bind(this);
+        this.postGig = this.postGig.bind(this);
+        this.deleteGig = this.deleteGig.bind(this);
 
     }
 
@@ -88,10 +93,18 @@ class Data {
      */
 
     getGigs(successCallback, errorCallback) {
-        this.gigsEndpoint.getRequest(successCallback, errorCallback);
+
+        this.gigsEndpoint.getRequest((gigs) => {
+
+            this.setVenues();
+            successCallback(gigs);
+
+        }, errorCallback);
     }
 
     putGig(gig, successCallback, errorCallback) {
+
+        this.sendVenue(gig);
         console.log('Putting ' + JSON.stringify(gig, null, 4));
         //this.gigsEndpoint.putRequest(gig, successCallback, errorCallback);
     }
@@ -112,37 +125,25 @@ class Data {
             {
                 label: 'Välj datum och tid:',
                 fields: {
-                    datetime: 'datetime'
+                    datetime: datetime
                 }
             },
             {
                 label: 'Annan nyttig information:',
                 fields: {
-                    ticketlink: 'text',
-                    info: 'text',
-                    price: 'text'
+                    ticketlink: text,
+                    info: text,
+                    price: text
                 }
             },
             {
                 label: 'Välj spelställe:',
                 fields: {
-                    venue_name: 'text',
-                    address: {
-                        type: 'text',
-                        enabled: false
-                    },
-                    name: {
-                        type: 'text',
-                        enabled: false
-                    },
-                    city: {
-                        type: 'text',
-                        enabled: false
-                    },
-                    webpage: {
-                        type: 'text',
-                        enabled: false
-                    }
+                    venue_name: text,
+                    address: text,
+                    name: text,
+                    city: text,
+                    webpage: text
                 }
             }
         ];
@@ -166,6 +167,79 @@ class Data {
 
     deleteMember(member, successCallback, errorCallback) {
         this.membersEndpoint.deleteRequest(member, successCallback, errorCallback);
+    }
+
+    /*
+     * Venues
+     */
+
+    setVenues() {
+
+        this.getVenues((venues) => {
+            this.venues = venues;
+        }, (error) => {
+            console.error('Error while getting venues: ' + JSON.stringify(error, null, 4));
+        });
+    }
+
+    modifyVenueAndUpdate(venue, modifyingFunction) {
+
+        modifyingFunction(venue, () => {
+            this.setVenues();
+        }, (error) => {
+            console.error('Error while updating venue with function: ' + modifyingFunction + ': ' + JSON.stringify(error, null, 4));
+        })
+    }
+
+    sendVenue(gig) {
+
+        let selectedVenue = {
+
+            address: gig.address,
+            name: gig.venue_name, // Note that it is not possible to use gig.name, since that field is not being updated in the form
+            city: gig.city,
+            webpage: gig.webpage
+
+        };
+
+        if (typeof(this.venues) !== 'undefined') {
+
+            let venueForComparison = this.venues.find((venue) => {
+                return venue.name === selectedVenue.name;
+            });
+
+            if (typeof(venueForComparison) === 'undefined') {
+
+                // If there is no venue with the specified name, post the venue (i.e. create it).
+                console.log('Posting venue: ' + JSON.stringify(selectedVenue));
+                //this.modifyVenueAndUpdate(selectedVenue, this.postVenue);
+
+            } else if (JSON.stringify(selectedVenue) !== JSON.stringify(venueForComparison)) { // The order of the attributes in selectedVenue matters here
+
+                /*
+                 * If there is a venue with the specified name, but some of the other fields have been changed,
+                 * put the venue (i.e. update it).
+                 */
+
+                console.log('Putting venue: ' + JSON.stringify(selectedVenue));
+                //this.modifyVenueAndUpdate(selectedVenue, this.putVenue);
+            }
+
+        } else {
+            console.error('Venues undefined when trying to operate on gigs.');
+        }
+    }
+
+    getVenues(successCallback, errorCallback) {
+        this.venuesEndpoint.getRequest(successCallback, errorCallback);
+    }
+
+    postVenue(venue, successCallback, errorCallback) {
+        this.venuesEndpoint.postRequest(venue, successCallback, errorCallback);
+    }
+
+    putVenue(venue, successCallback, errorCallback) {
+        this.venuesEndpoint.putRequest(venue, successCallback, errorCallback);
     }
 }
 

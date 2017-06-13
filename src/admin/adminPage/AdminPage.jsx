@@ -42,7 +42,7 @@ class AdminPage extends React.Component {
         });
     }
 
-    postItem(e, item) {
+    postItem(e) {
 
         /*
          * Without preventDefault, the browser will redirect to:
@@ -56,11 +56,11 @@ class AdminPage extends React.Component {
          * preventDefault fixes it, however, so going with that for now.
          */
         e.preventDefault();
-        this.props.postItem({}, null, null);
+        this.props.postItem(this.adminForm.getModel(), null, null);
 
     }
 
-    putItem(e, item) {
+    putItem(e) {
 
         /*
          * Without preventDefault, the browser will redirect to:
@@ -116,7 +116,7 @@ class AdminPage extends React.Component {
          * preventDefault fixes it, however, so going with that for now.
          */
         e.preventDefault();
-        this.props.deleteItem({}, null, null);
+        this.props.deleteItem(this.adminForm.getModel(), null, null);
 
     }
 

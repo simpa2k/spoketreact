@@ -1,4 +1,5 @@
 import React from 'react';
+import FormGroupVisitor from "./FormGroupVisitor";
 
 class AdminForm extends React.Component {
 
@@ -7,6 +8,8 @@ class AdminForm extends React.Component {
         super(props);
         this.state = {model: this.props.model};
         this.editableFields = [];
+
+        this.updateModel = this.updateModel.bind(this);
 
     }
 
@@ -47,88 +50,23 @@ class AdminForm extends React.Component {
 
     createInputs(group) {
 
-        let inputs = [];
-        let index = 0;
+        let visitor = new FormGroupVisitor(this.state.model, this.updateModel);
 
-        for (const FIELD_NAME in group) {
+        let inputs = visitor.visit(group);
 
-            if (group.hasOwnProperty(FIELD_NAME)) {
+        /*
+         * This makes sure that only fields that are supposed to be editable, that is, fields
+         * that there will be an input element for, are displayed in the admin items generated
+         * in AdminPage.createItems. Semantically, this code should probably be placed in that function but that
+         * would require going through the fields once again. The extra time that would take really is
+         * negligible, though. Also, it results in a lot of duplicates, but since indexOf checks should return
+         * true on the first occurrence of a value this shouldn't be a problem. Space complexity really
+         * isn't an issue in this case.
+         */
+        this.editableFields = this.editableFields.concat(visitor.getVisitedFields());
 
-                /*
-                 * This makes sure that only fields that are supposed to be editable, that is, fields
-                 * that there will be an input element for, are displayed in the admin items generated
-                 * in AdminPage.createItems. Semantically, this code should probably be placed in that function but that
-                 * would require going through the fields once again. The extra time that would take really is
-                 * negligible, though.
-                 */
-                this.editableFields.push(FIELD_NAME);
-
-                inputs.push(
-                    this.resolveInputType(FIELD_NAME, group[FIELD_NAME], ++index)
-                )
-            }
-        }
         return inputs;
 
-    }
-
-    resolveInputType(fieldName, type, key) {
-
-        let element;
-        let value = this.state.model[fieldName];
-
-        if (typeof(value) === 'undefined' || value === null) {
-            value = '';
-        }
-
-        let props = {
-
-            key: key,
-            className: 'form-control',
-            value: value,
-            onChange: (event) => {
-                this.updateModel(event, fieldName)
-            }
-        };
-
-        switch (type) {
-
-            case 'datetime':
-
-                element = 'input';
-
-                props.type = 'datetime-local';
-                props.name = fieldName;
-
-                break;
-
-            case 'textarea':
-
-                element = 'textarea';
-
-                props.rows = '4';
-                props.cols = '50';
-
-                break;
-
-            default:
-
-                element = 'input';
-
-                props.type = 'text';
-                props.name = fieldName;
-
-                break;
-        }
-
-        if (typeof(type.enabled) !== 'undefined') {
-            props.disabled = !type.enabled;
-        }
-
-        return React.createElement(
-            element,
-            props
-        );
     }
 
     updateModel(event, fieldName) {
