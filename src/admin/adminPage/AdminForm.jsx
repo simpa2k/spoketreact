@@ -51,14 +51,14 @@ class AdminForm extends React.Component {
 
     }
 
-    updateModel(event, fieldsToUpdate) {
+    updateModel(value, fieldsToUpdate) {
 
         let model = this.state.model;
 
         if (typeof(fieldsToUpdate) === 'object') {
             model = fieldsToUpdate;
         } else {
-            model[fieldsToUpdate] = event.target.value;
+            model[fieldsToUpdate] = value;
         }
 
         this.setState({model: model});

@@ -1,5 +1,9 @@
 import React from 'react';
 import TinyMCE from 'tinymce-react';
+
+import { DateField } from 'react-date-picker';
+import 'react-date-picker/index.css'
+
 import secrets from '../../secrets';
 
 class FormGroupVisitor {
@@ -9,12 +13,6 @@ class FormGroupVisitor {
         this.formContents = formContents;
         this.onChange = onChange;
 
-        this._visitedFields = [];
-
-    }
-
-    getVisitedFields() {
-        return this._visitedFields;
     }
 
     visit(formGroup) {
@@ -29,7 +27,6 @@ class FormGroupVisitor {
                 this.currentFieldName = FIELD_NAME;
                 this.currentKey = ++index;
 
-                this._visitedFields.push(FIELD_NAME);
                 inputs.push(formGroup[FIELD_NAME].accept(this));
 
             }
@@ -52,7 +49,7 @@ class FormGroupVisitor {
 
     getOnChange(onChange, fieldName) {
         return (event) => {
-            onChange(event, fieldName);
+            onChange(event.target.value, fieldName);
         }
     }
 
@@ -63,6 +60,7 @@ class FormGroupVisitor {
             key: key,
             className: 'form-control',
             value: this.getValue(fieldName),
+            placeholder: fieldName,
             onChange: this.getOnChange(onChange, fieldName)
         }
     };
@@ -113,13 +111,12 @@ class FormGroupVisitor {
 
     createDateTimeInput() {
 
-        let props = this.getProps(this.currentKey, this.currentFieldName, this.onChange);
+        return (
 
-        props.type = 'datetime-local';
-        props.name = this.currentFieldName;
-
-        return this.createElement('input', props);
-
+            <DateField dateFormat={'YYYY-MM-DD HH:mm:ss'} value={this.getValue(this.currentFieldName)} onChange={(datestring) => {
+                this.onChange(datestring, this.currentFieldName);
+            }} />
+        )
     }
 
     createTextarea() {
