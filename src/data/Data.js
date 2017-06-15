@@ -1,4 +1,4 @@
-import { text, AutocompletedText, datetime, textarea } from './formStructure/inputs';
+import { text, AutocompletedText, datetime, textarea, imageCollection } from './formStructure/inputs';
 
 class Data {
 
@@ -9,6 +9,7 @@ class Data {
         this.embeddedItemsEndpoint = endpoints.embeddedItemsEndpoint;
         this.gigsEndpoint = endpoints.gigsEndpoint;
         this.imagesEndpoint = endpoints.imagesEndpoint;
+        this.galleriesEndpoint = endpoints.galleriesEndpoint;
         this.membersEndpoint = endpoints.membersEndpoint;
         this.usersEndpoint = endpoints.usersEndpoint;
         this.venuesEndpoint = endpoints.venuesEndpoint;
@@ -16,6 +17,7 @@ class Data {
         this.bindDescriptionFunctions();
         this.bindEmbeddedItemFunctions();
         this.bindGigFunctions();
+        this.bindImagesFunctions();
         this.bindMemberFunctions();
 
     }
@@ -49,6 +51,12 @@ class Data {
         this.deleteGig = this.deleteGig.bind(this);
         this.getGigsStructure = this.getGigsStructure.bind(this);
 
+    }
+
+    bindImagesFunctions() {
+        
+        this.getGalleries = this.getGalleries.bind(this);
+        
     }
 
     bindMemberFunctions() {
@@ -278,6 +286,54 @@ class Data {
                 }
             ]);
         })
+    }
+
+    /*
+     * Images and galleries
+     */
+
+    getGalleries(successCallback, errorCallback) {
+
+        this.galleriesEndpoint.getRequest((galleries) => {
+
+            let formattedGalleries = [];
+
+            for (const GALLERY_NAME in galleries) {
+
+                let gallery = Object.assign({}, galleries[GALLERY_NAME]);
+
+                gallery.name = GALLERY_NAME;
+                gallery.images = [];
+
+                let images = galleries[GALLERY_NAME].images;
+                for (const IMAGE in images) {
+                    gallery.images.push(images[IMAGE]);
+                }
+
+                formattedGalleries.push(gallery);
+
+            }
+            successCallback(formattedGalleries);
+
+        }, errorCallback);
+    }
+
+    getGalleryStructure(callback) {
+
+        callback([
+            {
+                label: '',
+                fields: {
+                    images: imageCollection
+                }
+            },
+            {
+                label: 'Galleriets namn',
+                fields: {
+                    name: text
+                }
+            }
+        ]);
     }
 
     /*

@@ -27,5 +27,13 @@ let textarea = {
     }
 };
 
-export { text, AutocompletedText, datetime, textarea };
+let imageCollection = {
+
+    accept: (visitor) => {
+        return visitor.createImageCollection();
+    }
+};
+
+
+export { text, AutocompletedText, datetime, textarea, imageCollection };
 

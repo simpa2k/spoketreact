@@ -8,6 +8,7 @@ import StickyNavbar from '../../stickyNavbar/StickyNavbar.jsx';
 import Gig from '../../home/presentational/Gig.jsx';
 import EditableYoutubePlayer from '../presentational/EditableYoutubePlayer.jsx';
 import EditableSoundPlayer from '../presentational/EditableSoundPlayer.jsx';
+import Gallery from '../../home/presentational/gallery/Gallery.jsx';
 
 class Admin extends React.Component {
 
@@ -45,6 +46,10 @@ class Admin extends React.Component {
             {
                 name: 'LJUD',
                 destination: '/admin/sounds'
+            },
+            {
+                name: 'BILDER',
+                destination: '/admin/images'
             }
 
         ];
@@ -124,6 +129,21 @@ class Admin extends React.Component {
                                       createObject={this.createSound}
                                       displayItem={(item, setEditState) => {
                                           return <EditableSoundPlayer model={item} onClick={setEditState} />
+                                      }}/>
+                }} />
+
+                <Route path="/admin/images" render={() => {
+                    return <AdminPage getItems={this.state.data.getGalleries}
+                                      putItem={this.state.data.putImage}
+                                      postItem={this.state.data.postImage}
+                                      deleteItem={this.state.data.deleteImage}
+                                      getFormStructure={this.state.data.getGalleryStructure}
+                                      formName="galleries-form"
+                                      entityName="GALLERIER"
+                                      refreshCallback={this.refreshImages}
+                                      createObject={this.createImage}
+                                      displayItem={(item, setEditState) => {
+                                          return <Gallery model={item} onClick={setEditState} />
                                       }}/>
                 }} />
 

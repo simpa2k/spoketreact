@@ -16,7 +16,7 @@ class SoundPlayer extends EmbeddedItem {
 
     };
 
-    getProps() {
+    getAdditionalProps() {
 
         let style;
 
@@ -27,9 +27,10 @@ class SoundPlayer extends EmbeddedItem {
                 style = {
 
                     width: "100%",
-                    height: "380",
-                    frameborder: "0",
-                    allowtransparency: "true"
+                    height: "166",
+                    scrolling: "no",
+                    frameborder: "no",
+
                 };
 
                 break;
@@ -39,12 +40,24 @@ class SoundPlayer extends EmbeddedItem {
                 style = {
 
                     width: "100%",
-                    height: "166",
-                    scrolling: "no",
-                    frameborder: "no",
+                    height: "380",
+                    frameborder: "0",
+                    allowtransparency: "true"
 
-                }
+                };
 
+                break;
+
+            default:
+
+                style = {
+
+                width: "100%",
+                height: "166",
+                scrolling: "no",
+                frameborder: "no",
+
+            }
         }
 
         return style;

@@ -3,7 +3,7 @@ import EmbeddedItem from './EmbeddedItem.jsx';
 
 class YoutubePlayer extends EmbeddedItem {
 
-    getProps() {
+    getAdditionalProps() {
 
         return {
 

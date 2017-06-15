@@ -12360,6 +12360,7 @@ var Data = function () {
         this.embeddedItemsEndpoint = endpoints.embeddedItemsEndpoint;
         this.gigsEndpoint = endpoints.gigsEndpoint;
         this.imagesEndpoint = endpoints.imagesEndpoint;
+        this.galleriesEndpoint = endpoints.galleriesEndpoint;
         this.membersEndpoint = endpoints.membersEndpoint;
         this.usersEndpoint = endpoints.usersEndpoint;
         this.venuesEndpoint = endpoints.venuesEndpoint;
@@ -12367,6 +12368,7 @@ var Data = function () {
         this.bindDescriptionFunctions();
         this.bindEmbeddedItemFunctions();
         this.bindGigFunctions();
+        this.bindImagesFunctions();
         this.bindMemberFunctions();
     }
 
@@ -12400,6 +12402,12 @@ var Data = function () {
             this.postGig = this.postGig.bind(this);
             this.deleteGig = this.deleteGig.bind(this);
             this.getGigsStructure = this.getGigsStructure.bind(this);
+        }
+    }, {
+        key: 'bindImagesFunctions',
+        value: function bindImagesFunctions() {
+
+            this.getGalleries = this.getGalleries.bind(this);
         }
     }, {
         key: 'bindMemberFunctions',
@@ -12641,6 +12649,52 @@ var Data = function () {
                     }
                 }]);
             });
+        }
+
+        /*
+         * Images and galleries
+         */
+
+    }, {
+        key: 'getGalleries',
+        value: function getGalleries(successCallback, errorCallback) {
+
+            this.galleriesEndpoint.getRequest(function (galleries) {
+
+                var formattedGalleries = [];
+
+                for (var GALLERY_NAME in galleries) {
+
+                    var gallery = Object.assign({}, galleries[GALLERY_NAME]);
+
+                    gallery.name = GALLERY_NAME;
+                    gallery.images = [];
+
+                    var images = galleries[GALLERY_NAME].images;
+                    for (var IMAGE in images) {
+                        gallery.images.push(images[IMAGE]);
+                    }
+
+                    formattedGalleries.push(gallery);
+                }
+                successCallback(formattedGalleries);
+            }, errorCallback);
+        }
+    }, {
+        key: 'getGalleryStructure',
+        value: function getGalleryStructure(callback) {
+
+            callback([{
+                label: '',
+                fields: {
+                    images: _inputs.imageCollection
+                }
+            }, {
+                label: 'Galleriets namn',
+                fields: {
+                    name: _inputs.text
+                }
+            }]);
         }
 
         /*
@@ -36649,6 +36703,7 @@ var App = function (_React$Component) {
                 embeddedItemsEndpoint: new _Endpoint2.default('embeddeditems', true, true, true),
                 gigsEndpoint: new _Endpoint2.default('gigs', true, true, true),
                 imagesEndpoint: new _Endpoint2.default('images', true, true, true),
+                galleriesEndpoint: new _Endpoint2.default('images/galleries', false, false, false),
                 membersEndpoint: new _Endpoint2.default('members', true, true, true),
                 usersEndpoint: new _Endpoint2.default('users', false, false, false),
                 venuesEndpoint: new _Endpoint2.default('venues', true, true, false)
@@ -36682,6 +36737,81 @@ exports.default = App;
 
 var map = {
 	"./about.jpg": 475,
+	"./galleries/Folk at Heart - 15/FaH 1.jpg": 485,
+	"./galleries/Folk at Heart - 15/FaH 2.jpg": 486,
+	"./galleries/Folk at Heart - 15/FaH 3.jpg": 487,
+	"./galleries/Folk at Heart - 15/FaH 4.jpg": 488,
+	"./galleries/Folk at Heart - 15/FaH 5.jpg": 489,
+	"./galleries/Folk at Heart - 15/galleryCover/FaH 1.jpg": 490,
+	"./galleries/Folk at Heart - 15/metadata": 482,
+	"./galleries/Folk at Heart - 15/metadata.json": 482,
+	"./galleries/Folk at Heart - 15/thumbnails/FaH 1.jpg": 491,
+	"./galleries/Folk at Heart - 15/thumbnails/FaH 2.jpg": 492,
+	"./galleries/Folk at Heart - 15/thumbnails/FaH 3.jpg": 493,
+	"./galleries/Folk at Heart - 15/thumbnails/FaH 4.jpg": 494,
+	"./galleries/Folk at Heart - 15/thumbnails/FaH 5.jpg": 495,
+	"./galleries/Pressfoto Mars - 15/galleryCover/spoketpentry.jpg": 496,
+	"./galleries/Pressfoto Mars - 15/metadata": 483,
+	"./galleries/Pressfoto Mars - 15/metadata.json": 483,
+	"./galleries/Pressfoto Mars - 15/spoketpentry.jpg": 497,
+	"./galleries/Pressfoto Mars - 15/spoketrepar1.jpg": 498,
+	"./galleries/Pressfoto Mars - 15/spoketrepar2.jpg": 499,
+	"./galleries/Pressfoto Mars - 15/spoketrepar3.jpg": 500,
+	"./galleries/Pressfoto Mars - 15/spoketrepar6.jpg": 501,
+	"./galleries/Pressfoto Mars - 15/spoketrepar7.jpg": 502,
+	"./galleries/Pressfoto Mars - 15/spokettaket2.jpg": 503,
+	"./galleries/Pressfoto Mars - 15/spokettaket3.jpg": 504,
+	"./galleries/Pressfoto Mars - 15/spokettaket4.jpg": 505,
+	"./galleries/Pressfoto Mars - 15/spokettaket5.jpg": 506,
+	"./galleries/Pressfoto Mars - 15/thumbnails/spoketpentry.jpg": 507,
+	"./galleries/Pressfoto Mars - 15/thumbnails/spoketrepar1.jpg": 508,
+	"./galleries/Pressfoto Mars - 15/thumbnails/spoketrepar2.jpg": 509,
+	"./galleries/Pressfoto Mars - 15/thumbnails/spoketrepar3.jpg": 510,
+	"./galleries/Pressfoto Mars - 15/thumbnails/spoketrepar6.jpg": 511,
+	"./galleries/Pressfoto Mars - 15/thumbnails/spoketrepar7.jpg": 512,
+	"./galleries/Pressfoto Mars - 15/thumbnails/spokettaket2.jpg": 513,
+	"./galleries/Pressfoto Mars - 15/thumbnails/spokettaket3.jpg": 514,
+	"./galleries/Pressfoto Mars - 15/thumbnails/spokettaket4.jpg": 515,
+	"./galleries/Pressfoto Mars - 15/thumbnails/spokettaket5.jpg": 516,
+	"./galleries/Stallet Maj - 15/1.jpg": 517,
+	"./galleries/Stallet Maj - 15/1akrobatiklogotyp.jpg": 518,
+	"./galleries/Stallet Maj - 15/1svartvitlogga.jpg": 519,
+	"./galleries/Stallet Maj - 15/2.jpg": 520,
+	"./galleries/Stallet Maj - 15/20.jpg": 521,
+	"./galleries/Stallet Maj - 15/22.jpg": 522,
+	"./galleries/Stallet Maj - 15/23.jpg": 523,
+	"./galleries/Stallet Maj - 15/24.jpg": 524,
+	"./galleries/Stallet Maj - 15/25.jpg": 525,
+	"./galleries/Stallet Maj - 15/26.jpg": 526,
+	"./galleries/Stallet Maj - 15/27.jpg": 527,
+	"./galleries/Stallet Maj - 15/28.jpg": 528,
+	"./galleries/Stallet Maj - 15/galleryCover/20.jpg": 529,
+	"./galleries/Stallet Maj - 15/largeImages/50.jpg": 530,
+	"./galleries/Stallet Maj - 15/largeImages/51.jpg": 531,
+	"./galleries/Stallet Maj - 15/largeImages/52.jpg": 532,
+	"./galleries/Stallet Maj - 15/largeImages/53.jpg": 533,
+	"./galleries/Stallet Maj - 15/largeImages/54.jpg": 534,
+	"./galleries/Stallet Maj - 15/largeImages/55.jpg": 535,
+	"./galleries/Stallet Maj - 15/largeImages/thumbnails/50.jpg": 536,
+	"./galleries/Stallet Maj - 15/largeImages/thumbnails/51.jpg": 537,
+	"./galleries/Stallet Maj - 15/largeImages/thumbnails/52.jpg": 538,
+	"./galleries/Stallet Maj - 15/largeImages/thumbnails/53.jpg": 539,
+	"./galleries/Stallet Maj - 15/largeImages/thumbnails/54.jpg": 540,
+	"./galleries/Stallet Maj - 15/largeImages/thumbnails/55.jpg": 541,
+	"./galleries/Stallet Maj - 15/metadata": 484,
+	"./galleries/Stallet Maj - 15/metadata.json": 484,
+	"./galleries/Stallet Maj - 15/thumbnails/1.jpg": 542,
+	"./galleries/Stallet Maj - 15/thumbnails/1akrobatiklogotyp.jpg": 543,
+	"./galleries/Stallet Maj - 15/thumbnails/1svartvitlogga.jpg": 544,
+	"./galleries/Stallet Maj - 15/thumbnails/2.jpg": 545,
+	"./galleries/Stallet Maj - 15/thumbnails/20.jpg": 546,
+	"./galleries/Stallet Maj - 15/thumbnails/22.jpg": 547,
+	"./galleries/Stallet Maj - 15/thumbnails/23.jpg": 548,
+	"./galleries/Stallet Maj - 15/thumbnails/24.jpg": 549,
+	"./galleries/Stallet Maj - 15/thumbnails/25.jpg": 550,
+	"./galleries/Stallet Maj - 15/thumbnails/26.jpg": 551,
+	"./galleries/Stallet Maj - 15/thumbnails/27.jpg": 552,
+	"./galleries/Stallet Maj - 15/thumbnails/28.jpg": 553,
 	"./socialmedia/facebooklogga_29.png": 267,
 	"./socialmedia/spotify_29.png": 268,
 	"./socialmedia/yt29.png": 269,
@@ -36901,6 +37031,10 @@ var _tinymceReact = __webpack_require__(471);
 
 var _tinymceReact2 = _interopRequireDefault(_tinymceReact);
 
+var _EditableImage = __webpack_require__(557);
+
+var _EditableImage2 = _interopRequireDefault(_EditableImage);
+
 var _reactDatePicker = __webpack_require__(344);
 
 __webpack_require__(468);
@@ -36970,6 +37104,7 @@ var FormGroupVisitor = function () {
                 value: this.getValue(fieldName),
                 placeholder: fieldName,
                 onChange: this.getOnChange(onChange, fieldName)
+
             };
         }
     }, {
@@ -37033,6 +37168,19 @@ var FormGroupVisitor = function () {
             return _react2.default.createElement(_tinymceReact2.default, { apiKey: _secrets2.default.tinyMCEAPIKey,
                 content: this.getValue(this.currentFieldName),
                 onChange: this.getOnChange(this.onChange, this.currentFieldName) });
+        }
+    }, {
+        key: 'createImageCollection',
+        value: function createImageCollection() {
+
+            var images = this.formContents[this.currentFieldName];
+
+            if (typeof images !== 'undefined') {
+
+                return images.map(function (image, index) {
+                    return _react2.default.createElement(_EditableImage2.default, { key: index, full: image.full, thumb: image.thumb });
+                });
+            }
         }
     }]);
 
@@ -37267,6 +37415,10 @@ var _EditableSoundPlayer = __webpack_require__(279);
 
 var _EditableSoundPlayer2 = _interopRequireDefault(_EditableSoundPlayer);
 
+var _Gallery = __webpack_require__(555);
+
+var _Gallery2 = _interopRequireDefault(_Gallery);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -37311,6 +37463,9 @@ var Admin = function (_React$Component) {
             }, {
                 name: 'LJUD',
                 destination: '/admin/sounds'
+            }, {
+                name: 'BILDER',
+                destination: '/admin/images'
             }];
         }
     }, {
@@ -37386,6 +37541,20 @@ var Admin = function (_React$Component) {
                             createObject: _this2.createSound,
                             displayItem: function displayItem(item, setEditState) {
                                 return _react2.default.createElement(_EditableSoundPlayer2.default, { model: item, onClick: setEditState });
+                            } });
+                    } }),
+                _react2.default.createElement(_reactRouterDom.Route, { path: '/admin/images', render: function render() {
+                        return _react2.default.createElement(_AdminPage2.default, { getItems: _this2.state.data.getGalleries,
+                            putItem: _this2.state.data.putImage,
+                            postItem: _this2.state.data.postImage,
+                            deleteItem: _this2.state.data.deleteImage,
+                            getFormStructure: _this2.state.data.getGalleryStructure,
+                            formName: 'galleries-form',
+                            entityName: 'GALLERIER',
+                            refreshCallback: _this2.refreshImages,
+                            createObject: _this2.createImage,
+                            displayItem: function displayItem(item, setEditState) {
+                                return _react2.default.createElement(_Gallery2.default, { model: item, onClick: setEditState });
                             } });
                     } })
             );
@@ -37596,10 +37765,18 @@ var textarea = {
     }
 };
 
+var imageCollection = {
+
+    accept: function accept(visitor) {
+        return visitor.createImageCollection();
+    }
+};
+
 exports.text = text;
 exports.AutocompletedText = AutocompletedText;
 exports.datetime = datetime;
 exports.textarea = textarea;
+exports.imageCollection = imageCollection;
 
 /***/ }),
 /* 283 */
@@ -38396,7 +38573,7 @@ exports.default = Section;
 
 
 Object.defineProperty(exports, "__esModule", {
-        value: true
+                value: true
 });
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
@@ -38418,65 +38595,78 @@ function _possibleConstructorReturn(self, call) { if (!self) { throw new Referen
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
 var SoundPlayer = function (_EmbeddedItem) {
-        _inherits(SoundPlayer, _EmbeddedItem);
+                _inherits(SoundPlayer, _EmbeddedItem);
 
-        function SoundPlayer() {
-                _classCallCheck(this, SoundPlayer);
+                function SoundPlayer() {
+                                _classCallCheck(this, SoundPlayer);
 
-                return _possibleConstructorReturn(this, (SoundPlayer.__proto__ || Object.getPrototypeOf(SoundPlayer)).apply(this, arguments));
-        }
-
-        _createClass(SoundPlayer, [{
-                key: 'determineType',
-                value: function determineType(embeddedItem) {
-
-                        var anchor = document.createElement('a');
-                        anchor.href = embeddedItem.src;
-
-                        var hostname = anchor.hostname;
-                        var hostnameElements = hostname.split('.');
-
-                        // ToDo: this currently only handles urls with a subdomain, which is fine for the APIs currently used.
-                        return hostnameElements.length >= 2 ? hostnameElements[1] : 'default';
+                                return _possibleConstructorReturn(this, (SoundPlayer.__proto__ || Object.getPrototypeOf(SoundPlayer)).apply(this, arguments));
                 }
-        }, {
-                key: 'getProps',
-                value: function getProps() {
 
-                        var style = void 0;
+                _createClass(SoundPlayer, [{
+                                key: 'determineType',
+                                value: function determineType(embeddedItem) {
 
-                        switch (this.determineType(this.props.model)) {
+                                                var anchor = document.createElement('a');
+                                                anchor.href = embeddedItem.src;
 
-                                case 'soundcloud':
+                                                var hostname = anchor.hostname;
+                                                var hostnameElements = hostname.split('.');
 
-                                        style = {
+                                                // ToDo: this currently only handles urls with a subdomain, which is fine for the APIs currently used.
+                                                return hostnameElements.length >= 2 ? hostnameElements[1] : 'default';
+                                }
+                }, {
+                                key: 'getAdditionalProps',
+                                value: function getAdditionalProps() {
 
-                                                width: "100%",
-                                                height: "380",
-                                                frameborder: "0",
-                                                allowtransparency: "true"
-                                        };
+                                                var style = void 0;
 
-                                        break;
+                                                switch (this.determineType(this.props.model)) {
 
-                                case 'spotify':
+                                                                case 'soundcloud':
 
-                                        style = {
+                                                                                style = {
 
-                                                width: "100%",
-                                                height: "166",
-                                                scrolling: "no",
-                                                frameborder: "no"
+                                                                                                width: "100%",
+                                                                                                height: "166",
+                                                                                                scrolling: "no",
+                                                                                                frameborder: "no"
 
-                                        };
+                                                                                };
 
-                        }
+                                                                                break;
 
-                        return style;
-                }
-        }]);
+                                                                case 'spotify':
 
-        return SoundPlayer;
+                                                                                style = {
+
+                                                                                                width: "100%",
+                                                                                                height: "380",
+                                                                                                frameborder: "0",
+                                                                                                allowtransparency: "true"
+
+                                                                                };
+
+                                                                                break;
+
+                                                                default:
+
+                                                                                style = {
+
+                                                                                                width: "100%",
+                                                                                                height: "166",
+                                                                                                scrolling: "no",
+                                                                                                frameborder: "no"
+
+                                                                                };
+                                                }
+
+                                                return style;
+                                }
+                }]);
+
+                return SoundPlayer;
 }(_EmbeddedItem3.default);
 
 exports.default = SoundPlayer;
@@ -38520,8 +38710,8 @@ var YoutubePlayer = function (_EmbeddedItem) {
     }
 
     _createClass(YoutubePlayer, [{
-        key: 'getProps',
-        value: function getProps() {
+        key: 'getAdditionalProps',
+        value: function getAdditionalProps() {
 
             return {
 
@@ -60338,6 +60528,563 @@ module.exports = function(module) {
   self.fetch.polyfill = true
 })(typeof self !== 'undefined' ? self : this);
 
+
+/***/ }),
+/* 482 */
+/***/ (function(module, exports) {
+
+module.exports = {
+	"galleryname": "Folk at Heart - 15"
+};
+
+/***/ }),
+/* 483 */
+/***/ (function(module, exports) {
+
+module.exports = {
+	"galleryname": "Pressfoto Mars - 15"
+};
+
+/***/ }),
+/* 484 */
+/***/ (function(module, exports) {
+
+module.exports = {
+	"galleryname": "Stallet Maj - 15"
+};
+
+/***/ }),
+/* 485 */
+/***/ (function(module, exports, __webpack_require__) {
+
+module.exports = __webpack_require__.p + "12c7522e37a5aec1b8571db1cb8aaa35.jpg";
+
+/***/ }),
+/* 486 */
+/***/ (function(module, exports, __webpack_require__) {
+
+module.exports = __webpack_require__.p + "a81e830c5d94dc34d7f806b595f74925.jpg";
+
+/***/ }),
+/* 487 */
+/***/ (function(module, exports, __webpack_require__) {
+
+module.exports = __webpack_require__.p + "b4d27dba6bf73a62a375e40c7a352186.jpg";
+
+/***/ }),
+/* 488 */
+/***/ (function(module, exports, __webpack_require__) {
+
+module.exports = __webpack_require__.p + "822aff3d419342a7234fc15410bc3869.jpg";
+
+/***/ }),
+/* 489 */
+/***/ (function(module, exports, __webpack_require__) {
+
+module.exports = __webpack_require__.p + "91e69466a0728de27a9891ac90af2fc7.jpg";
+
+/***/ }),
+/* 490 */
+/***/ (function(module, exports, __webpack_require__) {
+
+module.exports = __webpack_require__.p + "2a9917c2cf59f389cb97926d2aff6ae8.jpg";
+
+/***/ }),
+/* 491 */
+/***/ (function(module, exports, __webpack_require__) {
+
+module.exports = __webpack_require__.p + "54a7e4e8b81d75334952fcfdedf2aa34.jpg";
+
+/***/ }),
+/* 492 */
+/***/ (function(module, exports, __webpack_require__) {
+
+module.exports = __webpack_require__.p + "624dd6b7490f340ccb3e3304c1205a28.jpg";
+
+/***/ }),
+/* 493 */
+/***/ (function(module, exports, __webpack_require__) {
+
+module.exports = __webpack_require__.p + "47240908ff82c7bc9e2d555904079188.jpg";
+
+/***/ }),
+/* 494 */
+/***/ (function(module, exports, __webpack_require__) {
+
+module.exports = __webpack_require__.p + "4eddb3c6c097426c3115df269b42e67d.jpg";
+
+/***/ }),
+/* 495 */
+/***/ (function(module, exports, __webpack_require__) {
+
+module.exports = __webpack_require__.p + "807d696c87e37833e14b65642bfb0a45.jpg";
+
+/***/ }),
+/* 496 */
+/***/ (function(module, exports, __webpack_require__) {
+
+module.exports = __webpack_require__.p + "740adf9bde462d1dbd2229eaf90a0e9b.jpg";
+
+/***/ }),
+/* 497 */
+/***/ (function(module, exports, __webpack_require__) {
+
+module.exports = __webpack_require__.p + "1c362d164cec49064738186cab9db9ab.jpg";
+
+/***/ }),
+/* 498 */
+/***/ (function(module, exports, __webpack_require__) {
+
+module.exports = __webpack_require__.p + "47184b58233983c60ad5dfcc1934ce72.jpg";
+
+/***/ }),
+/* 499 */
+/***/ (function(module, exports, __webpack_require__) {
+
+module.exports = __webpack_require__.p + "413d990ac76bf5e2c5b7e5ffcefd20ac.jpg";
+
+/***/ }),
+/* 500 */
+/***/ (function(module, exports, __webpack_require__) {
+
+module.exports = __webpack_require__.p + "139f15af3228d2a7c1d7a6d090fd8d28.jpg";
+
+/***/ }),
+/* 501 */
+/***/ (function(module, exports, __webpack_require__) {
+
+module.exports = __webpack_require__.p + "47f4e958a2e3086c8a66129ec69ea6c6.jpg";
+
+/***/ }),
+/* 502 */
+/***/ (function(module, exports, __webpack_require__) {
+
+module.exports = __webpack_require__.p + "3eed372158690cd542af8259e3d6eee1.jpg";
+
+/***/ }),
+/* 503 */
+/***/ (function(module, exports, __webpack_require__) {
+
+module.exports = __webpack_require__.p + "476eb1e587328cec6f0d15a42c93d191.jpg";
+
+/***/ }),
+/* 504 */
+/***/ (function(module, exports, __webpack_require__) {
+
+module.exports = __webpack_require__.p + "b249fc3b1c922c6ecb041f35e17bc453.jpg";
+
+/***/ }),
+/* 505 */
+/***/ (function(module, exports, __webpack_require__) {
+
+module.exports = __webpack_require__.p + "32b23164fb53448c4b3666ab730e7579.jpg";
+
+/***/ }),
+/* 506 */
+/***/ (function(module, exports, __webpack_require__) {
+
+module.exports = __webpack_require__.p + "f3011e2ef05716725518845711f5609b.jpg";
+
+/***/ }),
+/* 507 */
+/***/ (function(module, exports, __webpack_require__) {
+
+module.exports = __webpack_require__.p + "b1ca7b680239571e685b07691d9b9d85.jpg";
+
+/***/ }),
+/* 508 */
+/***/ (function(module, exports, __webpack_require__) {
+
+module.exports = __webpack_require__.p + "017eba915d94d373e887726dd43bdffc.jpg";
+
+/***/ }),
+/* 509 */
+/***/ (function(module, exports, __webpack_require__) {
+
+module.exports = __webpack_require__.p + "73761fb715670aed57f4d055b7e43fb0.jpg";
+
+/***/ }),
+/* 510 */
+/***/ (function(module, exports, __webpack_require__) {
+
+module.exports = __webpack_require__.p + "fc76c4ca6b141f8c9f944a3ffe5a500a.jpg";
+
+/***/ }),
+/* 511 */
+/***/ (function(module, exports, __webpack_require__) {
+
+module.exports = __webpack_require__.p + "8471545c9106fa0995a1c6ef217b85d2.jpg";
+
+/***/ }),
+/* 512 */
+/***/ (function(module, exports, __webpack_require__) {
+
+module.exports = __webpack_require__.p + "84e6bff137fa87a764f9473d0b4c3e50.jpg";
+
+/***/ }),
+/* 513 */
+/***/ (function(module, exports, __webpack_require__) {
+
+module.exports = __webpack_require__.p + "e6fac22c729e29ed429dc86022db97d1.jpg";
+
+/***/ }),
+/* 514 */
+/***/ (function(module, exports, __webpack_require__) {
+
+module.exports = __webpack_require__.p + "2eb099c63836d9aa2d2458d867cdc1f9.jpg";
+
+/***/ }),
+/* 515 */
+/***/ (function(module, exports, __webpack_require__) {
+
+module.exports = __webpack_require__.p + "0bd41407e0ccd7f72274930d16fdd743.jpg";
+
+/***/ }),
+/* 516 */
+/***/ (function(module, exports, __webpack_require__) {
+
+module.exports = __webpack_require__.p + "42e11e620972d31678b445c773f0a40d.jpg";
+
+/***/ }),
+/* 517 */
+/***/ (function(module, exports, __webpack_require__) {
+
+module.exports = __webpack_require__.p + "a5c06ed823dfc9152c894a123ed35a13.jpg";
+
+/***/ }),
+/* 518 */
+/***/ (function(module, exports, __webpack_require__) {
+
+module.exports = __webpack_require__.p + "3b13297212cc43305fa8858396c6eeba.jpg";
+
+/***/ }),
+/* 519 */
+/***/ (function(module, exports, __webpack_require__) {
+
+module.exports = __webpack_require__.p + "7f24e159ffca7e7c9824495153fbe857.jpg";
+
+/***/ }),
+/* 520 */
+/***/ (function(module, exports, __webpack_require__) {
+
+module.exports = __webpack_require__.p + "835cfdbdade1f374b972017f7061f309.jpg";
+
+/***/ }),
+/* 521 */
+/***/ (function(module, exports, __webpack_require__) {
+
+module.exports = __webpack_require__.p + "34b2568f284f8ae7f7057416acef1594.jpg";
+
+/***/ }),
+/* 522 */
+/***/ (function(module, exports, __webpack_require__) {
+
+module.exports = __webpack_require__.p + "6a842c84811f9631fa7d2808d84e40d9.jpg";
+
+/***/ }),
+/* 523 */
+/***/ (function(module, exports, __webpack_require__) {
+
+module.exports = __webpack_require__.p + "ccd2f8eb155f09b8be28a532a7a4a093.jpg";
+
+/***/ }),
+/* 524 */
+/***/ (function(module, exports, __webpack_require__) {
+
+module.exports = __webpack_require__.p + "b10ecdc3415ede7a285b632a37868d27.jpg";
+
+/***/ }),
+/* 525 */
+/***/ (function(module, exports, __webpack_require__) {
+
+module.exports = __webpack_require__.p + "0c905698599677262eb8780a9daa192f.jpg";
+
+/***/ }),
+/* 526 */
+/***/ (function(module, exports, __webpack_require__) {
+
+module.exports = __webpack_require__.p + "b4646838c803a4a25061dd605c048dbb.jpg";
+
+/***/ }),
+/* 527 */
+/***/ (function(module, exports, __webpack_require__) {
+
+module.exports = __webpack_require__.p + "405be9069ffce8d9c2f5fe7419f9eaba.jpg";
+
+/***/ }),
+/* 528 */
+/***/ (function(module, exports, __webpack_require__) {
+
+module.exports = __webpack_require__.p + "c9c10ba6cdac5e05b23d4af168bc7168.jpg";
+
+/***/ }),
+/* 529 */
+/***/ (function(module, exports, __webpack_require__) {
+
+module.exports = __webpack_require__.p + "0b323b0e4dc8d7c559133c1c2d4dea88.jpg";
+
+/***/ }),
+/* 530 */
+/***/ (function(module, exports, __webpack_require__) {
+
+module.exports = __webpack_require__.p + "bd52eb38175e3294be324fd9eeb4bbd9.jpg";
+
+/***/ }),
+/* 531 */
+/***/ (function(module, exports, __webpack_require__) {
+
+module.exports = __webpack_require__.p + "897cbfc022b7afdc6df9247801235fa7.jpg";
+
+/***/ }),
+/* 532 */
+/***/ (function(module, exports, __webpack_require__) {
+
+module.exports = __webpack_require__.p + "5c4ad2e678e247f715849a8789e21625.jpg";
+
+/***/ }),
+/* 533 */
+/***/ (function(module, exports, __webpack_require__) {
+
+module.exports = __webpack_require__.p + "6e8859ecc5c09b36de6c92d8d22b5f56.jpg";
+
+/***/ }),
+/* 534 */
+/***/ (function(module, exports, __webpack_require__) {
+
+module.exports = __webpack_require__.p + "d61ee618c45d1ba7cb67ec94b53099f6.jpg";
+
+/***/ }),
+/* 535 */
+/***/ (function(module, exports, __webpack_require__) {
+
+module.exports = __webpack_require__.p + "ce24929cb14ef7d517b2534596afc271.jpg";
+
+/***/ }),
+/* 536 */
+/***/ (function(module, exports, __webpack_require__) {
+
+module.exports = __webpack_require__.p + "1a1186de7880a7eaa817940a69999f52.jpg";
+
+/***/ }),
+/* 537 */
+/***/ (function(module, exports, __webpack_require__) {
+
+module.exports = __webpack_require__.p + "9e1df00647e1f9eb691cc9a0596317b7.jpg";
+
+/***/ }),
+/* 538 */
+/***/ (function(module, exports, __webpack_require__) {
+
+module.exports = __webpack_require__.p + "b6cef4b5f7413d02ac6b52f8867a70c5.jpg";
+
+/***/ }),
+/* 539 */
+/***/ (function(module, exports, __webpack_require__) {
+
+module.exports = __webpack_require__.p + "eae9d067115d38f260682890dbafb38e.jpg";
+
+/***/ }),
+/* 540 */
+/***/ (function(module, exports, __webpack_require__) {
+
+module.exports = __webpack_require__.p + "d0d9f4197219adb2997324a0cad8d59d.jpg";
+
+/***/ }),
+/* 541 */
+/***/ (function(module, exports, __webpack_require__) {
+
+module.exports = __webpack_require__.p + "97b51814302f2de1c53f2c9ca94d18ae.jpg";
+
+/***/ }),
+/* 542 */
+/***/ (function(module, exports, __webpack_require__) {
+
+module.exports = __webpack_require__.p + "c991bbf85ae238ea1c677e33b9b62ce0.jpg";
+
+/***/ }),
+/* 543 */
+/***/ (function(module, exports, __webpack_require__) {
+
+module.exports = __webpack_require__.p + "dee76d7b0ab38eda4329264eab838135.jpg";
+
+/***/ }),
+/* 544 */
+/***/ (function(module, exports, __webpack_require__) {
+
+module.exports = __webpack_require__.p + "21585d85053e496b2ed6d75d6dfbc681.jpg";
+
+/***/ }),
+/* 545 */
+/***/ (function(module, exports, __webpack_require__) {
+
+module.exports = __webpack_require__.p + "643ca980730b8297ab29204f7ce4adfe.jpg";
+
+/***/ }),
+/* 546 */
+/***/ (function(module, exports, __webpack_require__) {
+
+module.exports = __webpack_require__.p + "6fcb1ebce66a22cc27fce48fc9455e96.jpg";
+
+/***/ }),
+/* 547 */
+/***/ (function(module, exports, __webpack_require__) {
+
+module.exports = __webpack_require__.p + "764f31faf34f95ec631e7baff212ff70.jpg";
+
+/***/ }),
+/* 548 */
+/***/ (function(module, exports, __webpack_require__) {
+
+module.exports = __webpack_require__.p + "b29b0cf9ca884cad4f616269572915bb.jpg";
+
+/***/ }),
+/* 549 */
+/***/ (function(module, exports, __webpack_require__) {
+
+module.exports = __webpack_require__.p + "2db2a7afc099f81032213a9e04ecc6e7.jpg";
+
+/***/ }),
+/* 550 */
+/***/ (function(module, exports, __webpack_require__) {
+
+module.exports = __webpack_require__.p + "1b94a0ee54e4e9572773dff27c49a12d.jpg";
+
+/***/ }),
+/* 551 */
+/***/ (function(module, exports, __webpack_require__) {
+
+module.exports = __webpack_require__.p + "c1dfbbdee6e70ea3f686e86831f3e856.jpg";
+
+/***/ }),
+/* 552 */
+/***/ (function(module, exports, __webpack_require__) {
+
+module.exports = __webpack_require__.p + "0161c2358ff869fbb2537c31f4c340fc.jpg";
+
+/***/ }),
+/* 553 */
+/***/ (function(module, exports, __webpack_require__) {
+
+module.exports = __webpack_require__.p + "a2a168eee13145800c6780e79e38c6bf.jpg";
+
+/***/ }),
+/* 554 */,
+/* 555 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _react = __webpack_require__(2);
+
+var _react2 = _interopRequireDefault(_react);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+var Gallery = function (_React$Component) {
+    _inherits(Gallery, _React$Component);
+
+    function Gallery() {
+        _classCallCheck(this, Gallery);
+
+        return _possibleConstructorReturn(this, (Gallery.__proto__ || Object.getPrototypeOf(Gallery)).apply(this, arguments));
+    }
+
+    _createClass(Gallery, [{
+        key: 'render',
+        value: function render() {
+
+            return _react2.default.createElement('img', { src: '/' + this.props.model.galleryCover, onClick: this.props.onClick });
+        }
+    }]);
+
+    return Gallery;
+}(_react2.default.Component);
+
+exports.default = Gallery;
+
+/***/ }),
+/* 556 */,
+/* 557 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _react = __webpack_require__(2);
+
+var _react2 = _interopRequireDefault(_react);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+var EditableImage = function (_React$Component) {
+    _inherits(EditableImage, _React$Component);
+
+    function EditableImage() {
+        _classCallCheck(this, EditableImage);
+
+        return _possibleConstructorReturn(this, (EditableImage.__proto__ || Object.getPrototypeOf(EditableImage)).apply(this, arguments));
+    }
+
+    _createClass(EditableImage, [{
+        key: 'render',
+        value: function render() {
+            var _this2 = this;
+
+            return _react2.default.createElement(
+                'div',
+                { className: 'gallery-item' },
+                _react2.default.createElement('img', { src: '/' + this.props.thumb }),
+                _react2.default.createElement(
+                    'div',
+                    { className: 'btn-group-vertical edit-image' },
+                    _react2.default.createElement(
+                        'button',
+                        { className: 'btn btn-danger', onClick: function onClick() {
+                                return _this2.props.delete();
+                            } },
+                        'Ta bort'
+                    ),
+                    _react2.default.createElement(
+                        'button',
+                        { className: 'btn btn-primary', onClick: function onClick() {
+                                return _this2.props.setGalleryCover();
+                            } },
+                        'Anv\xE4nd som omslag'
+                    )
+                )
+            );
+        }
+    }]);
+
+    return EditableImage;
+}(_react2.default.Component);
+
+exports.default = EditableImage;
 
 /***/ })
 /******/ ]);

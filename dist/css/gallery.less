@@ -1,0 +1,40 @@
+@import "globals.less";
+
+.edit-image {
+  display: none;
+}
+
+.gallery-item {
+
+  display: inline;
+  position: relative;
+
+  img {
+
+    margin: 1% 1% 1% 0;
+    max-width: 100%;
+    .shadowed;
+
+  }
+
+  .active {
+    .box-shadow(2px 2px 3px 0px @deep-blue);
+    border: 1px solid @deep-blue;
+    border-radius: 3px;
+  }
+}
+
+.gallery-item:hover > img {
+  opacity: 0.5;
+}
+
+.gallery-item:hover > .edit-image {
+
+  display: initial;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+
+}
+

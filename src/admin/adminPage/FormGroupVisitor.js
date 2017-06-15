@@ -1,5 +1,6 @@
 import React from 'react';
 import TinyMCE from 'tinymce-react';
+import EditableImage from "../presentational/EditableImage.jsx";
 
 import { DateField } from 'react-date-picker';
 import 'react-date-picker/index.css'
@@ -62,6 +63,7 @@ class FormGroupVisitor {
             value: this.getValue(fieldName),
             placeholder: fieldName,
             onChange: this.getOnChange(onChange, fieldName)
+
         }
     };
 
@@ -127,6 +129,18 @@ class FormGroupVisitor {
                      content={this.getValue(this.currentFieldName)}
                      onChange={this.getOnChange(this.onChange, this.currentFieldName)} />
         )
+    }
+
+    createImageCollection() {
+
+        let images = this.formContents[this.currentFieldName];
+
+        if (typeof(images) !== 'undefined') {
+
+            return images.map((image, index) => {
+                return <EditableImage key={index} full={image.full} thumb={image.thumb} />
+            });
+        }
     }
 }
 
