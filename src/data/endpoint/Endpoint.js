@@ -21,8 +21,8 @@ const Endpoint = function(endpointName, puttable, postable, deleteable) {
 
     };
 
-    this.getRequest = (successCallback, errorCallback, responseFormat) => {
-        getRequest(this.endpointName, {}, {}, successCallback, errorCallback, responseFormat);
+    this.getRequest = (successCallback, errorCallback, responseFormat, parameters = {}) => {
+        getRequest(this.endpointName, parameters, {}, successCallback, errorCallback, responseFormat);
     };
 
     this.putRequest = puttable ? (object, successCallback, errorCallback, responseFormat) => {

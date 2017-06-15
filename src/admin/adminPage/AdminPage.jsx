@@ -27,7 +27,7 @@ class AdminPage extends React.Component {
         this.props.getFormStructure((formStructure) => {
 
             this.setState({formStructure: formStructure});
-            this.createItems(this.pickOutFieldsToDisplay(formStructure));
+            this.createItems(formStructure);
 
         });
     }
@@ -66,22 +66,31 @@ class AdminPage extends React.Component {
         }));
     }
 
-    createItems(fieldsToDisplay) {
+    createItems(formStructure) {
 
         this.props.getItems((items) => {
 
             this.setState({
                 items: items.map((item, index) => {
 
+                    let setEditState = () => {
+                        this.setPutState(item);
+                    };
+
+                    let component = this.props.displayItem ? this.props.displayItem(item, setEditState) : <AdminItem model={item} fields={this.pickOutFieldsToDisplay(formStructure)} onClick={setEditState} />;
+
                     return (
 
-                        <div key={index} className="admin-item selectable row">
-                            <AdminItem item={item} fields={fieldsToDisplay} onClick={() => this.setPutState(item)}/>
+                        <div key={index} className="selectable-container" >
+                            {component}
                         </div>
 
                     )
                 })
             });
+            //<div key={index} className="admin-item selectable row">
+                //<AdminItem model={item} fields={fieldsToDisplay} onClick={() => this.setPutState(item)}/>
+            //</div>
 
         }, (error) => {
             console.log(error);

@@ -5,6 +5,9 @@ import AdminPage from '../adminPage/AdminPage.jsx';
 import SingleItemAdminPage from '../adminPage/SingleItemAdminPage.jsx';
 import AdminMembersPage from '../adminPage/AdminMembersPage.jsx';
 import StickyNavbar from '../../stickyNavbar/StickyNavbar.jsx';
+import Gig from '../../home/presentational/Gig.jsx';
+import EditableYoutubePlayer from '../presentational/EditableYoutubePlayer.jsx';
+import EditableSoundPlayer from '../presentational/EditableSoundPlayer.jsx';
 
 class Admin extends React.Component {
 
@@ -34,6 +37,14 @@ class Admin extends React.Component {
             {
                 name: 'MEDLEMMAR',
                 destination: '/admin/members'
+            },
+            {
+                name: 'VIDEOR',
+                destination: '/admin/videos'
+            },
+            {
+                name: 'LJUD',
+                destination: '/admin/sounds'
             }
 
         ];
@@ -58,7 +69,10 @@ class Admin extends React.Component {
                                       formName="gigs-form"
                                       entityName="KONSERTER"
                                       refreshCallback={this.refreshGigs}
-                                      createObject={this.createGig} />
+                                      createObject={this.createGig}
+                                      displayItem={(item, setEditState) => {
+                                        return <Gig model={item} onClick={(event) => {setEditState()}} />
+                                      }}/>
                 }} />
 
                 <Route path="/admin/description" render={() => {
@@ -82,6 +96,36 @@ class Admin extends React.Component {
                                        refreshCallback={this.refreshMembers}
                                        createObject={this.createMember} />
                  }} />
+
+                <Route path="/admin/videos" render={() => {
+                    return <AdminPage getItems={this.state.data.getVideos}
+                                      putItem={this.state.data.putVideo}
+                                      postItem={this.state.data.postVideo}
+                                      deleteItem={this.state.data.deleteEmbeddedItem}
+                                      getFormStructure={this.state.data.getEmbeddedItemStructure}
+                                      formName="video-form"
+                                      entityName="VIDEO"
+                                      refreshCallback={this.refreshVideos}
+                                      createObject={this.createVideo}
+                                      displayItem={(item, setEditState) => {
+                                          return <EditableYoutubePlayer model={item} onClick={setEditState} />
+                                      }}/>
+                }} />
+
+                <Route path="/admin/sounds" render={() => {
+                    return <AdminPage getItems={this.state.data.getSounds}
+                                      putItem={this.state.data.putSound}
+                                      postItem={this.state.data.postSound}
+                                      deleteItem={this.state.data.deleteEmbeddedItem}
+                                      getFormStructure={this.state.data.getSoundStructure}
+                                      formName="sound-form"
+                                      entityName="LJUD"
+                                      refreshCallback={this.refreshSounds}
+                                      createObject={this.createSound}
+                                      displayItem={(item, setEditState) => {
+                                          return <EditableSoundPlayer model={item} onClick={setEditState} />
+                                      }}/>
+                }} />
 
             </div>
         )

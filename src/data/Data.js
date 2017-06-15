@@ -13,8 +13,9 @@ class Data {
         this.usersEndpoint = endpoints.usersEndpoint;
         this.venuesEndpoint = endpoints.venuesEndpoint;
 
-        this.bindGigFunctions();
         this.bindDescriptionFunctions();
+        this.bindEmbeddedItemFunctions();
+        this.bindGigFunctions();
         this.bindMemberFunctions();
 
     }
@@ -25,6 +26,19 @@ class Data {
         this.putDescription = this.putDescription.bind(this);
         this.getDescriptionStructure = this.getDescriptionStructure.bind(this);
 
+    }
+
+    bindEmbeddedItemFunctions() {
+        
+        this.getEmbeddedItems = this.getEmbeddedItems.bind(this);
+        this.getVideos = this.getVideos.bind(this);
+        this.getSounds = this.getSounds.bind(this);
+        this.putEmbeddedItem = this.putEmbeddedItem.bind(this);
+        this.putVideo = this.putVideo.bind(this);
+        this.postEmbeddedItem = this.postEmbeddedItem.bind(this);
+        this.postVideo = this.postVideo.bind(this);
+        this.deleteEmbeddedItem = this.deleteEmbeddedItem.bind(this);
+        
     }
 
     bindGigFunctions() {
@@ -82,7 +96,9 @@ class Data {
      */
 
     getDescription(successCallback, errorCallback) {
-        this.descriptionEndpoint.getRequest(successCallback, errorCallback);
+        this.descriptionEndpoint.getRequest((fulfilled) => {
+            successCallback(fulfilled[0]);
+        }, errorCallback);
     }
 
     putDescription(description, successCallback, errorCallback) {
@@ -95,7 +111,7 @@ class Data {
             {
                 label: '',
                 fields: {
-                    description: textarea
+                    content: textarea
                 }
             }
         ]);
@@ -110,16 +126,93 @@ class Data {
         this.embeddedItemsEndpoint.getRequest(successCallback, errorCallback);
     }
 
+    getVideos(successCallback, errorCallback) {
+
+        this.embeddedItemsEndpoint.getRequest((fulfilled) => {
+
+            successCallback(fulfilled.map((video) => {
+
+                video.externalId = video.src.split('/').pop();
+                return video;
+
+            }));
+
+        }, errorCallback, null, {
+            type: 'video'
+        });
+    }
+
+    getSounds(successCallback, errorCallback) {
+
+        this.embeddedItemsEndpoint.getRequest((fulfilled) => {
+
+            successCallback(fulfilled.map((sound) => {
+
+                sound.externalId = sound.src;
+                return sound;
+
+            }));
+        }, errorCallback, null, {
+            type: 'sound'
+        });
+    }
+
     putEmbeddedItem(embeddedItem, successCallback, errorCallback) {
         this.embeddedItemsEndpoint.putRequest(embeddedItem, successCallback, errorCallback);
+    }
+
+    setType(embeddedItem, type) {
+
+        if (typeof(embeddedItem.type) === 'undefined' || embeddedItem.type !== type) {
+            embeddedItem.type = type;
+        }
+    }
+
+    modifyVideosRepository(video, modificationFunction, successCallback, errorCallback) {
+
+        this.setType(video, 'video');
+        modificationFunction(video, successCallback, errorCallback);
+
+    }
+
+    putVideo(video, successCallback, errorCallback) {
+        this.modifyVideosRepository(video, this.embeddedItemsEndpoint.putRequest, successCallback, errorCallback);
     }
 
     postEmbeddedItem(embeddedItem, successCallback, errorCallback) {
         this.embeddedItemsEndpoint.postRequest(embeddedItem, successCallback, errorCallback);
     }
 
+    postVideo(video, successCallback, errorCallback) {
+        this.modifyVideosRepository(video, this.embeddedItemsEndpoint.postRequest, successCallback, errorCallback);
+    }
+
     deleteEmbeddedItem(embeddedItem, successCallback, errorCallback) {
         this.embeddedItemsEndpoint.deleteRequest(embeddedItem, successCallback, errorCallback);
+    }
+
+    getEmbeddedItemStructure(callback) {
+
+        callback([
+            {
+                label: 'Ange den inbäddade videons id',
+                fields: {
+                    externalId: text
+                }
+            }
+        ]);
+    }
+
+    getSoundStructure(callback) {
+
+        callback([
+            {
+                label: 'Ange det inbäddade ljudets url',
+                fields: {
+                    src: text
+                }
+            }
+        ]);
     }
 
     /*
