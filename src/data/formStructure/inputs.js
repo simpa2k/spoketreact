@@ -10,7 +10,7 @@ let AutocompletedText = function(collection, comparisonFunction, assignmentFunct
     this.collection = collection;
     this.accept = (visitor) => {
         return visitor.createAutoCompletedTextInput(this.collection, comparisonFunction, assignmentFunction);
-    }
+    };
 };
 
 let datetime = {
@@ -27,13 +27,21 @@ let textarea = {
     }
 };
 
-let imageCollection = {
+let image = {
 
     accept: (visitor) => {
-        return visitor.createImageCollection();
+        return visitor.createImage();
     }
 };
 
+let ImageCollection = function(deleteFunction) {
 
-export { text, AutocompletedText, datetime, textarea, imageCollection };
+    this.deleteFunction = deleteFunction;
+    this.accept = (visitor) => {
+        return visitor.createImageCollection(this.deleteFunction);
+    };
+};
+
+
+export { text, AutocompletedText, datetime, textarea, image, ImageCollection };
 

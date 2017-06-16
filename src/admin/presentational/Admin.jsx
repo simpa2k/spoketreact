@@ -134,9 +134,9 @@ class Admin extends React.Component {
 
                 <Route path="/admin/images" render={() => {
                     return <AdminPage getItems={this.state.data.getGalleries}
-                                      putItem={this.state.data.putImage}
-                                      postItem={this.state.data.postImage}
-                                      deleteItem={this.state.data.deleteImage}
+                                      putItem={this.state.data.putGallery}
+                                      postItem={this.state.data.postGallery}
+                                      deleteItem={this.state.data.deleteGallery}
                                       getFormStructure={this.state.data.getGalleryStructure}
                                       formName="galleries-form"
                                       entityName="GALLERIER"

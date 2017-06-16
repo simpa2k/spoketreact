@@ -131,14 +131,33 @@ class FormGroupVisitor {
         )
     }
 
-    createImageCollection() {
+    createImage() {
+
+        let imagePath = this.formContents[this.currentFieldName];
+
+        if (typeof(imagePath) !== 'undefined') {
+            return <div className="row col-xs-12"><img src={'/' + this.getValue(this.currentFieldName)} style={{width: '100%'}} /></div>
+        }
+        return <p className="large-text">Ingen bild vald</p>
+
+    }
+
+    createImageCollection(deleteFunction) {
 
         let images = this.formContents[this.currentFieldName];
 
         if (typeof(images) !== 'undefined') {
 
             return images.map((image, index) => {
-                return <EditableImage key={index} full={image.full} thumb={image.thumb} />
+                return <EditableImage key={index} full={image.full} thumb={image.thumb} delete={() => {
+
+                    deleteFunction(image);
+
+                }} setGalleryCover={(imagePath) => {
+
+                    this.onChange(imagePath, 'galleryCover');
+
+                }} />
             });
         }
     }

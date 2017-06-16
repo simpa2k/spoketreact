@@ -1,4 +1,4 @@
-import { text, AutocompletedText, datetime, textarea, imageCollection } from './formStructure/inputs';
+import { text, AutocompletedText, datetime, textarea, image, ImageCollection } from './formStructure/inputs';
 
 class Data {
 
@@ -56,6 +56,8 @@ class Data {
     bindImagesFunctions() {
         
         this.getGalleries = this.getGalleries.bind(this);
+        this.deleteImage = this.deleteImage.bind(this);
+        this.getGalleryStructure = this.getGalleryStructure.bind(this);
         
     }
 
@@ -306,8 +308,8 @@ class Data {
                 gallery.images = [];
 
                 let images = galleries[GALLERY_NAME].images;
-                for (const IMAGE in images) {
-                    gallery.images.push(images[IMAGE]);
+                for (const IMAGE_ID in images) {
+                    gallery.images.push(images[IMAGE_ID]);
                 }
 
                 formattedGalleries.push(gallery);
@@ -318,17 +320,41 @@ class Data {
         }, errorCallback);
     }
 
+    putGallery(gallery, successCallback, errorCallback) {
+        this.galleriesEndpoint.putRequest(gallery, successCallback, errorCallback);
+    }
+
+    postGallery(gallery, successCallback, errorCallback) {
+        this.galleriesEndpoint.postRequest(gallery, successCallback, errorCallback);
+    }
+
+    deleteImage(image, successCallback, errorCallback) {
+        console.log(image);
+    }
+
+    deleteGallery(gallery, successCallback, errorCallback) {
+        this.galleriesEndpoint.deleteRequest(gallery, successCallback, errorCallback);
+    }
+
     getGalleryStructure(callback) {
 
         callback([
             {
-                label: '',
+                label: 'Galleriomslag:',
                 fields: {
-                    images: imageCollection
+                    galleryCover: image
                 }
             },
             {
-                label: 'Galleriets namn',
+                label: '',
+                fields: {
+                    images: new ImageCollection((image) => {
+                        this.deleteImage(image);
+                    })
+                }
+            },
+            {
+                label: 'Galleriets namn:',
                 fields: {
                     name: text
                 }
