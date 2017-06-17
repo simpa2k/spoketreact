@@ -145,37 +145,39 @@ class FormGroupVisitor {
 
     }
 
-    createEditableImage(pathToFull, pathToThumb, deleteFunction, setGalleryCoverFunction, additionalProps) {
-        return <EditableImage full={pathToFull} thumb={pathToThumb} delete={deleteFunction} setGalleryCover={setGalleryCoverFunction} {...additionalProps} />
+    createEditableImage(pathToFull, pathToThumb, deleteFunction, restoreFunction, setGalleryCoverFunction, additionalProps) {
+        return <EditableImage full={pathToFull} thumb={pathToThumb} delete={deleteFunction} restore={restoreFunction} setGalleryCover={setGalleryCoverFunction} {...additionalProps} />
     }
 
-    createRemovableEditableImageAsArrayItem(image, index, sourceArray, destinationKey, setGalleryCoverFunction, additionalProps) {
+    moveToAnotherArray(image, index, sourceArray, destinationKey) {
 
-        return this.createEditableImage(image.full, image.thumb, () => {
+        // ToDo: Make sure that the gallery cover is removed if the image removed is used as gallery cover.
+        let destinationArray = this.formContents[destinationKey];
 
-            // ToDo: Make sure that the gallery cover is removed if the image removed is used as gallery cover.
-            let destinationArray = this.formContents[destinationKey];
+        if (typeof(destinationArray) === 'undefined') {
+            destinationArray = [];
+        }
+        destinationArray.push(image);
+        sourceArray.splice(index, 1);
 
-            if (typeof(destinationArray) === 'undefined') {
-                destinationArray = [];
-            }
-            destinationArray.push(image);
-            sourceArray.splice(index, 1);
+        this.onChange(destinationArray, destinationKey);
 
-            this.onChange(destinationArray, destinationKey);
-
-        }, setGalleryCoverFunction, additionalProps);
     }
 
     createExistingEditableImageAsArrayItem(image, index, images, additionalProps) {
 
-        return this.createRemovableEditableImageAsArrayItem(image, index, images, 'deleted', (imagePath) => {
+        return this.createEditableImage(image.full, image.thumb, () => {
+            this.moveToAnotherArray(image, index, images, 'deleted');
+        }, null, (imagePath) => {
             this.onChange(imagePath, 'galleryCover');
-        }, additionalProps)
+        }, additionalProps);
     }
 
     createRemovedEditableImageAsArrayItem(image, index, images, additionalProps) {
-        return this.createRemovableEditableImageAsArrayItem(image, index, images, 'images', null, additionalProps);
+
+        return this.createEditableImage(image.full, image.thumb, null, () => {
+            this.moveToAnotherArray(image, index, images, 'images');
+        }, null, additionalProps)
     }
 
     createImageCollection(createImageFunction) {

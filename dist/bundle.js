@@ -37252,41 +37252,43 @@ var FormGroupVisitor = function () {
         }
     }, {
         key: 'createEditableImage',
-        value: function createEditableImage(pathToFull, pathToThumb, deleteFunction, setGalleryCoverFunction, additionalProps) {
-            return _react2.default.createElement(_EditableImage2.default, _extends({ full: pathToFull, thumb: pathToThumb, 'delete': deleteFunction, setGalleryCover: setGalleryCoverFunction }, additionalProps));
+        value: function createEditableImage(pathToFull, pathToThumb, deleteFunction, restoreFunction, setGalleryCoverFunction, additionalProps) {
+            return _react2.default.createElement(_EditableImage2.default, _extends({ full: pathToFull, thumb: pathToThumb, 'delete': deleteFunction, restore: restoreFunction, setGalleryCover: setGalleryCoverFunction }, additionalProps));
         }
     }, {
-        key: 'createRemovableEditableImageAsArrayItem',
-        value: function createRemovableEditableImageAsArrayItem(image, index, sourceArray, destinationKey, setGalleryCoverFunction, additionalProps) {
-            var _this3 = this;
+        key: 'moveToAnotherArray',
+        value: function moveToAnotherArray(image, index, sourceArray, destinationKey) {
 
-            return this.createEditableImage(image.full, image.thumb, function () {
+            // ToDo: Make sure that the gallery cover is removed if the image removed is used as gallery cover.
+            var destinationArray = this.formContents[destinationKey];
 
-                // ToDo: Make sure that the gallery cover is removed if the image removed is used as gallery cover.
-                var destinationArray = _this3.formContents[destinationKey];
+            if (typeof destinationArray === 'undefined') {
+                destinationArray = [];
+            }
+            destinationArray.push(image);
+            sourceArray.splice(index, 1);
 
-                if (typeof destinationArray === 'undefined') {
-                    destinationArray = [];
-                }
-                destinationArray.push(image);
-                sourceArray.splice(index, 1);
-
-                _this3.onChange(destinationArray, destinationKey);
-            }, setGalleryCoverFunction, additionalProps);
+            this.onChange(destinationArray, destinationKey);
         }
     }, {
         key: 'createExistingEditableImageAsArrayItem',
         value: function createExistingEditableImageAsArrayItem(image, index, images, additionalProps) {
-            var _this4 = this;
+            var _this3 = this;
 
-            return this.createRemovableEditableImageAsArrayItem(image, index, images, 'deleted', function (imagePath) {
-                _this4.onChange(imagePath, 'galleryCover');
+            return this.createEditableImage(image.full, image.thumb, function () {
+                _this3.moveToAnotherArray(image, index, images, 'deleted');
+            }, null, function (imagePath) {
+                _this3.onChange(imagePath, 'galleryCover');
             }, additionalProps);
         }
     }, {
         key: 'createRemovedEditableImageAsArrayItem',
         value: function createRemovedEditableImageAsArrayItem(image, index, images, additionalProps) {
-            return this.createRemovableEditableImageAsArrayItem(image, index, images, 'images', null, additionalProps);
+            var _this4 = this;
+
+            return this.createEditableImage(image.full, image.thumb, null, function () {
+                _this4.moveToAnotherArray(image, index, images, 'images');
+            }, null, additionalProps);
         }
     }, {
         key: 'createImageCollection',
@@ -37725,35 +37727,65 @@ var EditableImage = function (_React$Component) {
     }
 
     _createClass(EditableImage, [{
-        key: 'render',
-        value: function render() {
+        key: "createEditingButtons",
+        value: function createEditingButtons() {
             var _this2 = this;
 
+            var buttons = [];
+
+            if (this.props.delete) {
+
+                buttons.push(_react2.default.createElement(
+                    "button",
+                    { className: "btn btn-danger", onClick: function onClick(event) {
+
+                            event.preventDefault();
+                            _this2.props.delete();
+                        } },
+                    "Ta bort"
+                ));
+            }
+
+            if (this.props.restore) {
+
+                buttons.push(_react2.default.createElement(
+                    "button",
+                    { className: "btn btn-primary", onClick: function onClick(event) {
+
+                            event.preventDefault();
+                            _this2.props.restore();
+                        } },
+                    "\xC5terst\xE4ll"
+                ));
+            }
+
+            if (this.props.setGalleryCover) {
+
+                buttons.push(_react2.default.createElement(
+                    "button",
+                    { className: "btn btn-primary", onClick: function onClick(event) {
+
+                            event.preventDefault();
+                            _this2.props.setGalleryCover(_this2.props.full);
+                        } },
+                    "Anv\xE4nd som omslag"
+                ));
+            }
+
+            return buttons;
+        }
+    }, {
+        key: "render",
+        value: function render() {
+
             return _react2.default.createElement(
-                'div',
-                { className: 'gallery-item' },
-                _react2.default.createElement('img', { src: '/' + this.props.thumb }),
+                "div",
+                { className: "gallery-item" },
+                _react2.default.createElement("img", { src: '/' + this.props.thumb }),
                 _react2.default.createElement(
-                    'div',
-                    { className: 'btn-group-vertical edit-image' },
-                    _react2.default.createElement(
-                        'button',
-                        { className: 'btn btn-danger', onClick: function onClick(event) {
-
-                                event.preventDefault();
-                                _this2.props.delete();
-                            } },
-                        'Ta bort'
-                    ),
-                    this.props.setGalleryCover ? _react2.default.createElement(
-                        'button',
-                        { className: 'btn btn-primary', onClick: function onClick(event) {
-
-                                event.preventDefault();
-                                _this2.props.setGalleryCover(_this2.props.full);
-                            } },
-                        'Anv\xE4nd som omslag'
-                    ) : null
+                    "div",
+                    { className: "btn-group-vertical edit-image" },
+                    this.createEditingButtons()
                 )
             );
         }
