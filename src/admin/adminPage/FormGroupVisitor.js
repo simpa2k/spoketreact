@@ -1,6 +1,7 @@
 import React from 'react';
 import TinyMCE from 'tinymce-react';
 import EditableImage from "../presentational/EditableImage.jsx";
+import EditableGalleryCover from "../presentational/EditableGalleryCover.jsx";
 import FileUpload from "../presentational/FileUpload.jsx";
 
 import { DateField } from 'react-date-picker';
@@ -141,7 +142,12 @@ class FormGroupVisitor {
         let imagePath = this.formContents[this.currentFieldName];
 
         if (typeof(imagePath) !== 'undefined') {
-            return <div className="row col-xs-12"><img src={'/' + this.getValue(this.currentFieldName)} style={{width: '100%'}} /></div>
+            /*return <div className="row col-xs-12">
+                <img src={'/' + this.getValue(this.currentFieldName)} style={{width: '100%'}} />
+            </div>*/
+            return <EditableGalleryCover src={'/' + this.getValue(this.currentFieldName)}
+                                         images={this.formContents['images']}
+                                         setGalleryCover={(imagePath) => this.onChange(imagePath, 'galleryCover')} />;
         }
         return <p className="large-text">Ingen bild vald</p>
 
@@ -173,9 +179,7 @@ class FormGroupVisitor {
 
         return this.createEditableImage(image.full, '/' + image.thumb, () => {
             this.moveToAnotherArray(image, index, images, 'deleted');
-        }, null, (imagePath) => {
-            this.onChange(imagePath, 'galleryCover');
-        }, additionalProps);
+        }, null, null, additionalProps);
     }
 
     createTemporaryEditableImageAsArrayItem(base64Image, index, images, additionalProps) {
