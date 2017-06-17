@@ -14,6 +14,9 @@ class FormGroupVisitor {
         this.formContents = formContents;
         this.onChange = onChange;
 
+        this.createExistingEditableImageAsArrayItem = this.createExistingEditableImageAsArrayItem.bind(this);
+        this.createRemovedEditableImageAsArrayItem = this.createRemovedEditableImageAsArrayItem.bind(this);
+
     }
 
     visit(formGroup) {
@@ -142,24 +145,50 @@ class FormGroupVisitor {
 
     }
 
-    createImageCollection(deleteFunction) {
+    createEditableImage(pathToFull, pathToThumb, deleteFunction, setGalleryCoverFunction, additionalProps) {
+        return <EditableImage full={pathToFull} thumb={pathToThumb} delete={deleteFunction} setGalleryCover={setGalleryCoverFunction} {...additionalProps} />
+    }
+
+    createRemovableEditableImageAsArrayItem(image, index, sourceArray, destinationKey, setGalleryCoverFunction, additionalProps) {
+
+        return this.createEditableImage(image.full, image.thumb, () => {
+
+            // ToDo: Make sure that the gallery cover is removed if the image removed is used as gallery cover.
+            let destinationArray = this.formContents[destinationKey];
+
+            if (typeof(destinationArray) === 'undefined') {
+                destinationArray = [];
+            }
+            destinationArray.push(image);
+            sourceArray.splice(index, 1);
+
+            this.onChange(destinationArray, destinationKey);
+
+        }, setGalleryCoverFunction, additionalProps);
+    }
+
+    createExistingEditableImageAsArrayItem(image, index, images, additionalProps) {
+
+        return this.createRemovableEditableImageAsArrayItem(image, index, images, 'deleted', (imagePath) => {
+            this.onChange(imagePath, 'galleryCover');
+        }, additionalProps)
+    }
+
+    createRemovedEditableImageAsArrayItem(image, index, images, additionalProps) {
+        return this.createRemovableEditableImageAsArrayItem(image, index, images, 'images', null, additionalProps);
+    }
+
+    createImageCollection(createImageFunction) {
 
         let images = this.formContents[this.currentFieldName];
 
-        if (typeof(images) !== 'undefined') {
-
-            return images.map((image, index) => {
-                return <EditableImage key={index} full={image.full} thumb={image.thumb} delete={() => {
-
-                    deleteFunction(image);
-
-                }} setGalleryCover={(imagePath) => {
-
-                    this.onChange(imagePath, 'galleryCover');
-
-                }} />
-            });
+        if (typeof(images) === 'undefined' || images.length === 0) {
+            return <p className="large-text">Inga bilder att visa</p>
         }
+
+        return images.map((image, index) => {
+            return createImageFunction(image, index, images, {key: index});
+        });
     }
 }
 

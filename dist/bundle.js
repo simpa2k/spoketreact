@@ -12705,7 +12705,6 @@ var Data = function () {
     }, {
         key: 'getGalleryStructure',
         value: function getGalleryStructure(callback) {
-            var _this2 = this;
 
             callback([{
                 label: 'Galleriomslag:',
@@ -12713,11 +12712,14 @@ var Data = function () {
                     galleryCover: _inputs.image
                 }
             }, {
-                label: '',
+                label: 'Bilder:',
                 fields: {
-                    images: new _inputs.ImageCollection(function (image) {
-                        _this2.deleteImage(image);
-                    })
+                    images: _inputs.imageCollection
+                }
+            }, {
+                label: 'Borttagna bilder:',
+                fields: {
+                    deleted: _inputs.deletedImageCollection
                 }
             }, {
                 label: 'Galleriets namn:',
@@ -12772,11 +12774,11 @@ var Data = function () {
     }, {
         key: 'setVenues',
         value: function setVenues(successCallback, errorCallback) {
-            var _this3 = this;
+            var _this2 = this;
 
             this.getVenues(function (venues) {
 
-                _this3.venues = venues;
+                _this2.venues = venues;
 
                 if (typeof successCallback !== 'undefined') {
                     successCallback(venues);
@@ -12793,10 +12795,10 @@ var Data = function () {
     }, {
         key: 'modifyVenueAndUpdate',
         value: function modifyVenueAndUpdate(venue, modifyingFunction) {
-            var _this4 = this;
+            var _this3 = this;
 
             modifyingFunction(venue, function () {
-                _this4.setVenues();
+                _this3.setVenues();
             }, function (error) {
                 console.error('Error while updating venue with function: ' + modifyingFunction + ': ' + JSON.stringify(error, null, 4));
             });
@@ -17468,6 +17470,7 @@ var AdminForm = function (_React$Component) {
             }
 
             this.setState({ model: model });
+            console.log(this.state.model);
         }
     }, {
         key: 'render',
@@ -37075,6 +37078,8 @@ Object.defineProperty(exports, "__esModule", {
     value: true
 });
 
+var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
+
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
 var _react = __webpack_require__(2);
@@ -37107,6 +37112,9 @@ var FormGroupVisitor = function () {
 
         this.formContents = formContents;
         this.onChange = onChange;
+
+        this.createExistingEditableImageAsArrayItem = this.createExistingEditableImageAsArrayItem.bind(this);
+        this.createRemovedEditableImageAsArrayItem = this.createRemovedEditableImageAsArrayItem.bind(this);
     }
 
     _createClass(FormGroupVisitor, [{
@@ -37243,24 +37251,60 @@ var FormGroupVisitor = function () {
             );
         }
     }, {
-        key: 'createImageCollection',
-        value: function createImageCollection(deleteFunction) {
+        key: 'createEditableImage',
+        value: function createEditableImage(pathToFull, pathToThumb, deleteFunction, setGalleryCoverFunction, additionalProps) {
+            return _react2.default.createElement(_EditableImage2.default, _extends({ full: pathToFull, thumb: pathToThumb, 'delete': deleteFunction, setGalleryCover: setGalleryCoverFunction }, additionalProps));
+        }
+    }, {
+        key: 'createRemovableEditableImageAsArrayItem',
+        value: function createRemovableEditableImageAsArrayItem(image, index, sourceArray, destinationKey, setGalleryCoverFunction, additionalProps) {
             var _this3 = this;
+
+            return this.createEditableImage(image.full, image.thumb, function () {
+
+                // ToDo: Make sure that the gallery cover is removed if the image removed is used as gallery cover.
+                var destinationArray = _this3.formContents[destinationKey];
+
+                if (typeof destinationArray === 'undefined') {
+                    destinationArray = [];
+                }
+                destinationArray.push(image);
+                sourceArray.splice(index, 1);
+
+                _this3.onChange(destinationArray, destinationKey);
+            }, setGalleryCoverFunction, additionalProps);
+        }
+    }, {
+        key: 'createExistingEditableImageAsArrayItem',
+        value: function createExistingEditableImageAsArrayItem(image, index, images, additionalProps) {
+            var _this4 = this;
+
+            return this.createRemovableEditableImageAsArrayItem(image, index, images, 'deleted', function (imagePath) {
+                _this4.onChange(imagePath, 'galleryCover');
+            }, additionalProps);
+        }
+    }, {
+        key: 'createRemovedEditableImageAsArrayItem',
+        value: function createRemovedEditableImageAsArrayItem(image, index, images, additionalProps) {
+            return this.createRemovableEditableImageAsArrayItem(image, index, images, 'images', null, additionalProps);
+        }
+    }, {
+        key: 'createImageCollection',
+        value: function createImageCollection(createImageFunction) {
 
             var images = this.formContents[this.currentFieldName];
 
-            if (typeof images !== 'undefined') {
-
-                return images.map(function (image, index) {
-                    return _react2.default.createElement(_EditableImage2.default, { key: index, full: image.full, thumb: image.thumb, 'delete': function _delete() {
-
-                            deleteFunction(image);
-                        }, setGalleryCover: function setGalleryCover(imagePath) {
-
-                            _this3.onChange(imagePath, 'galleryCover');
-                        } });
-                });
+            if (typeof images === 'undefined' || images.length === 0) {
+                return _react2.default.createElement(
+                    'p',
+                    { className: 'large-text' },
+                    'Inga bilder att visa'
+                );
             }
+
+            return images.map(function (image, index) {
+                return createImageFunction(image, index, images, { key: index });
+            });
         }
     }]);
 
@@ -37701,7 +37745,7 @@ var EditableImage = function (_React$Component) {
                             } },
                         'Ta bort'
                     ),
-                    _react2.default.createElement(
+                    this.props.setGalleryCover ? _react2.default.createElement(
                         'button',
                         { className: 'btn btn-primary', onClick: function onClick(event) {
 
@@ -37709,7 +37753,7 @@ var EditableImage = function (_React$Component) {
                                 _this2.props.setGalleryCover(_this2.props.full);
                             } },
                         'Anv\xE4nd som omslag'
-                    )
+                    ) : null
                 )
             );
         }
@@ -37926,13 +37970,18 @@ var image = {
     }
 };
 
-var ImageCollection = function ImageCollection(deleteFunction) {
-    var _this2 = this;
+var imageCollection = {
 
-    this.deleteFunction = deleteFunction;
-    this.accept = function (visitor) {
-        return visitor.createImageCollection(_this2.deleteFunction);
-    };
+    accept: function accept(visitor) {
+        return visitor.createImageCollection(visitor.createExistingEditableImageAsArrayItem);
+    }
+};
+
+var deletedImageCollection = {
+
+    accept: function accept(visitor) {
+        return visitor.createImageCollection(visitor.createRemovedEditableImageAsArrayItem);
+    }
 };
 
 exports.text = text;
@@ -37940,7 +37989,8 @@ exports.AutocompletedText = AutocompletedText;
 exports.datetime = datetime;
 exports.textarea = textarea;
 exports.image = image;
-exports.ImageCollection = ImageCollection;
+exports.imageCollection = imageCollection;
+exports.deletedImageCollection = deletedImageCollection;
 
 /***/ }),
 /* 287 */

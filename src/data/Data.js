@@ -1,4 +1,4 @@
-import { text, AutocompletedText, datetime, textarea, image, ImageCollection } from './formStructure/inputs';
+import { text, AutocompletedText, datetime, textarea, image, imageCollection, deletedImageCollection } from './formStructure/inputs';
 
 class Data {
 
@@ -346,11 +346,15 @@ class Data {
                 }
             },
             {
-                label: '',
+                label: 'Bilder:',
                 fields: {
-                    images: new ImageCollection((image) => {
-                        this.deleteImage(image);
-                    })
+                    images: imageCollection
+                }
+            },
+            {
+                label: 'Borttagna bilder:',
+                fields: {
+                    deleted: deletedImageCollection
                 }
             },
             {

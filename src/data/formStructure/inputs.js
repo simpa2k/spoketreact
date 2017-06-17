@@ -34,14 +34,20 @@ let image = {
     }
 };
 
-let ImageCollection = function(deleteFunction) {
+let imageCollection = {
 
-    this.deleteFunction = deleteFunction;
-    this.accept = (visitor) => {
-        return visitor.createImageCollection(this.deleteFunction);
-    };
+    accept: (visitor) => {
+        return visitor.createImageCollection(visitor.createExistingEditableImageAsArrayItem);
+    }
+};
+
+let deletedImageCollection = {
+
+    accept: (visitor) => {
+        return visitor.createImageCollection(visitor.createRemovedEditableImageAsArrayItem);
+    }
 };
 
 
-export { text, AutocompletedText, datetime, textarea, image, ImageCollection };
+export { text, AutocompletedText, datetime, textarea, image, imageCollection, deletedImageCollection };
 

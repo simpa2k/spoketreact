@@ -17,12 +17,12 @@ class EditableImage extends React.Component {
 
                     }}>Ta bort</button>
 
-                    <button className="btn btn-primary" onClick={(event) => {
+                    {this.props.setGalleryCover ? <button className="btn btn-primary" onClick={(event) => {
 
                         event.preventDefault();
                         this.props.setGalleryCover(this.props.full)
 
-                    }}>Använd som omslag</button>
+                    }}>Använd som omslag</button> : null}
                 </div>
 
             </div>

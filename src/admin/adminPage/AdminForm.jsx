@@ -62,6 +62,7 @@ class AdminForm extends React.Component {
         }
 
         this.setState({model: model});
+        console.log(this.state.model);
 
     }
 
