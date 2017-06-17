@@ -1,6 +1,7 @@
 import React from 'react';
 import TinyMCE from 'tinymce-react';
 import EditableImage from "../presentational/EditableImage.jsx";
+import FileUpload from "../presentational/FileUpload.jsx";
 
 import { DateField } from 'react-date-picker';
 import 'react-date-picker/index.css'
@@ -15,6 +16,7 @@ class FormGroupVisitor {
         this.onChange = onChange;
 
         this.createExistingEditableImageAsArrayItem = this.createExistingEditableImageAsArrayItem.bind(this);
+        this.createTemporaryEditableImageAsArrayItem = this.createTemporaryEditableImageAsArrayItem.bind(this);
         this.createRemovedEditableImageAsArrayItem = this.createRemovedEditableImageAsArrayItem.bind(this);
 
     }
@@ -145,8 +147,11 @@ class FormGroupVisitor {
 
     }
 
-    createEditableImage(pathToFull, pathToThumb, deleteFunction, restoreFunction, setGalleryCoverFunction, additionalProps) {
-        return <EditableImage full={pathToFull} thumb={pathToThumb} delete={deleteFunction} restore={restoreFunction} setGalleryCover={setGalleryCoverFunction} {...additionalProps} />
+    createEditableImage(pathToFull, pathToThumb, deleteFunction, restoreFunction, setGalleryCoverFunction, additionalProps, width) {
+        return <EditableImage full={pathToFull} thumb={pathToThumb}
+                              delete={deleteFunction} restore={restoreFunction} setGalleryCover={setGalleryCoverFunction}
+                              width={width}
+                              extraProps={additionalProps} />
     }
 
     moveToAnotherArray(image, index, sourceArray, destinationKey) {
@@ -166,16 +171,29 @@ class FormGroupVisitor {
 
     createExistingEditableImageAsArrayItem(image, index, images, additionalProps) {
 
-        return this.createEditableImage(image.full, image.thumb, () => {
+        return this.createEditableImage(image.full, '/' + image.thumb, () => {
             this.moveToAnotherArray(image, index, images, 'deleted');
         }, null, (imagePath) => {
             this.onChange(imagePath, 'galleryCover');
         }, additionalProps);
     }
 
+    createTemporaryEditableImageAsArrayItem(base64Image, index, images, additionalProps) {
+
+        let fieldName = this.currentFieldName;
+
+        return this.createEditableImage(base64Image, base64Image, () => {
+
+            images.splice(index, 1);
+            this.onChange(images, fieldName);
+
+        }, null, null, additionalProps, '256');
+    }
+
+
     createRemovedEditableImageAsArrayItem(image, index, images, additionalProps) {
 
-        return this.createEditableImage(image.full, image.thumb, null, () => {
+        return this.createEditableImage(image.full, '/' + image.thumb, null, () => {
             this.moveToAnotherArray(image, index, images, 'images');
         }, null, additionalProps)
     }
@@ -191,6 +209,22 @@ class FormGroupVisitor {
         return images.map((image, index) => {
             return createImageFunction(image, index, images, {key: index});
         });
+    }
+
+    createImageUpload() {
+
+        return <FileUpload label={'Ladda upp'} handleFile={(image) => {
+
+            let addedImages = this.formContents['addedImages'];
+
+            if (typeof(addedImages) === 'undefined') {
+                addedImages = [];
+            }
+            addedImages.push(image);
+
+            this.onChange(addedImages, 'addedImages');
+
+        }} />
     }
 }
 

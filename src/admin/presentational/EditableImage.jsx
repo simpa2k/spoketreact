@@ -50,9 +50,9 @@ class EditableImage extends React.Component {
 
         return (
 
-            <div className="gallery-item">
+            <div className="gallery-item" {...this.props.extraProps}>
 
-                <img src={'/' + this.props.thumb} />
+                <img src={this.props.thumb} width={this.props.width} />
                 <div className="btn-group-vertical edit-image">
                     {this.createEditingButtons()}
                 </div>

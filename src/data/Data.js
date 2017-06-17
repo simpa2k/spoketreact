@@ -1,4 +1,16 @@
-import { text, AutocompletedText, datetime, textarea, image, imageCollection, deletedImageCollection } from './formStructure/inputs';
+import {
+
+    text,
+    AutocompletedText,
+    datetime,
+    textarea,
+    image,
+    imageCollection,
+    temporaryImageCollection,
+    deletedImageCollection,
+    imageUpload
+
+} from './formStructure/inputs';
 
 class Data {
 
@@ -346,15 +358,27 @@ class Data {
                 }
             },
             {
-                label: 'Bilder:',
+                label: 'Omodifierade bilder:',
                 fields: {
                     images: imageCollection
+                }
+            },
+            {
+                label: 'Tillagda bilder:',
+                fields: {
+                    addedImages: temporaryImageCollection
                 }
             },
             {
                 label: 'Borttagna bilder:',
                 fields: {
                     deleted: deletedImageCollection
+                }
+            },
+            {
+                label: 'Lägg till ny(a) bild(er):',
+                fields: {
+                    addImages: imageUpload
                 }
             },
             {

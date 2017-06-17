@@ -12712,14 +12712,24 @@ var Data = function () {
                     galleryCover: _inputs.image
                 }
             }, {
-                label: 'Bilder:',
+                label: 'Omodifierade bilder:',
                 fields: {
                     images: _inputs.imageCollection
+                }
+            }, {
+                label: 'Tillagda bilder:',
+                fields: {
+                    addedImages: _inputs.temporaryImageCollection
                 }
             }, {
                 label: 'Borttagna bilder:',
                 fields: {
                     deleted: _inputs.deletedImageCollection
+                }
+            }, {
+                label: 'Lägg till ny(a) bild(er):',
+                fields: {
+                    addImages: _inputs.imageUpload
                 }
             }, {
                 label: 'Galleriets namn:',
@@ -37078,8 +37088,6 @@ Object.defineProperty(exports, "__esModule", {
     value: true
 });
 
-var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
-
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
 var _react = __webpack_require__(2);
@@ -37093,6 +37101,10 @@ var _tinymceReact2 = _interopRequireDefault(_tinymceReact);
 var _EditableImage = __webpack_require__(282);
 
 var _EditableImage2 = _interopRequireDefault(_EditableImage);
+
+var _FileUpload = __webpack_require__(556);
+
+var _FileUpload2 = _interopRequireDefault(_FileUpload);
 
 var _reactDatePicker = __webpack_require__(349);
 
@@ -37114,6 +37126,7 @@ var FormGroupVisitor = function () {
         this.onChange = onChange;
 
         this.createExistingEditableImageAsArrayItem = this.createExistingEditableImageAsArrayItem.bind(this);
+        this.createTemporaryEditableImageAsArrayItem = this.createTemporaryEditableImageAsArrayItem.bind(this);
         this.createRemovedEditableImageAsArrayItem = this.createRemovedEditableImageAsArrayItem.bind(this);
     }
 
@@ -37252,8 +37265,11 @@ var FormGroupVisitor = function () {
         }
     }, {
         key: 'createEditableImage',
-        value: function createEditableImage(pathToFull, pathToThumb, deleteFunction, restoreFunction, setGalleryCoverFunction, additionalProps) {
-            return _react2.default.createElement(_EditableImage2.default, _extends({ full: pathToFull, thumb: pathToThumb, 'delete': deleteFunction, restore: restoreFunction, setGalleryCover: setGalleryCoverFunction }, additionalProps));
+        value: function createEditableImage(pathToFull, pathToThumb, deleteFunction, restoreFunction, setGalleryCoverFunction, additionalProps, width) {
+            return _react2.default.createElement(_EditableImage2.default, { full: pathToFull, thumb: pathToThumb,
+                'delete': deleteFunction, restore: restoreFunction, setGalleryCover: setGalleryCoverFunction,
+                width: width,
+                extraProps: additionalProps });
         }
     }, {
         key: 'moveToAnotherArray',
@@ -37275,19 +37291,32 @@ var FormGroupVisitor = function () {
         value: function createExistingEditableImageAsArrayItem(image, index, images, additionalProps) {
             var _this3 = this;
 
-            return this.createEditableImage(image.full, image.thumb, function () {
+            return this.createEditableImage(image.full, '/' + image.thumb, function () {
                 _this3.moveToAnotherArray(image, index, images, 'deleted');
             }, null, function (imagePath) {
                 _this3.onChange(imagePath, 'galleryCover');
             }, additionalProps);
         }
     }, {
-        key: 'createRemovedEditableImageAsArrayItem',
-        value: function createRemovedEditableImageAsArrayItem(image, index, images, additionalProps) {
+        key: 'createTemporaryEditableImageAsArrayItem',
+        value: function createTemporaryEditableImageAsArrayItem(base64Image, index, images, additionalProps) {
             var _this4 = this;
 
-            return this.createEditableImage(image.full, image.thumb, null, function () {
-                _this4.moveToAnotherArray(image, index, images, 'images');
+            var fieldName = this.currentFieldName;
+
+            return this.createEditableImage(base64Image, base64Image, function () {
+
+                images.splice(index, 1);
+                _this4.onChange(images, fieldName);
+            }, null, null, additionalProps, '256');
+        }
+    }, {
+        key: 'createRemovedEditableImageAsArrayItem',
+        value: function createRemovedEditableImageAsArrayItem(image, index, images, additionalProps) {
+            var _this5 = this;
+
+            return this.createEditableImage(image.full, '/' + image.thumb, null, function () {
+                _this5.moveToAnotherArray(image, index, images, 'images');
             }, null, additionalProps);
         }
     }, {
@@ -37307,6 +37336,23 @@ var FormGroupVisitor = function () {
             return images.map(function (image, index) {
                 return createImageFunction(image, index, images, { key: index });
             });
+        }
+    }, {
+        key: 'createImageUpload',
+        value: function createImageUpload() {
+            var _this6 = this;
+
+            return _react2.default.createElement(_FileUpload2.default, { label: 'Ladda upp', handleFile: function handleFile(image) {
+
+                    var addedImages = _this6.formContents['addedImages'];
+
+                    if (typeof addedImages === 'undefined') {
+                        addedImages = [];
+                    }
+                    addedImages.push(image);
+
+                    _this6.onChange(addedImages, 'addedImages');
+                } });
         }
     }]);
 
@@ -37703,6 +37749,8 @@ Object.defineProperty(exports, "__esModule", {
     value: true
 });
 
+var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
+
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
 var _react = __webpack_require__(2);
@@ -37780,8 +37828,8 @@ var EditableImage = function (_React$Component) {
 
             return _react2.default.createElement(
                 "div",
-                { className: "gallery-item" },
-                _react2.default.createElement("img", { src: '/' + this.props.thumb }),
+                _extends({ className: "gallery-item" }, this.props.extraProps),
+                _react2.default.createElement("img", { src: this.props.thumb, width: this.props.width }),
                 _react2.default.createElement(
                     "div",
                     { className: "btn-group-vertical edit-image" },
@@ -38009,10 +38057,24 @@ var imageCollection = {
     }
 };
 
+var temporaryImageCollection = {
+
+    accept: function accept(visitor) {
+        return visitor.createImageCollection(visitor.createTemporaryEditableImageAsArrayItem);
+    }
+};
+
 var deletedImageCollection = {
 
     accept: function accept(visitor) {
         return visitor.createImageCollection(visitor.createRemovedEditableImageAsArrayItem);
+    }
+};
+
+var imageUpload = {
+
+    accept: function accept(visitor) {
+        return visitor.createImageUpload();
     }
 };
 
@@ -38022,7 +38084,9 @@ exports.datetime = datetime;
 exports.textarea = textarea;
 exports.image = image;
 exports.imageCollection = imageCollection;
+exports.temporaryImageCollection = temporaryImageCollection;
 exports.deletedImageCollection = deletedImageCollection;
+exports.imageUpload = imageUpload;
 
 /***/ }),
 /* 287 */
@@ -61235,6 +61299,92 @@ module.exports = function(module) {
   self.fetch.polyfill = true
 })(typeof self !== 'undefined' ? self : this);
 
+
+/***/ }),
+/* 556 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _react = __webpack_require__(2);
+
+var _react2 = _interopRequireDefault(_react);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+var FileUpload = function (_React$Component) {
+    _inherits(FileUpload, _React$Component);
+
+    function FileUpload() {
+        _classCallCheck(this, FileUpload);
+
+        return _possibleConstructorReturn(this, (FileUpload.__proto__ || Object.getPrototypeOf(FileUpload)).apply(this, arguments));
+    }
+
+    _createClass(FileUpload, [{
+        key: "readFiles",
+
+
+        /*
+         * From https://stackoverflow.com/questions/13975031/reading-multiple-files-with-javascript-filereader-api-one-at-a-time
+         * With minor modifications. The reason it has to be done this way is that there will be memory leaks if
+         * the FileReader is not reused, and it's not entirely straightforward to reuse a FileReader.
+         */
+        value: function readFiles(files) {
+            var _this2 = this;
+
+            var reader = new FileReader();
+
+            var readFile = function readFile(index) {
+
+                if (index >= files.length) {
+                    return;
+                }
+
+                var file = files[index];
+
+                reader.onload = function (event) {
+
+                    _this2.props.handleFile(event.target.result);
+                    readFile(++index);
+                };
+                reader.readAsDataURL(file);
+            };
+            readFile(0);
+        }
+    }, {
+        key: "render",
+        value: function render() {
+            var _this3 = this;
+
+            return _react2.default.createElement(
+                "label",
+                { className: "btn btn-primary btn-file" },
+                this.props.label,
+                _react2.default.createElement("input", { type: "file", style: { display: 'none' }, onChange: function onChange(event) {
+                        return _this3.readFiles(event.target.files);
+                    }, multiple: true })
+            );
+        }
+    }]);
+
+    return FileUpload;
+}(_react2.default.Component);
+
+exports.default = FileUpload;
 
 /***/ })
 /******/ ]);

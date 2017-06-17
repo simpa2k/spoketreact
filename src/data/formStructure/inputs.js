@@ -41,6 +41,13 @@ let imageCollection = {
     }
 };
 
+let temporaryImageCollection = {
+
+    accept: (visitor) => {
+        return visitor.createImageCollection(visitor.createTemporaryEditableImageAsArrayItem);
+    }
+};
+
 let deletedImageCollection = {
 
     accept: (visitor) => {
@@ -48,6 +55,13 @@ let deletedImageCollection = {
     }
 };
 
+let imageUpload = {
 
-export { text, AutocompletedText, datetime, textarea, image, imageCollection, deletedImageCollection };
+    accept: (visitor) => {
+        return visitor.createImageUpload();
+    }
+};
+
+
+export { text, AutocompletedText, datetime, textarea, image, imageCollection, temporaryImageCollection, deletedImageCollection, imageUpload };
 
