@@ -243,10 +243,22 @@ class Data {
 
     getGigs(successCallback, errorCallback) {
 
+        const GIG_TIME_NULL_CODE = '01:01:01';
+
         this.gigsEndpoint.getRequest((gigs) => {
 
             this.setVenues();
-            successCallback(gigs);
+            successCallback(gigs.map((gig) => {
+
+                let dateAndTime = gig.datetime.split(' ');
+
+                if (dateAndTime[1] === GIG_TIME_NULL_CODE) {
+                    gig.datetime = dateAndTime[0];
+                }
+
+                return gig;
+
+            }));
 
         }, errorCallback);
     }

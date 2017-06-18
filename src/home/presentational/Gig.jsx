@@ -45,7 +45,7 @@ class Gig extends React.Component {
                 <div className="col-xs-12">
                     <div className="row">
                         <div className="gig-text col-xs-9">
-                            <p className="text-center">{ this.props.model.datetime } - <span className="orange-brown">{ this.props.model.venueName }</span> { this.props.model.city }</p>
+                            <p className="text-center">{ this.props.model.datetime } - <span className="orange-brown">{ this.props.model.venue_name }</span>, { this.props.model.city }</p>
                         </div>
                         <div className="gig-button col-xs-3"></div>
                     </div>
