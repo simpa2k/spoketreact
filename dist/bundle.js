@@ -14467,6 +14467,12 @@ var _createClass = function () { function defineProperties(target, props) { for 
 
 var _inputs = __webpack_require__(404);
 
+var _GigsService = __webpack_require__(806);
+
+var _GigsService2 = _interopRequireDefault(_GigsService);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 var Data = function () {
@@ -14482,6 +14488,8 @@ var Data = function () {
         this.membersEndpoint = endpoints.membersEndpoint;
         this.usersEndpoint = endpoints.usersEndpoint;
         this.venuesEndpoint = endpoints.venuesEndpoint;
+
+        this.gigsService = new _GigsService2.default();
 
         this.bindDescriptionFunctions();
         this.bindEmbeddedItemFunctions();
@@ -14718,24 +14726,7 @@ var Data = function () {
     }, {
         key: 'getGigs',
         value: function getGigs(successCallback, errorCallback) {
-            var _this = this;
-
-            var GIG_TIME_NULL_CODE = '01:01:01';
-
-            this.gigsEndpoint.getRequest(function (gigs) {
-
-                _this.setVenues();
-                successCallback(gigs.map(function (gig) {
-
-                    var dateAndTime = gig.datetime.split(' ');
-
-                    if (dateAndTime[1] === GIG_TIME_NULL_CODE) {
-                        gig.datetime = dateAndTime[0];
-                    }
-
-                    return gig;
-                }));
-            }, errorCallback);
+            this.gigsService.getGigs(successCallback, errorCallback);
         }
     }, {
         key: 'prepareGigModification',
@@ -14951,11 +14942,11 @@ var Data = function () {
     }, {
         key: 'setVenues',
         value: function setVenues(successCallback, errorCallback) {
-            var _this2 = this;
+            var _this = this;
 
             this.getVenues(function (venues) {
 
-                _this2.venues = venues;
+                _this.venues = venues;
 
                 if (typeof successCallback !== 'undefined') {
                     successCallback(venues);
@@ -14972,10 +14963,10 @@ var Data = function () {
     }, {
         key: 'modifyVenueAndUpdate',
         value: function modifyVenueAndUpdate(venue, modifyingFunction) {
-            var _this3 = this;
+            var _this2 = this;
 
             modifyingFunction(venue, function () {
-                _this3.setVenues();
+                _this2.setVenues();
             }, function (error) {
                 console.error('Error while updating venue with function: ' + modifyingFunction + ': ' + JSON.stringify(error, null, 4));
             });
@@ -79710,6 +79701,283 @@ module.exports = function(module) {
 module.exports = function (value) {
     return typeof value !== 'undefined' && value !== null;
 };
+
+/***/ }),
+/* 806 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _Service2 = __webpack_require__(807);
+
+var _Service3 = _interopRequireDefault(_Service2);
+
+var _Endpoint = __webpack_require__(403);
+
+var _Endpoint2 = _interopRequireDefault(_Endpoint);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+/**
+ * Class for operating on gigs. Transparently handles venues as well.
+ */
+var GigsService = function (_Service) {
+    _inherits(GigsService, _Service);
+
+    function GigsService() {
+        _classCallCheck(this, GigsService);
+
+        var _this = _possibleConstructorReturn(this, (GigsService.__proto__ || Object.getPrototypeOf(GigsService)).call(this, new _Endpoint2.default('gigs', true, true, true)));
+
+        _this.venuesEndpoint = new _Endpoint2.default('venues', true, true, false);
+
+        return _this;
+    }
+
+    /*
+     * Gigs
+     */
+
+    _createClass(GigsService, [{
+        key: 'getGigs',
+        value: function getGigs(successCallback, errorCallback) {
+            var _this2 = this;
+
+            var GIG_TIME_NULL_CODE = '01:01:01';
+
+            this.endpoint.getRequest(function (gigs) {
+
+                _this2.setVenues();
+                successCallback(gigs.map(function (gig) {
+
+                    var dateAndTime = gig.datetime.split(' ');
+
+                    if (dateAndTime[1] === GIG_TIME_NULL_CODE) {
+                        gig.datetime = dateAndTime[0];
+                    }
+
+                    return gig;
+                }));
+            }, errorCallback);
+        }
+    }, {
+        key: 'prepareGigModification',
+        value: function prepareGigModification(gig) {
+
+            this.sendVenue(gig);
+
+            gig.venue_name = gig.name;
+
+            delete gig.address;
+            delete gig.name;
+            delete gig.city;
+            delete gig.webpage;
+        }
+    }, {
+        key: 'putGig',
+        value: function putGig(gig, successCallback, errorCallback) {
+
+            this.prepareGigModification(gig);
+            this.endpoint.putRequest(gig, successCallback, errorCallback);
+        }
+    }, {
+        key: 'postGig',
+        value: function postGig(gig, successCallback, errorCallback) {
+
+            this.prepareGigModification(gig);
+            this.endpoint.postRequest(gig, successCallback, errorCallback);
+        }
+    }, {
+        key: 'deleteGig',
+        value: function deleteGig(gig, successCallback, errorCallback) {
+            console.log('Deleting' + JSON.stringify(gig, null, 4));
+            this.endpoint.deleteRequest(gig, successCallback, errorCallback);
+        }
+    }, {
+        key: 'getGigsStructure',
+        value: function getGigsStructure(callback) {
+
+            this.setVenues(function (venues) {
+
+                callback([{
+                    label: 'Välj datum och tid:',
+                    fields: {
+                        datetime: datetime
+                    }
+                }, {
+                    label: 'Annan nyttig information:',
+                    fields: {
+                        ticketlink: text,
+                        info: text,
+                        price: text
+                    }
+                }, {
+                    label: 'Välj spelställe:',
+                    fields: {
+                        address: text,
+                        name: new AutocompletedText(venues, function (venue, targetValue) {
+                            return venue.name === targetValue;
+                        }),
+                        city: text,
+                        webpage: text
+                    }
+                }]);
+            });
+        }
+
+        /*
+         * Venues
+         */
+
+    }, {
+        key: 'setVenues',
+        value: function setVenues(successCallback, errorCallback) {
+            var _this3 = this;
+
+            this.getVenues(function (venues) {
+
+                _this3.venues = venues;
+
+                if (typeof successCallback !== 'undefined') {
+                    successCallback(venues);
+                }
+            }, function (error) {
+
+                console.error('Error while getting venues: ' + JSON.stringify(error, null, 4));
+
+                if (typeof errorCallback !== 'undefined') {
+                    errorCallback(error);
+                }
+            });
+        }
+    }, {
+        key: 'modifyVenueAndUpdate',
+        value: function modifyVenueAndUpdate(venue, modifyingFunction) {
+            var _this4 = this;
+
+            modifyingFunction(venue, function () {
+                _this4.setVenues();
+            }, function (error) {
+                console.error('Error while updating venue with function: ' + modifyingFunction + ': ' + JSON.stringify(error, null, 4));
+            });
+        }
+
+        /*
+         * Having this kind of logic here could be discussed. The reason for it is mainly to simplify
+         * automatic generation of admin pages. The kind of foreign key relationship between gigs and
+         * venues that require venues to be sent before gigs is hard to generalize in a good way.
+         * This is mainly because of the fact that the relationship is not apparent when getting data from the
+         * server, only when modifying it, which of course was a pretty poor design choice. The fact that
+         * this is a backend quirk suggests handling it in the interface towards the backend.
+         */
+
+    }, {
+        key: 'sendVenue',
+        value: function sendVenue(gig) {
+
+            var selectedVenue = {
+
+                address: gig.address,
+                name: gig.name,
+                city: gig.city,
+                webpage: gig.webpage
+
+            };
+
+            if (typeof this.venues !== 'undefined') {
+
+                var venueForComparison = this.venues.find(function (venue) {
+                    return venue.name === selectedVenue.name;
+                });
+
+                if (typeof venueForComparison === 'undefined') {
+
+                    // If there is no venue with the specified name, post the venue (i.e. create it).
+                    console.log('Posting venue: ' + JSON.stringify(selectedVenue));
+                    this.modifyVenueAndUpdate(selectedVenue, this.postVenue);
+                } else if (JSON.stringify(selectedVenue) !== JSON.stringify(venueForComparison)) {
+                    // The order of the properties in selectedVenue matters here
+
+                    /*
+                     * If there is a venue with the specified name, but some of the other fields have been changed,
+                     * put the venue (i.e. update it).
+                     */
+
+                    console.log('Putting venue: ' + JSON.stringify(selectedVenue));
+                    this.modifyVenueAndUpdate(selectedVenue, this.putVenue);
+                }
+            } else {
+                console.error('Venues undefined when trying to operate on gigs.');
+            }
+        }
+    }, {
+        key: 'getVenues',
+        value: function getVenues(successCallback, errorCallback) {
+            this.venuesEndpoint.getRequest(successCallback, errorCallback);
+        }
+    }, {
+        key: 'postVenue',
+        value: function postVenue(venue, successCallback, errorCallback) {
+            this.venuesEndpoint.postRequest(venue, successCallback, errorCallback);
+        }
+    }, {
+        key: 'putVenue',
+        value: function putVenue(venue, successCallback, errorCallback) {
+            this.venuesEndpoint.putRequest(venue, successCallback, errorCallback);
+        }
+    }]);
+
+    return GigsService;
+}(_Service3.default);
+
+exports.default = GigsService;
+
+/***/ }),
+/* 807 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+var Service = function () {
+    function Service(endpoint) {
+        _classCallCheck(this, Service);
+
+        this.endpoint = endpoint;
+    }
+
+    _createClass(Service, [{
+        key: "getEndpoint",
+        value: function getEndpoint() {
+            return this.endpoint;
+        }
+    }]);
+
+    return Service;
+}();
+
+exports.default = Service;
 
 /***/ })
 /******/ ]);
