@@ -14754,8 +14754,8 @@ var Data = function () {
         key: 'putGig',
         value: function putGig(gig, successCallback, errorCallback) {
 
-            //this.sendVenue(gig);
             this.prepareGigModification(gig);
+
             console.log('Putting ' + JSON.stringify(gig, null, 4));
             this.gigsEndpoint.putRequest(gig, successCallback, errorCallback);
         }
@@ -14763,7 +14763,6 @@ var Data = function () {
         key: 'postGig',
         value: function postGig(gig, successCallback, errorCallback) {
 
-            //this.sendVenue(gig);
             this.prepareGigModification(gig);
 
             console.log('Posting' + JSON.stringify(gig, null, 4));
@@ -21014,9 +21013,7 @@ var AdminForm = function (_React$Component) {
             var model = this.state.model;
 
             if ((typeof fieldsToUpdate === 'undefined' ? 'undefined' : _typeof(fieldsToUpdate)) === 'object') {
-
                 model = Object.assign(model, fieldsToUpdate);
-                //model = fieldsToUpdate;
             } else {
                 model[fieldsToUpdate] = value;
             }
@@ -44680,15 +44677,18 @@ var FormGroupVisitor = function () {
     }, {
         key: 'createTextarea',
         value: function createTextarea() {
+            var _this3 = this;
 
             return _react2.default.createElement(_tinymceReact2.default, { apiKey: _secrets2.default.tinyMCEAPIKey,
                 content: this.getValue(this.currentFieldName),
-                onChange: this.getOnChange(this.onChange, this.currentFieldName) });
+                onContentChanged: function onContentChanged(content) {
+                    return _this3.onChange(content, _this3.currentFieldName);
+                } });
         }
     }, {
         key: 'createImage',
         value: function createImage() {
-            var _this3 = this;
+            var _this4 = this;
 
             var imagePath = this.formContents[this.currentFieldName];
 
@@ -44699,7 +44699,7 @@ var FormGroupVisitor = function () {
                 return _react2.default.createElement(_EditableGalleryCover2.default, { src: '/' + this.getValue(this.currentFieldName),
                     images: this.formContents['images'],
                     setGalleryCover: function setGalleryCover(imagePath) {
-                        return _this3.onChange(imagePath, 'galleryCover');
+                        return _this4.onChange(imagePath, 'galleryCover');
                     } });
             }
             return _react2.default.createElement(
@@ -44734,32 +44734,32 @@ var FormGroupVisitor = function () {
     }, {
         key: 'createExistingEditableImageAsArrayItem',
         value: function createExistingEditableImageAsArrayItem(image, index, images, additionalProps) {
-            var _this4 = this;
+            var _this5 = this;
 
             return this.createEditableImage(image.full, '/' + image.thumb, function () {
-                _this4.moveToAnotherArray(image, index, images, 'deleted');
+                _this5.moveToAnotherArray(image, index, images, 'deleted');
             }, null, null, additionalProps);
         }
     }, {
         key: 'createTemporaryEditableImageAsArrayItem',
         value: function createTemporaryEditableImageAsArrayItem(base64Image, index, images, additionalProps) {
-            var _this5 = this;
+            var _this6 = this;
 
             var fieldName = this.currentFieldName;
 
             return this.createEditableImage(base64Image, base64Image, function () {
 
                 images.splice(index, 1);
-                _this5.onChange(images, fieldName);
+                _this6.onChange(images, fieldName);
             }, null, null, additionalProps, '256');
         }
     }, {
         key: 'createRemovedEditableImageAsArrayItem',
         value: function createRemovedEditableImageAsArrayItem(image, index, images, additionalProps) {
-            var _this6 = this;
+            var _this7 = this;
 
             return this.createEditableImage(image.full, '/' + image.thumb, null, function () {
-                _this6.moveToAnotherArray(image, index, images, 'images');
+                _this7.moveToAnotherArray(image, index, images, 'images');
             }, null, additionalProps);
         }
     }, {
@@ -44783,18 +44783,18 @@ var FormGroupVisitor = function () {
     }, {
         key: 'createImageUpload',
         value: function createImageUpload() {
-            var _this7 = this;
+            var _this8 = this;
 
             return _react2.default.createElement(_FileUpload2.default, { label: 'Ladda upp', handleFile: function handleFile(image) {
 
-                    var addedImages = _this7.formContents['addedImages'];
+                    var addedImages = _this8.formContents['addedImages'];
 
                     if (typeof addedImages === 'undefined') {
                         addedImages = [];
                     }
                     addedImages.push(image);
 
-                    _this7.onChange(addedImages, 'addedImages');
+                    _this8.onChange(addedImages, 'addedImages');
                 } });
         }
     }]);
@@ -45534,7 +45534,9 @@ var Endpoint = function Endpoint(endpointName, puttable, postable, deleteable) {
 
     this.sendObject = function (sendFunction, object, parameters, options, successCallback, errorCallback, format) {
 
-        Object.assign(parameters, object);
+        options.body = JSON.stringify(object);
+        options.headers = { 'Content-Type': 'application/json' };
+
         sendFunction(_this.endpointName, parameters, options, successCallback, errorCallback, format);
     };
 
@@ -45553,7 +45555,11 @@ var Endpoint = function Endpoint(endpointName, puttable, postable, deleteable) {
     } : undefined;
 
     this.deleteRequest = deleteable ? function (object, successCallback, errorCallback, responseFormat) {
-        _this.sendObject(_requests.deleteRequest, object, {}, {}, successCallback, errorCallback, responseFormat);
+
+        var parameters = {};
+        Object.assign(parameters, object);
+
+        (0, _requests.deleteRequest)(_this.endpointName, parameters, {}, successCallback, errorCallback, responseFormat);
     } : undefined;
 };
 
@@ -45686,7 +45692,6 @@ var authenticatedRequest = function authenticatedRequest(endpoint, parameters, o
     // Might as well stop immediately
     if (!isSet(parameters.username) || !isSet(parameters.token)) {
 
-        //if (typeof(errorCallback === 'undefined') || errorCallback === null) {
         if (!isSet(errorCallback)) {
             errorCallback = console.error;
         }

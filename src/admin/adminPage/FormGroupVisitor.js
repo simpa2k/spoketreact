@@ -133,7 +133,7 @@ class FormGroupVisitor {
 
             <TinyMCE apiKey={secrets.tinyMCEAPIKey}
                      content={this.getValue(this.currentFieldName)}
-                     onChange={this.getOnChange(this.onChange, this.currentFieldName)} />
+                     onContentChanged={(content) => this.onChange(content, this.currentFieldName)} />
         )
     }
 

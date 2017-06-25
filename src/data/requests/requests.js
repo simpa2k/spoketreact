@@ -37,7 +37,6 @@ const authenticatedRequest = function(endpoint, parameters, options, successCall
     // Might as well stop immediately
     if (!isSet(parameters.username) || !isSet(parameters.token)) {
 
-        //if (typeof(errorCallback === 'undefined') || errorCallback === null) {
         if (!isSet(errorCallback)) {
             errorCallback = console.error;
         }

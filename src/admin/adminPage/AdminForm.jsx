@@ -56,10 +56,7 @@ class AdminForm extends React.Component {
         let model = this.state.model;
 
         if (typeof(fieldsToUpdate) === 'object') {
-
             model = Object.assign(model, fieldsToUpdate);
-            //model = fieldsToUpdate;
-
         } else {
             model[fieldsToUpdate] = value;
         }

@@ -284,8 +284,8 @@ class Data {
 
     putGig(gig, successCallback, errorCallback) {
 
-        //this.sendVenue(gig);
         this.prepareGigModification(gig);
+
         console.log('Putting ' + JSON.stringify(gig, null, 4));
         this.gigsEndpoint.putRequest(gig, successCallback, errorCallback);
 
@@ -293,7 +293,6 @@ class Data {
 
     postGig(gig, successCallback, errorCallback) {
 
-        //this.sendVenue(gig);
         this.prepareGigModification(gig);
 
         console.log('Posting' + JSON.stringify(gig, null, 4));

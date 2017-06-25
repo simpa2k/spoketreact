@@ -16,7 +16,9 @@ const Endpoint = function(endpointName, puttable, postable, deleteable) {
 
     this.sendObject = (sendFunction, object, parameters, options, successCallback, errorCallback, format) => {
 
-        Object.assign(parameters, object);
+        options.body = JSON.stringify(object);
+        options.headers = {'Content-Type': 'application/json'};
+
         sendFunction(this.endpointName, parameters, options, successCallback, errorCallback, format);
 
     };
@@ -34,7 +36,12 @@ const Endpoint = function(endpointName, puttable, postable, deleteable) {
     } : undefined;
 
     this.deleteRequest = deleteable ? (object, successCallback, errorCallback, responseFormat) => {
-        this.sendObject(deleteRequest, object, {}, {}, successCallback, errorCallback, responseFormat);
+
+        let parameters = {};
+        Object.assign(parameters, object);
+
+        deleteRequest(this.endpointName, parameters, {}, successCallback, errorCallback, responseFormat);
+
     } : undefined;
 };
 
