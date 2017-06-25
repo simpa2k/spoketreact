@@ -14517,6 +14517,7 @@ var Data = function () {
         value: function bindGigFunctions() {
 
             this.getGigs = this.getGigs.bind(this);
+            this.prepareGigModification = this.prepareGigModification.bind(this);
             this.putGig = this.putGig.bind(this);
             this.postGig = this.postGig.bind(this);
             this.deleteGig = this.deleteGig.bind(this);
@@ -14737,10 +14738,24 @@ var Data = function () {
             }, errorCallback);
         }
     }, {
+        key: 'prepareGigModification',
+        value: function prepareGigModification(gig) {
+
+            this.sendVenue(gig);
+
+            gig.venue_name = gig.name;
+
+            delete gig.address;
+            delete gig.name;
+            delete gig.city;
+            delete gig.webpage;
+        }
+    }, {
         key: 'putGig',
         value: function putGig(gig, successCallback, errorCallback) {
 
-            this.sendVenue(gig);
+            //this.sendVenue(gig);
+            this.prepareGigModification(gig);
             console.log('Putting ' + JSON.stringify(gig, null, 4));
             this.gigsEndpoint.putRequest(gig, successCallback, errorCallback);
         }
@@ -14748,7 +14763,9 @@ var Data = function () {
         key: 'postGig',
         value: function postGig(gig, successCallback, errorCallback) {
 
-            this.sendVenue(gig);
+            //this.sendVenue(gig);
+            this.prepareGigModification(gig);
+
             console.log('Posting' + JSON.stringify(gig, null, 4));
             this.gigsEndpoint.postRequest(gig, successCallback, errorCallback);
         }
@@ -14986,13 +15003,6 @@ var Data = function () {
                 webpage: gig.webpage
 
             };
-
-            gig.venue_name = gig.name;
-
-            delete gig.address;
-            delete gig.name;
-            delete gig.city;
-            delete gig.webpage;
 
             if (typeof this.venues !== 'undefined') {
 
@@ -45650,7 +45660,7 @@ var postRequest = function postRequest(endpoint, parameters, options, successCal
 var deleteRequest = function deleteRequest(endpoint, parameters, options, successCallback, errorCallback, format) {
 
     options.method = 'DELETE';
-    authenticatedRequest(endpoints, parameters, options, successCallback, errorCallback, format);
+    authenticatedRequest(endpoint, parameters, options, successCallback, errorCallback, format);
 };
 
 var authenticatedRequest = function authenticatedRequest(endpoint, parameters, options, successCallback, errorCallback, format) {

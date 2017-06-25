@@ -59,6 +59,7 @@ class Data {
     bindGigFunctions() {
 
         this.getGigs = this.getGigs.bind(this);
+        this.prepareGigModification = this.prepareGigModification.bind(this);
         this.putGig = this.putGig.bind(this);
         this.postGig = this.postGig.bind(this);
         this.deleteGig = this.deleteGig.bind(this);
@@ -268,9 +269,23 @@ class Data {
         }, errorCallback);
     }
 
-    putGig(gig, successCallback, errorCallback) {
+    prepareGigModification(gig) {
 
         this.sendVenue(gig);
+
+        gig.venue_name = gig.name;
+
+        delete gig.address;
+        delete gig.name;
+        delete gig.city;
+        delete gig.webpage;
+
+    }
+
+    putGig(gig, successCallback, errorCallback) {
+
+        //this.sendVenue(gig);
+        this.prepareGigModification(gig);
         console.log('Putting ' + JSON.stringify(gig, null, 4));
         this.gigsEndpoint.putRequest(gig, successCallback, errorCallback);
 
@@ -278,7 +293,9 @@ class Data {
 
     postGig(gig, successCallback, errorCallback) {
 
-        this.sendVenue(gig);
+        //this.sendVenue(gig);
+        this.prepareGigModification(gig);
+
         console.log('Posting' + JSON.stringify(gig, null, 4));
         this.gigsEndpoint.postRequest(gig, successCallback, errorCallback);
 
@@ -508,13 +525,6 @@ class Data {
             webpage: gig.webpage
 
         };
-
-        gig.venue_name = gig.name;
-
-        delete gig.address;
-        delete gig.name;
-        delete gig.city;
-        delete gig.webpage;
 
         if (typeof(this.venues) !== 'undefined') {
 

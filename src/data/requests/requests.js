@@ -25,7 +25,7 @@ const postRequest = function(endpoint, parameters, options, successCallback, err
 const deleteRequest = function(endpoint, parameters, options, successCallback, errorCallback, format) {
 
     options.method = 'DELETE';
-    authenticatedRequest(endpoints, parameters, options, successCallback, errorCallback, format);
+    authenticatedRequest(endpoint, parameters, options, successCallback, errorCallback, format);
 
 };
 
