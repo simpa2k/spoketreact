@@ -35,7 +35,9 @@ class App extends React.Component {
                     return <AdminContainer data={data} />
                 }} />
 
-                <Route path="/login" component={Login} />
+                <Route path="/login" render={() => {
+                    return <Login loginFunction={data.getUser} />
+                }} />
 
                 <Route path="/" render={() => {
                     return <Home data={data} />

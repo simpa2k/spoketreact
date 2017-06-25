@@ -31,6 +31,7 @@ class Data {
         this.bindGigFunctions();
         this.bindImagesFunctions();
         this.bindMemberFunctions();
+        this.bindUserFunctions();
 
     }
 
@@ -81,6 +82,10 @@ class Data {
         this.deleteMember = this.deleteMember.bind(this);
         this.getMemberStructure = this.getMemberStructure.bind(this);
 
+    }
+
+    bindUserFunctions() {
+        this.getUser = this.getUser.bind(this);
     }
 
     /*
@@ -267,17 +272,21 @@ class Data {
 
         this.sendVenue(gig);
         console.log('Putting ' + JSON.stringify(gig, null, 4));
-        //this.gigsEndpoint.putRequest(gig, successCallback, errorCallback);
+        this.gigsEndpoint.putRequest(gig, successCallback, errorCallback);
+
     }
 
     postGig(gig, successCallback, errorCallback) {
+
+        this.sendVenue(gig);
         console.log('Posting' + JSON.stringify(gig, null, 4));
-        //this.gigsEndpoint.postRequest(gig, successCallback, errorCallback);
+        this.gigsEndpoint.postRequest(gig, successCallback, errorCallback);
+
     }
 
     deleteGig(gig, successCallback, errorCallback) {
         console.log('Deleting' + JSON.stringify(gig, null, 4));
-        //this.gigsEndpoint.deleteRequest(gig, successCallback, errorCallback);
+        this.gigsEndpoint.deleteRequest(gig, successCallback, errorCallback);
     }
 
     getGigsStructure(callback) {
@@ -437,6 +446,18 @@ class Data {
     }
 
     /*
+     * Users
+     */
+
+    getUser(username, password, successCallback, errorCallback) {
+
+        this.usersEndpoint.getRequest(successCallback, errorCallback, null, {
+            username: username,
+            password: password
+        });
+    }
+
+    /*
      * Venues
      */
 
@@ -488,6 +509,13 @@ class Data {
 
         };
 
+        gig.venue_name = gig.name;
+
+        delete gig.address;
+        delete gig.name;
+        delete gig.city;
+        delete gig.webpage;
+
         if (typeof(this.venues) !== 'undefined') {
 
             let venueForComparison = this.venues.find((venue) => {
@@ -498,7 +526,7 @@ class Data {
 
                 // If there is no venue with the specified name, post the venue (i.e. create it).
                 console.log('Posting venue: ' + JSON.stringify(selectedVenue));
-                //this.modifyVenueAndUpdate(selectedVenue, this.postVenue);
+                this.modifyVenueAndUpdate(selectedVenue, this.postVenue);
 
             } else if (JSON.stringify(selectedVenue) !== JSON.stringify(venueForComparison)) { // The order of the properties in selectedVenue matters here
 
@@ -508,7 +536,7 @@ class Data {
                  */
 
                 console.log('Putting venue: ' + JSON.stringify(selectedVenue));
-                //this.modifyVenueAndUpdate(selectedVenue, this.putVenue);
+                this.modifyVenueAndUpdate(selectedVenue, this.putVenue);
             }
 
         } else {

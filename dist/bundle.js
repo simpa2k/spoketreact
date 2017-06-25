@@ -14488,6 +14488,7 @@ var Data = function () {
         this.bindGigFunctions();
         this.bindImagesFunctions();
         this.bindMemberFunctions();
+        this.bindUserFunctions();
     }
 
     _createClass(Data, [{
@@ -14538,6 +14539,11 @@ var Data = function () {
             this.postMember = this.postMember.bind(this);
             this.deleteMember = this.deleteMember.bind(this);
             this.getMemberStructure = this.getMemberStructure.bind(this);
+        }
+    }, {
+        key: 'bindUserFunctions',
+        value: function bindUserFunctions() {
+            this.getUser = this.getUser.bind(this);
         }
 
         /*
@@ -14736,19 +14742,21 @@ var Data = function () {
 
             this.sendVenue(gig);
             console.log('Putting ' + JSON.stringify(gig, null, 4));
-            //this.gigsEndpoint.putRequest(gig, successCallback, errorCallback);
+            this.gigsEndpoint.putRequest(gig, successCallback, errorCallback);
         }
     }, {
         key: 'postGig',
         value: function postGig(gig, successCallback, errorCallback) {
+
+            this.sendVenue(gig);
             console.log('Posting' + JSON.stringify(gig, null, 4));
-            //this.gigsEndpoint.postRequest(gig, successCallback, errorCallback);
+            this.gigsEndpoint.postRequest(gig, successCallback, errorCallback);
         }
     }, {
         key: 'deleteGig',
         value: function deleteGig(gig, successCallback, errorCallback) {
             console.log('Deleting' + JSON.stringify(gig, null, 4));
-            //this.gigsEndpoint.deleteRequest(gig, successCallback, errorCallback);
+            this.gigsEndpoint.deleteRequest(gig, successCallback, errorCallback);
         }
     }, {
         key: 'getGigsStructure',
@@ -14907,6 +14915,20 @@ var Data = function () {
         }
 
         /*
+         * Users
+         */
+
+    }, {
+        key: 'getUser',
+        value: function getUser(username, password, successCallback, errorCallback) {
+
+            this.usersEndpoint.getRequest(successCallback, errorCallback, null, {
+                username: username,
+                password: password
+            });
+        }
+
+        /*
          * Venues
          */
 
@@ -14965,6 +14987,13 @@ var Data = function () {
 
             };
 
+            gig.venue_name = gig.name;
+
+            delete gig.address;
+            delete gig.name;
+            delete gig.city;
+            delete gig.webpage;
+
             if (typeof this.venues !== 'undefined') {
 
                 var venueForComparison = this.venues.find(function (venue) {
@@ -14975,7 +15004,7 @@ var Data = function () {
 
                     // If there is no venue with the specified name, post the venue (i.e. create it).
                     console.log('Posting venue: ' + JSON.stringify(selectedVenue));
-                    //this.modifyVenueAndUpdate(selectedVenue, this.postVenue);
+                    this.modifyVenueAndUpdate(selectedVenue, this.postVenue);
                 } else if (JSON.stringify(selectedVenue) !== JSON.stringify(venueForComparison)) {
                     // The order of the properties in selectedVenue matters here
 
@@ -14985,7 +15014,7 @@ var Data = function () {
                      */
 
                     console.log('Putting venue: ' + JSON.stringify(selectedVenue));
-                    //this.modifyVenueAndUpdate(selectedVenue, this.putVenue);
+                    this.modifyVenueAndUpdate(selectedVenue, this.putVenue);
                 }
             } else {
                 console.error('Venues undefined when trying to operate on gigs.');
@@ -20975,13 +21004,14 @@ var AdminForm = function (_React$Component) {
             var model = this.state.model;
 
             if ((typeof fieldsToUpdate === 'undefined' ? 'undefined' : _typeof(fieldsToUpdate)) === 'object') {
-                model = fieldsToUpdate;
+
+                model = Object.assign(model, fieldsToUpdate);
+                //model = fieldsToUpdate;
             } else {
                 model[fieldsToUpdate] = value;
             }
 
             this.setState({ model: model });
-            console.log(this.state.model);
         }
     }, {
         key: 'render',
@@ -44125,7 +44155,9 @@ var App = function (_React$Component) {
                 _react2.default.createElement(_reactRouterDom.Route, { path: '/admin', render: function render() {
                         return _react2.default.createElement(_AdminContainer2.default, { data: data });
                     } }),
-                _react2.default.createElement(_reactRouterDom.Route, { path: '/login', component: _Login2.default }),
+                _react2.default.createElement(_reactRouterDom.Route, { path: '/login', render: function render() {
+                        return _react2.default.createElement(_Login2.default, { loginFunction: data.getUser });
+                    } }),
                 _react2.default.createElement(_reactRouterDom.Route, { path: '/', render: function render() {
                         return _react2.default.createElement(_Home2.default, { data: data });
                     } })
@@ -44259,6 +44291,8 @@ var _react = __webpack_require__(0);
 
 var _react2 = _interopRequireDefault(_react);
 
+var _reactBootstrap = __webpack_require__(572);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -44277,13 +44311,51 @@ var Login = function (_React$Component) {
     }
 
     _createClass(Login, [{
+        key: 'login',
+        value: function login() {
+            var _this2 = this;
+
+            this.props.loginFunction(this.state.username, this.state.password, function (response) {
+
+                localStorage.setItem('username', _this2.state.username);
+                localStorage.setItem('authToken', response.token);
+            }, console.error);
+        }
+    }, {
+        key: 'setUsername',
+        value: function setUsername(username) {
+            this.setState({ username: username });
+        }
+    }, {
+        key: 'setPassword',
+        value: function setPassword(password) {
+            this.setState({ password: password });
+        }
+    }, {
         key: 'render',
         value: function render() {
+            var _this3 = this;
 
             return _react2.default.createElement(
-                'h1',
-                null,
-                'This is the login page.'
+                _reactBootstrap.Col,
+                { xs: 6, xsOffset: 3 },
+                _react2.default.createElement(
+                    _reactBootstrap.FormGroup,
+                    null,
+                    _react2.default.createElement(_reactBootstrap.FormControl, { type: 'text', placeholder: 'Anv\xE4ndarnamn', onChange: function onChange(event) {
+                            return _this3.setUsername(event.target.value);
+                        } }),
+                    _react2.default.createElement(_reactBootstrap.FormControl, { type: 'password', placeholder: 'L\xF6senord', onChange: function onChange(event) {
+                            return _this3.setPassword(event.target.value);
+                        } }),
+                    _react2.default.createElement(
+                        _reactBootstrap.Button,
+                        { bsStyle: 'primary', onClick: function onClick() {
+                                return _this3.login();
+                            } },
+                        'Logga in'
+                    )
+                )
             );
         }
     }]);
@@ -44549,10 +44621,10 @@ var FormGroupVisitor = function () {
 
             var fieldName = this.currentFieldName;
 
-            var props = this.getProps(this.currentKey, this.currentFieldName, function (event) {
+            var props = this.getProps(this.currentKey, this.currentFieldName, function (targetValue) {
 
                 var autoCompleted = collection.find(function (item) {
-                    return comparisonFunction(item, event.target.value);
+                    return comparisonFunction(item, targetValue);
                 });
 
                 var fieldsToUpdate = void 0;
@@ -44563,7 +44635,7 @@ var FormGroupVisitor = function () {
                     fieldsToUpdate = fieldName;
                 }
 
-                _this.onChange(event, fieldsToUpdate);
+                _this.onChange(targetValue, fieldsToUpdate);
             });
 
             props.type = 'text';
@@ -45555,6 +45627,7 @@ exports.imageUpload = imageUpload;
 
 
 __webpack_require__(804);
+var isSet = __webpack_require__(805);
 
 var getRequest = function getRequest(endpoint, parameters, options, successCallback, errorCallback, format) {
 
@@ -45582,13 +45655,19 @@ var deleteRequest = function deleteRequest(endpoint, parameters, options, succes
 
 var authenticatedRequest = function authenticatedRequest(endpoint, parameters, options, successCallback, errorCallback, format) {
 
-    parameters.authToken = window.localStorage.getItem('authToken');
+    parameters.username = window.localStorage.getItem('username');
+    parameters.token = window.localStorage.getItem('authToken');
 
     // Might as well stop immediately
-    if (typeof parameters.authToken === 'undefined' || parameters.authToken === null) {
+    if (!isSet(parameters.username) || !isSet(parameters.token)) {
+
+        //if (typeof(errorCallback === 'undefined') || errorCallback === null) {
+        if (!isSet(errorCallback)) {
+            errorCallback = console.error;
+        }
 
         errorCallback({
-            error: 'No authentication token set'
+            error: 'Credentials not set.'
         });
     } else {
         request(endpoint, parameters, options, successCallback, errorCallback, format);
@@ -79590,6 +79669,17 @@ module.exports = function(module) {
   self.fetch.polyfill = true
 })(typeof self !== 'undefined' ? self : this);
 
+
+/***/ }),
+/* 805 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+module.exports = function (value) {
+    return typeof value !== 'undefined' && value !== null;
+};
 
 /***/ })
 /******/ ]);

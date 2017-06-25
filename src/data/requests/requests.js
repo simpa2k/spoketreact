@@ -1,4 +1,5 @@
 require('whatwg-fetch');
+let isSet = require('../../utils/isSet');
 
 const getRequest = function(endpoint, parameters, options, successCallback, errorCallback, format) {
 
@@ -30,13 +31,19 @@ const deleteRequest = function(endpoint, parameters, options, successCallback, e
 
 const authenticatedRequest = function(endpoint, parameters, options, successCallback, errorCallback, format) {
 
-    parameters.authToken = window.localStorage.getItem('authToken');
+    parameters.username = window.localStorage.getItem('username');
+    parameters.token = window.localStorage.getItem('authToken');
 
     // Might as well stop immediately
-    if ((typeof(parameters.authToken) === 'undefined') || (parameters.authToken === null)) {
+    if (!isSet(parameters.username) || !isSet(parameters.token)) {
+
+        //if (typeof(errorCallback === 'undefined') || errorCallback === null) {
+        if (!isSet(errorCallback)) {
+            errorCallback = console.error;
+        }
 
         errorCallback({
-            error: 'No authentication token set'
+            error: 'Credentials not set.'
         });
 
     } else {

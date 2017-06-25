@@ -92,10 +92,10 @@ class FormGroupVisitor {
 
         let fieldName = this.currentFieldName;
 
-        let props = this.getProps(this.currentKey, this.currentFieldName, (event) => {
+        let props = this.getProps(this.currentKey, this.currentFieldName, (targetValue) => {
 
             let autoCompleted = collection.find((item) => {
-                return comparisonFunction(item, event.target.value);
+                return comparisonFunction(item, targetValue);
             });
 
             let fieldsToUpdate;
@@ -106,7 +106,7 @@ class FormGroupVisitor {
                 fieldsToUpdate = fieldName
             }
 
-            this.onChange(event, fieldsToUpdate);
+            this.onChange(targetValue, fieldsToUpdate);
 
         });
 
