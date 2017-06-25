@@ -1,7 +1,16 @@
 import React from 'react';
+import { Redirect } from 'react-router-dom';
 import { Col, FormGroup, FormControl, Button } from 'react-bootstrap';
 
 class Login extends React.Component {
+
+    constructor(props) {
+
+        super(props);
+        this.state = {
+            redirect: false
+        }
+    }
 
     login() {
 
@@ -9,6 +18,8 @@ class Login extends React.Component {
 
             localStorage.setItem('username', this.state.username);
             localStorage.setItem('authToken', response.token);
+
+            this.setState({redirect: true});
 
         }, console.error);
     }
@@ -23,7 +34,14 @@ class Login extends React.Component {
 
     render() {
 
+        let redirect = this.state.redirect;
+
+        if (redirect) {
+            return <Redirect to="/admin" />
+        }
+
         return (
+
             <Col xs={6} xsOffset={3}>
                 <FormGroup>
                     <FormControl type="text" placeholder="Användarnamn" onChange={(event) => this.setUsername(event.target.value)} />

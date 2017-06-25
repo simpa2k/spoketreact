@@ -44301,6 +44301,8 @@ var _react = __webpack_require__(0);
 
 var _react2 = _interopRequireDefault(_react);
 
+var _reactRouterDom = __webpack_require__(78);
+
 var _reactBootstrap = __webpack_require__(572);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
@@ -44314,10 +44316,15 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 var Login = function (_React$Component) {
     _inherits(Login, _React$Component);
 
-    function Login() {
+    function Login(props) {
         _classCallCheck(this, Login);
 
-        return _possibleConstructorReturn(this, (Login.__proto__ || Object.getPrototypeOf(Login)).apply(this, arguments));
+        var _this = _possibleConstructorReturn(this, (Login.__proto__ || Object.getPrototypeOf(Login)).call(this, props));
+
+        _this.state = {
+            redirect: false
+        };
+        return _this;
     }
 
     _createClass(Login, [{
@@ -44329,6 +44336,8 @@ var Login = function (_React$Component) {
 
                 localStorage.setItem('username', _this2.state.username);
                 localStorage.setItem('authToken', response.token);
+
+                _this2.setState({ redirect: true });
             }, console.error);
         }
     }, {
@@ -44345,6 +44354,12 @@ var Login = function (_React$Component) {
         key: 'render',
         value: function render() {
             var _this3 = this;
+
+            var redirect = this.state.redirect;
+
+            if (redirect) {
+                return _react2.default.createElement(_reactRouterDom.Redirect, { to: '/admin' });
+            }
 
             return _react2.default.createElement(
                 _reactBootstrap.Col,
