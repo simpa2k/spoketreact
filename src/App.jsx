@@ -19,6 +19,7 @@ class App extends React.Component {
             embeddedItemsEndpoint: new Endpoint('embeddeditems', true, true, true),
             gigsEndpoint: new Endpoint('gigs', true, true, true),
             imagesEndpoint: new Endpoint('images', true, true, true),
+            galleriesEndpoint: new Endpoint('images/galleries', false, false, false),
             membersEndpoint: new Endpoint('members', true, true, true),
             usersEndpoint: new Endpoint('users', false, false, false),
             venuesEndpoint: new Endpoint('venues', true, true, false)
@@ -34,7 +35,9 @@ class App extends React.Component {
                     return <AdminContainer data={data} />
                 }} />
 
-                <Route path="/login" component={Login} />
+                <Route path="/login" render={() => {
+                    return <Login loginFunction={data.getUser} />
+                }} />
 
                 <Route path="/" render={() => {
                     return <Home data={data} />

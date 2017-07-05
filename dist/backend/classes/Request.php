@@ -33,7 +33,7 @@ class Request {
         if(isset($_SERVER['QUERY_STRING'])) {
             parse_str($_SERVER['QUERY_STRING'], $parameters);
         }
-        
+
         if(!empty($_FILES)) {
             foreach ($_FILES as $key => $value) {
                 $parameters[$key] = $value;

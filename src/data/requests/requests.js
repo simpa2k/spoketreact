@@ -1,4 +1,5 @@
 require('whatwg-fetch');
+let isSet = require('../../utils/isSet');
 
 const getRequest = function(endpoint, parameters, options, successCallback, errorCallback, format) {
 
@@ -24,19 +25,24 @@ const postRequest = function(endpoint, parameters, options, successCallback, err
 const deleteRequest = function(endpoint, parameters, options, successCallback, errorCallback, format) {
 
     options.method = 'DELETE';
-    authenticatedRequest(endpoints, parameters, options, successCallback, errorCallback, format);
+    authenticatedRequest(endpoint, parameters, options, successCallback, errorCallback, format);
 
 };
 
 const authenticatedRequest = function(endpoint, parameters, options, successCallback, errorCallback, format) {
 
-    parameters.authToken = window.localStorage.getItem('authToken');
+    parameters.username = window.localStorage.getItem('username');
+    parameters.token = window.localStorage.getItem('authToken');
 
     // Might as well stop immediately
-    if ((typeof(parameters.authToken) === 'undefined') || (parameters.authToken === null)) {
+    if (!isSet(parameters.username) || !isSet(parameters.token)) {
+
+        if (!isSet(errorCallback)) {
+            errorCallback = console.error;
+        }
 
         errorCallback({
-            error: 'No authentication token set'
+            error: 'Credentials not set.'
         });
 
     } else {
@@ -66,7 +72,6 @@ const request = function(endpoint, parameters, options, successCallback, errorCa
         if ((typeof(errorCallback) !== 'undefined') && (errorCallback !== null)) {
             errorCallback(error);
         }
-
     });
 };
 

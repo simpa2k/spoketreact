@@ -7123,6 +7123,36 @@ button.close {
   -o-transition: all 0.5s;
   transition: all 0.5s;
 }
+.edit-image {
+  display: none;
+}
+.gallery-item {
+  display: inline;
+  position: relative;
+}
+.gallery-item img {
+  margin: 1% 1% 1% 0;
+  max-width: 100%;
+  -webkit-box-shadow: 2px 2px 3px 0px #c3bfa7;
+  -moz-box-shadow: 2px 2px 3px 0px #c3bfa7;
+  box-shadow: 2px 2px 3px 0px #c3bfa7;
+}
+.gallery-item .active {
+  -webkit-box-shadow: 2px 2px 3px 0px #123848;
+  box-shadow: 2px 2px 3px 0px #123848;
+  border: 1px solid #123848;
+  border-radius: 3px;
+}
+.gallery-item:hover > img {
+  opacity: 0.5;
+}
+.gallery-item:hover > .edit-image {
+  display: initial;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
 body {
   font-family: 'Oswald', sans-serif;
   margin: 0;
