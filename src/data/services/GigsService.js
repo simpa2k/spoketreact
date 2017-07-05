@@ -1,6 +1,16 @@
 import Service from './Service';
 import Endpoint from '../endpoint/Endpoint';
 
+import {
+
+    text,
+    AutocompletedText,
+    datetime,
+
+} from '../formStructure/inputs';
+
+let isSet = require('../../utils/isSet');
+
 /**
  * Class for operating on gigs. Transparently handles venues as well.
  */
@@ -67,7 +77,6 @@ class GigsService extends Service {
     }
 
     deleteGig(gig, successCallback, errorCallback) {
-        console.log('Deleting' + JSON.stringify(gig, null, 4));
         this.endpoint.deleteRequest(gig, successCallback, errorCallback);
     }
 
@@ -115,7 +124,7 @@ class GigsService extends Service {
 
             this.venues = venues;
 
-            if (typeof(successCallback) !== 'undefined') {
+            if (isSet(successCallback)) {
                 successCallback(venues)
             }
 

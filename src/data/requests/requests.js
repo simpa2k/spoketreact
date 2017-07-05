@@ -72,7 +72,6 @@ const request = function(endpoint, parameters, options, successCallback, errorCa
         if ((typeof(errorCallback) !== 'undefined') && (errorCallback !== null)) {
             errorCallback(error);
         }
-
     });
 };
 
