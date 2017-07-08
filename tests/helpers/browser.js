@@ -22,8 +22,14 @@ Object.keys(document.defaultView).forEach((property) => {
  */
 
 if (!global.window.localStorage) {
+
+    let credentials = {
+        username: 'mockUsername',
+        authToken: 'mockAuthToken'
+    };
+
     global.window.localStorage = {
-        getItem(key) { return 'mockAuthToken'; },
+        getItem(key) { return credentials[key]; },
         setItem() {}
     };
 }

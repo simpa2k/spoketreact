@@ -13,6 +13,7 @@ import {
 } from './formStructure/inputs';
 
 import GigsService from './services/GigsService';
+import ContactPersonsService from "./services/ContactPersonsService";
 
 class Data {
 
@@ -28,6 +29,7 @@ class Data {
         this.usersEndpoint = endpoints.usersEndpoint;
         this.venuesEndpoint = endpoints.venuesEndpoint;
 
+        this.contactPersonsService = new ContactPersonsService();
         this.gigsService = new GigsService();
 
         this.bindDescriptionFunctions();
@@ -97,29 +99,19 @@ class Data {
      */
 
     getContactInfo(successCallback, errorCallback) {
-
-        this.contactPersonsEndpoint.getRequest((fulfilled) => {
-
-            successCallback({
-
-                email: 'spoketikoket@gmail.com',
-                contactPersons: fulfilled
-
-            });
-
-        }, errorCallback);
+        this.contactPersonsService.getRequest(successCallback, errorCallback);
     }
 
     putContactPerson(contactPerson, successCallback, errorCallback) {
-        this.contactPersonsEndpoint.putRequest(contactPerson, successCallback, errorCallback);
+        this.contactPersonsService.putRequest(contactPerson, successCallback, errorCallback);
     }
 
     postContactPerson(contactPerson, successCallback, errorCallback) {
-        this.contactPersonsEndpoint.postRequest(contactPerson, successCallback, errorCallback);
+        this.contactPersonsService.postRequest(contactPerson, successCallback, errorCallback);
     }
 
     deleteContactPerson(contactPerson, successCallback, errorCallback) {
-        this.contactPersonsEndpoint.deleteRequest(contactPerson, successCallback, errorCallback);
+        this.contactPersonsService.deleteRequest(contactPerson, successCallback, errorCallback);
     }
 
     /*
