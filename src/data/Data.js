@@ -14,6 +14,7 @@ import {
 
 import GigsService from './services/GigsService';
 import ContactPersonsService from "./services/ContactPersonsService";
+import DescriptionService from "./services/DescriptionService";
 
 class Data {
 
@@ -30,6 +31,7 @@ class Data {
         this.venuesEndpoint = endpoints.venuesEndpoint;
 
         this.contactPersonsService = new ContactPersonsService();
+        this.descriptionService = new DescriptionService();
         this.gigsService = new GigsService();
 
         this.bindDescriptionFunctions();
@@ -119,26 +121,15 @@ class Data {
      */
 
     getDescription(successCallback, errorCallback) {
-        this.descriptionEndpoint.getRequest((fulfilled) => {
-            successCallback(fulfilled[0]);
-        }, errorCallback);
+        this.descriptionService.getDescription(successCallback, errorCallback);
     }
 
     putDescription(description, successCallback, errorCallback) {
-        this.descriptionEndpoint.putRequest(description, successCallback, errorCallback);
+        this.descriptionService.putDescription(description, successCallback, errorCallback);
     }
 
     getDescriptionStructure(callback) {
-
-        callback([
-            {
-                label: '',
-                fields: {
-                    content: textarea
-                }
-            }
-        ]);
-
+        this.descriptionService.getDescriptionStructure(callback);
     }
 
     /*

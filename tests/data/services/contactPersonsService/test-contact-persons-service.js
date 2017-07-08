@@ -5,10 +5,10 @@ import {EMAIL, ContactPersonsService} from '../../../../src/data/services/Contac
 
 describe('ContactPersonsService', () => {
 
-    let contactPersonsService;
-
     const SAMPLE_EMAIL = EMAIL;
     const SAMPLE_CONTACT_PERSONS = require('./sampleContactPersons.json');
+
+    let contactPersonsService;
 
     beforeEach(() => {
 

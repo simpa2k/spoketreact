@@ -14475,6 +14475,10 @@ var _ContactPersonsService = __webpack_require__(807);
 
 var _ContactPersonsService2 = _interopRequireDefault(_ContactPersonsService);
 
+var _DescriptionService = __webpack_require__(809);
+
+var _DescriptionService2 = _interopRequireDefault(_DescriptionService);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -14494,6 +14498,7 @@ var Data = function () {
         this.venuesEndpoint = endpoints.venuesEndpoint;
 
         this.contactPersonsService = new _ContactPersonsService2.default();
+        this.descriptionService = new _DescriptionService2.default();
         this.gigsService = new _GigsService2.default();
 
         this.bindDescriptionFunctions();
@@ -14591,25 +14596,17 @@ var Data = function () {
     }, {
         key: 'getDescription',
         value: function getDescription(successCallback, errorCallback) {
-            this.descriptionEndpoint.getRequest(function (fulfilled) {
-                successCallback(fulfilled[0]);
-            }, errorCallback);
+            this.descriptionService.getDescription(successCallback, errorCallback);
         }
     }, {
         key: 'putDescription',
         value: function putDescription(description, successCallback, errorCallback) {
-            this.descriptionEndpoint.putRequest(description, successCallback, errorCallback);
+            this.descriptionService.putDescription(description, successCallback, errorCallback);
         }
     }, {
         key: 'getDescriptionStructure',
         value: function getDescriptionStructure(callback) {
-
-            callback([{
-                label: '',
-                fields: {
-                    content: _inputs.textarea
-                }
-            }]);
+            this.descriptionService.getDescriptionStructure(callback);
         }
 
         /*
@@ -79894,6 +79891,80 @@ var ContactPersonsService = function (_Service) {
 exports.EMAIL = EMAIL;
 exports.ContactPersonsService = ContactPersonsService;
 exports.default = ContactPersonsService;
+
+/***/ }),
+/* 808 */,
+/* 809 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+exports.DescriptionService = exports.DESCRIPTION_STRUCTURE = undefined;
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _Service2 = __webpack_require__(409);
+
+var _Service3 = _interopRequireDefault(_Service2);
+
+var _inputs = __webpack_require__(170);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+var Endpoint = __webpack_require__(169);
+
+var DESCRIPTION_STRUCTURE = {
+    label: '',
+    fields: {
+        content: _inputs.textarea
+    }
+};
+
+var DescriptionService = function (_Service) {
+    _inherits(DescriptionService, _Service);
+
+    function DescriptionService() {
+        _classCallCheck(this, DescriptionService);
+
+        return _possibleConstructorReturn(this, (DescriptionService.__proto__ || Object.getPrototypeOf(DescriptionService)).call(this, new Endpoint('description', true, false, false)));
+    }
+
+    _createClass(DescriptionService, [{
+        key: "getDescription",
+        value: function getDescription(successCallback, errorCallback) {
+
+            this.endpoint.getRequest(function (fulfilled) {
+                successCallback(fulfilled[0]);
+            }, errorCallback);
+        }
+    }, {
+        key: "putDescription",
+        value: function putDescription(description, successCallback, errorCallback) {
+            this.endpoint.putRequest(description, successCallback, errorCallback);
+        }
+    }, {
+        key: "getDescriptionStructure",
+        value: function getDescriptionStructure(callback) {
+            callback(DESCRIPTION_STRUCTURE);
+        }
+    }]);
+
+    return DescriptionService;
+}(_Service3.default);
+
+exports.DESCRIPTION_STRUCTURE = DESCRIPTION_STRUCTURE;
+exports.DescriptionService = DescriptionService;
+exports.default = DescriptionService;
 
 /***/ })
 /******/ ]);

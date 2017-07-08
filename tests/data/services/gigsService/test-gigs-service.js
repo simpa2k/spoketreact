@@ -165,7 +165,7 @@ describe('GigsService', () => {
 
         });
 
-        it('should delete venue related properties', () => {
+        it('should delete venue related properties from gig in question', () => {
 
             let gigToBeSent = getGig(gigsService);
 

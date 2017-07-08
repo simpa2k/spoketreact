@@ -91,4 +91,52 @@ describe('Data', () => {
             });
         });
     });
+
+    describe('Description', () => {
+
+        const SAMPLE_DESCRIPTION = {};
+
+        describe('getDescription', () => {
+
+            it('should call service method with success callback and error callback', () => {
+
+                let getDescription = sinon.stub(data.descriptionService, 'getDescription');
+
+                let success = sinon.spy();
+                let error = sinon.spy();
+
+                data.getDescription(success, error);
+                sinon.assert.calledWith(getDescription, success, error);
+
+            });
+        });
+
+        describe('putDescription', () => {
+
+            it('should call service method with success callback and error callback', () => {
+
+                let putDescription = sinon.stub(data.descriptionService, 'putDescription');
+
+                let success = sinon.spy();
+                let error = sinon.spy();
+
+                data.putDescription(SAMPLE_DESCRIPTION, success, error);
+                sinon.assert.calledWith(putDescription, SAMPLE_DESCRIPTION, success, error);
+
+            });
+        });
+
+        describe('getDescriptionStructure', () => {
+
+            it('should call service method with callback', () => {
+
+                let getDescriptionStructure = sinon.stub(data.descriptionService, 'getDescriptionStructure');
+                let callback = sinon.spy();
+
+                data.getDescriptionStructure(callback);
+                sinon.assert.calledWith(getDescriptionStructure, callback);
+
+            });
+        });
+    });
 });
