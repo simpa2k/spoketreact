@@ -15,6 +15,7 @@ import {
 import GigsService from './services/GigsService';
 import ContactPersonsService from "./services/ContactPersonsService";
 import DescriptionService from "./services/DescriptionService";
+import EmbeddedItemsService from "./services/EmbeddedItemsService";
 
 class Data {
 
@@ -32,14 +33,25 @@ class Data {
 
         this.contactPersonsService = new ContactPersonsService();
         this.descriptionService = new DescriptionService();
+        this.embeddedItemsService = new EmbeddedItemsService();
         this.gigsService = new GigsService();
 
+        this.bindContactPersonsFunctions();
         this.bindDescriptionFunctions();
         this.bindEmbeddedItemFunctions();
         this.bindGigFunctions();
         this.bindImagesFunctions();
         this.bindMemberFunctions();
         this.bindUserFunctions();
+
+    }
+
+    bindContactPersonsFunctions() {
+
+        this.getContactInfo = this.getContactInfo.bind(this);
+        this.putContactPerson = this.putContactPerson.bind(this);
+        this.postContactPerson = this.postContactPerson.bind(this);
+        this.deleteContactPerson = this.deleteContactPerson.bind(this);
 
     }
 
@@ -137,12 +149,12 @@ class Data {
      */
 
     getEmbeddedItems(successCallback, errorCallback) {
-        this.embeddedItemsEndpoint.getRequest(successCallback, errorCallback);
+        this.embeddedItemsService.getEmbeddedItems(successCallback, errorCallback);
     }
 
     getVideos(successCallback, errorCallback) {
 
-        this.embeddedItemsEndpoint.getRequest((fulfilled) => {
+        /*this.embeddedItemsEndpoint.getRequest((fulfilled) => {
 
             successCallback(fulfilled.map((video) => {
 
@@ -153,12 +165,13 @@ class Data {
 
         }, errorCallback, null, {
             type: 'video'
-        });
+        });*/
+        this.embeddedItemsService.getVideos(successCallback, errorCallback);
     }
 
     getSounds(successCallback, errorCallback) {
 
-        this.embeddedItemsEndpoint.getRequest((fulfilled) => {
+        /*this.embeddedItemsEndpoint.getRequest((fulfilled) => {
 
             successCallback(fulfilled.map((sound) => {
 
@@ -168,11 +181,13 @@ class Data {
             }));
         }, errorCallback, null, {
             type: 'sound'
-        });
+        });*/
+        this.embeddedItemsService.getSounds(successCallback, errorCallback);
     }
 
     putEmbeddedItem(embeddedItem, successCallback, errorCallback) {
-        this.embeddedItemsEndpoint.putRequest(embeddedItem, successCallback, errorCallback);
+        //this.embeddedItemsEndpoint.putRequest(embeddedItem, successCallback, errorCallback);
+        this.embeddedItemsService.putEmbeddedItem(embeddedItem, successCallback, errorCallback);
     }
 
     setType(embeddedItem, type) {
@@ -190,19 +205,23 @@ class Data {
     }
 
     putVideo(video, successCallback, errorCallback) {
-        this.modifyVideosRepository(video, this.embeddedItemsEndpoint.putRequest, successCallback, errorCallback);
+        //this.modifyVideosRepository(video, this.embeddedItemsEndpoint.putRequest, successCallback, errorCallback);
+        this.embeddedItemsService.putVideo(video, successCallback, errorCallback);
     }
 
     postEmbeddedItem(embeddedItem, successCallback, errorCallback) {
-        this.embeddedItemsEndpoint.postRequest(embeddedItem, successCallback, errorCallback);
+        //this.embeddedItemsEndpoint.postRequest(embeddedItem, successCallback, errorCallback);
+        this.embeddedItemsService.postEmbeddedItem(embeddedItem, successCallback, errorCallback);
     }
 
     postVideo(video, successCallback, errorCallback) {
-        this.modifyVideosRepository(video, this.embeddedItemsEndpoint.postRequest, successCallback, errorCallback);
+        //this.modifyVideosRepository(video, this.embeddedItemsEndpoint.postRequest, successCallback, errorCallback);
+        this.embeddedItemsService.postVideo(video, successCallback, errorCallback);
     }
 
     deleteEmbeddedItem(embeddedItem, successCallback, errorCallback) {
-        this.embeddedItemsEndpoint.deleteRequest(embeddedItem, successCallback, errorCallback);
+        //this.embeddedItemsEndpoint.deleteRequest(embeddedItem, successCallback, errorCallback);
+        this.embeddedItemsService.deleteEmbeddedItem(embeddedItem, successCallback, errorCallback);
     }
 
     getEmbeddedItemStructure(callback) {

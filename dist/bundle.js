@@ -14479,6 +14479,10 @@ var _DescriptionService = __webpack_require__(809);
 
 var _DescriptionService2 = _interopRequireDefault(_DescriptionService);
 
+var _EmbeddedItemsService = __webpack_require__(810);
+
+var _EmbeddedItemsService2 = _interopRequireDefault(_EmbeddedItemsService);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -14499,6 +14503,7 @@ var Data = function () {
 
         this.contactPersonsService = new _ContactPersonsService2.default();
         this.descriptionService = new _DescriptionService2.default();
+        this.embeddedItemsService = new _EmbeddedItemsService2.default();
         this.gigsService = new _GigsService2.default();
 
         this.bindDescriptionFunctions();
@@ -14616,42 +14621,41 @@ var Data = function () {
     }, {
         key: 'getEmbeddedItems',
         value: function getEmbeddedItems(successCallback, errorCallback) {
-            this.embeddedItemsEndpoint.getRequest(successCallback, errorCallback);
+            this.embeddedItemsService.getEmbeddedItems(successCallback, errorCallback);
         }
     }, {
         key: 'getVideos',
         value: function getVideos(successCallback, errorCallback) {
 
-            this.embeddedItemsEndpoint.getRequest(function (fulfilled) {
-
-                successCallback(fulfilled.map(function (video) {
-
-                    video.externalId = video.src.split('/').pop();
+            /*this.embeddedItemsEndpoint.getRequest((fulfilled) => {
+                 successCallback(fulfilled.map((video) => {
+                     video.externalId = video.src.split('/').pop();
                     return video;
-                }));
-            }, errorCallback, null, {
+                 }));
+             }, errorCallback, null, {
                 type: 'video'
-            });
+            });*/
+            this.embeddedItemsService.getVideos(successCallback, errorCallback);
         }
     }, {
         key: 'getSounds',
         value: function getSounds(successCallback, errorCallback) {
 
-            this.embeddedItemsEndpoint.getRequest(function (fulfilled) {
-
-                successCallback(fulfilled.map(function (sound) {
-
-                    sound.externalId = sound.src;
+            /*this.embeddedItemsEndpoint.getRequest((fulfilled) => {
+                 successCallback(fulfilled.map((sound) => {
+                     sound.externalId = sound.src;
                     return sound;
-                }));
+                 }));
             }, errorCallback, null, {
                 type: 'sound'
-            });
+            });*/
+            this.embeddedItemsService.getSounds(successCallback, errorCallback);
         }
     }, {
         key: 'putEmbeddedItem',
         value: function putEmbeddedItem(embeddedItem, successCallback, errorCallback) {
-            this.embeddedItemsEndpoint.putRequest(embeddedItem, successCallback, errorCallback);
+            //this.embeddedItemsEndpoint.putRequest(embeddedItem, successCallback, errorCallback);
+            this.embeddedItemsService.putEmbeddedItem(embeddedItem, successCallback, errorCallback);
         }
     }, {
         key: 'setType',
@@ -14671,22 +14675,26 @@ var Data = function () {
     }, {
         key: 'putVideo',
         value: function putVideo(video, successCallback, errorCallback) {
-            this.modifyVideosRepository(video, this.embeddedItemsEndpoint.putRequest, successCallback, errorCallback);
+            //this.modifyVideosRepository(video, this.embeddedItemsEndpoint.putRequest, successCallback, errorCallback);
+            this.embeddedItemsService.putVideo(video, successCallback, errorCallback);
         }
     }, {
         key: 'postEmbeddedItem',
         value: function postEmbeddedItem(embeddedItem, successCallback, errorCallback) {
-            this.embeddedItemsEndpoint.postRequest(embeddedItem, successCallback, errorCallback);
+            //this.embeddedItemsEndpoint.postRequest(embeddedItem, successCallback, errorCallback);
+            this.embeddedItemsService.postEmbeddedItem(embeddedItem, successCallback, errorCallback);
         }
     }, {
         key: 'postVideo',
         value: function postVideo(video, successCallback, errorCallback) {
-            this.modifyVideosRepository(video, this.embeddedItemsEndpoint.postRequest, successCallback, errorCallback);
+            //this.modifyVideosRepository(video, this.embeddedItemsEndpoint.postRequest, successCallback, errorCallback);
+            this.embeddedItemsService.postVideo(video, successCallback, errorCallback);
         }
     }, {
         key: 'deleteEmbeddedItem',
         value: function deleteEmbeddedItem(embeddedItem, successCallback, errorCallback) {
-            this.embeddedItemsEndpoint.deleteRequest(embeddedItem, successCallback, errorCallback);
+            //this.embeddedItemsEndpoint.deleteRequest(embeddedItem, successCallback, errorCallback);
+            this.embeddedItemsService.deleteEmbeddedItem(embeddedItem, successCallback, errorCallback);
         }
     }, {
         key: 'getEmbeddedItemStructure',
@@ -79965,6 +79973,82 @@ var DescriptionService = function (_Service) {
 exports.DESCRIPTION_STRUCTURE = DESCRIPTION_STRUCTURE;
 exports.DescriptionService = DescriptionService;
 exports.default = DescriptionService;
+
+/***/ }),
+/* 810 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _Service2 = __webpack_require__(409);
+
+var _Service3 = _interopRequireDefault(_Service2);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+var EmbeddedItemsService = function (_Service) {
+  _inherits(EmbeddedItemsService, _Service);
+
+  function EmbeddedItemsService() {
+    _classCallCheck(this, EmbeddedItemsService);
+
+    return _possibleConstructorReturn(this, (EmbeddedItemsService.__proto__ || Object.getPrototypeOf(EmbeddedItemsService)).apply(this, arguments));
+  }
+
+  _createClass(EmbeddedItemsService, [{
+    key: "getEmbeddedItems",
+
+
+    /*
+     * General
+     */
+
+    value: function getEmbeddedItems(successCallback, errorCallback) {}
+  }, {
+    key: "getVideos",
+    value: function getVideos(successCallback, errorCallback) {}
+  }, {
+    key: "getSounds",
+    value: function getSounds(successCallback, errorCallback) {}
+  }, {
+    key: "putEmbeddedItem",
+    value: function putEmbeddedItem(embeddedItem, successCallback, errorCallback) {}
+  }, {
+    key: "postEmbeddedItem",
+    value: function postEmbeddedItem(embeddedItem, successCallback, errorCallback) {}
+  }, {
+    key: "deleteEmbeddedItem",
+    value: function deleteEmbeddedItem(embeddedItem, successCallback, errorCallback) {}
+
+    /*
+     * Videos
+     */
+
+  }, {
+    key: "putVideo",
+    value: function putVideo(video, successCallback, errorCallback) {}
+  }, {
+    key: "postVideo",
+    value: function postVideo(video, successCallback, errorCallback) {}
+  }]);
+
+  return EmbeddedItemsService;
+}(_Service3.default);
+
+exports.default = EmbeddedItemsService;
 
 /***/ })
 /******/ ]);

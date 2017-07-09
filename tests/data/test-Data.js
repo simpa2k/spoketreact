@@ -22,6 +22,37 @@ describe('Data', () => {
 
     let data = new Data(endpoints);
 
+    const assertServiceMethodCalled = (service, methodToStub, methodUnderTest, sampleObject) => {
+
+        let should = 'should call service method with ';
+
+        if (sampleObject) {
+            should += 'object, ';
+        }
+
+        should += 'success callback and error callback';
+
+        it(should, () => {
+
+            let functionStub = sinon.stub(service, methodToStub);
+
+            let successCallback = sinon.spy();
+            let errorCallback = sinon.spy();
+
+            if (sampleObject) {
+
+                methodUnderTest(sampleObject, successCallback, errorCallback);
+                sinon.assert.calledWith(functionStub, sampleObject, successCallback, errorCallback);
+
+            } else {
+
+                methodUnderTest(successCallback, errorCallback);
+                sinon.assert.calledWith(functionStub, successCallback, errorCallback);
+
+            }
+        });
+    };
+
     describe('Contact persons', () => {
 
         const SAMPLE_CONTACT_PERSON =  {
@@ -31,64 +62,24 @@ describe('Data', () => {
             country: "SE"
         };
 
+        const assertContactPersonsServiceMethodCalled = (methodToStub, methodUnderTest, sampleContactPerson) => {
+            assertServiceMethodCalled(data.contactPersonsService, methodToStub, methodUnderTest, sampleContactPerson);
+        };
+
         describe('getContactInfo', () => {
-
-            it('should call service method with success callback and error callback', () => {
-
-                let success = sinon.spy();
-                let error = sinon.spy();
-
-                let getContactInfo = sinon.stub(data.contactPersonsService, 'getRequest');
-
-                data.getContactInfo(success, error);
-                sinon.assert.calledWith(getContactInfo, success, error);
-
-            });
+            assertContactPersonsServiceMethodCalled('getRequest', data.getContactInfo);
         });
 
         describe('putContactPerson', () => {
-
-            it('should call service method with object, success callback and error callback', () => {
-
-                let success = sinon.spy();
-                let error = sinon.spy();
-
-                let putContactPerson = sinon.stub(data.contactPersonsService, 'putRequest');
-
-                data.putContactPerson(SAMPLE_CONTACT_PERSON, success, error);
-                sinon.assert.calledWith(putContactPerson, SAMPLE_CONTACT_PERSON, success, error);
-
-            });
+            assertContactPersonsServiceMethodCalled('putRequest', data.putContactPerson);
         });
 
         describe('postContactPerson', () => {
-
-            it('should call service method with object, success callback and error callback', () => {
-
-                let success = sinon.spy();
-                let error = sinon.spy();
-
-                let postContactPerson = sinon.stub(data.contactPersonsService, 'postRequest');
-
-                data.postContactPerson(SAMPLE_CONTACT_PERSON, success, error);
-                sinon.assert.calledWith(postContactPerson, SAMPLE_CONTACT_PERSON, success, error);
-
-            });
+            assertContactPersonsServiceMethodCalled('postRequest', data.postContactPerson);
         });
 
         describe('deleteContactPerson', () => {
-
-            it('should call service method with object, success callback and error callback', () => {
-
-                let success = sinon.spy();
-                let error = sinon.spy();
-
-                let deleteContactPerson = sinon.stub(data.contactPersonsService, 'deleteRequest');
-
-                data.deleteContactPerson(SAMPLE_CONTACT_PERSON, success, error);
-                sinon.assert.calledWith(deleteContactPerson, SAMPLE_CONTACT_PERSON, success, error);
-
-            });
+            assertContactPersonsServiceMethodCalled('deleteRequest', data.deleteContactPerson);
         });
     });
 
@@ -96,34 +87,16 @@ describe('Data', () => {
 
         const SAMPLE_DESCRIPTION = {};
 
+        const assertDescriptionServiceMethodCalled = (methodToStub, methodUnderTest, sampleDescription) => {
+            assertServiceMethodCalled(data.descriptionService, methodToStub, methodUnderTest, sampleDescription);
+        };
+
         describe('getDescription', () => {
-
-            it('should call service method with success callback and error callback', () => {
-
-                let getDescription = sinon.stub(data.descriptionService, 'getDescription');
-
-                let success = sinon.spy();
-                let error = sinon.spy();
-
-                data.getDescription(success, error);
-                sinon.assert.calledWith(getDescription, success, error);
-
-            });
+            assertDescriptionServiceMethodCalled('getDescription', data.getDescription);
         });
 
         describe('putDescription', () => {
-
-            it('should call service method with success callback and error callback', () => {
-
-                let putDescription = sinon.stub(data.descriptionService, 'putDescription');
-
-                let success = sinon.spy();
-                let error = sinon.spy();
-
-                data.putDescription(SAMPLE_DESCRIPTION, success, error);
-                sinon.assert.calledWith(putDescription, SAMPLE_DESCRIPTION, success, error);
-
-            });
+            assertDescriptionServiceMethodCalled('putDescription', data.putDescription, SAMPLE_DESCRIPTION);
         });
 
         describe('getDescriptionStructure', () => {
@@ -137,6 +110,47 @@ describe('Data', () => {
                 sinon.assert.calledWith(getDescriptionStructure, callback);
 
             });
+        });
+    });
+
+    describe('Embedded items', () => {
+
+        const SAMPLE_EMBEDDED_ITEM = {};
+
+        const assertEmbeddedItemsServiceMethodCalled = (methodToStub, methodUnderTest, sampleEmbeddedItem) => {
+            assertServiceMethodCalled(data.embeddedItemsService, methodToStub, methodUnderTest, sampleEmbeddedItem);
+        };
+
+        describe('getEmbeddedItems', () => {
+            assertEmbeddedItemsServiceMethodCalled('getEmbeddedItems', data.getEmbeddedItems);
+        });
+
+        describe('getVideos', () => {
+            assertEmbeddedItemsServiceMethodCalled('getVideos', data.getVideos);
+        });
+
+        describe('getSounds', () => {
+            assertEmbeddedItemsServiceMethodCalled('getSounds', data.getSounds);
+        });
+
+        describe('putEmbeddedItem', () => {
+            assertEmbeddedItemsServiceMethodCalled('putEmbeddedItem', data.putEmbeddedItem, SAMPLE_EMBEDDED_ITEM);
+        });
+
+        describe('postEmbeddedItem', () => {
+            assertEmbeddedItemsServiceMethodCalled('postEmbeddedItem', data.postEmbeddedItem, SAMPLE_EMBEDDED_ITEM);
+        });
+
+        describe('deleteEmbeddedItem', () => {
+            assertEmbeddedItemsServiceMethodCalled('deleteEmbeddedItem', data.deleteEmbeddedItem, SAMPLE_EMBEDDED_ITEM);
+        });
+
+        describe('putVideo', () => {
+            assertEmbeddedItemsServiceMethodCalled('putVideo', data.putVideo, SAMPLE_EMBEDDED_ITEM);
+        });
+
+        describe('postVideo', () => {
+            assertEmbeddedItemsServiceMethodCalled('postVideo', data.postVideo, SAMPLE_EMBEDDED_ITEM);
         });
     });
 });
