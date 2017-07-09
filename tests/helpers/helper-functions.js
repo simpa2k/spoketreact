@@ -1,3 +1,4 @@
+const expect = require('chai').expect;
 const sinon = require('sinon');
 
 const assertCallDelegatedProperly = (delegatee, delegateeName, functionToStub, functionUnderTest, sampleObject) => {
@@ -34,6 +35,38 @@ const assertCallDelegatedProperly = (delegatee, delegateeName, functionToStub, f
     });
 };
 
+const assertFunctionCalledWithSingleCallback = (functionOwner, functionToStub, functionUnderTest) => {
+
+    it('should call function with callback', () => {
+
+        let functionStub = sinon.stub(functionOwner, functionToStub);
+        let callback = sinon.spy();
+
+        functionUnderTest(callback);
+        sinon.assert.calledWith(functionStub, callback);
+
+    });
+};
+
+const assertCallbackCalledWithFormStructure = (formStructure, functionUnderTest) => {
+
+    it('should call callback with form structure', () => {
+
+        let successCallbackSpy = sinon.spy((returnedFormStructure) => {
+            expect(returnedFormStructure).to.equal(formStructure);
+        });
+
+        functionUnderTest(successCallbackSpy);
+        sinon.assert.calledWith(successCallbackSpy, formStructure);
+
+    });
+
+};
+
 module.exports = {
-    assertCallDelegatedProperly: assertCallDelegatedProperly
+
+    assertCallDelegatedProperly: assertCallDelegatedProperly,
+    assertFunctionCalledWithSingleCallback: assertFunctionCalledWithSingleCallback,
+    assertCallbackCalledWithFormStructure
+
 };

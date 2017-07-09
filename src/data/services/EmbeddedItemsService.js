@@ -1,6 +1,22 @@
 import Service from "./Service";
 import Endpoint from '../../../src/data/endpoint/Endpoint';
 
+import {text} from '../../../src/data/formStructure/inputs';
+
+const VIDEO_STRUCTURE = [{
+    label: 'Ange den inbäddade videons id',
+    fields: {
+        externalId: text
+    }
+}];
+
+const SOUND_STRUCTURE = [{
+    label: 'Ange det inbäddade ljudets url',
+    fields: {
+        src: text
+    }
+}];
+
 class EmbeddedItemsService extends Service {
 
     constructor() {
@@ -100,6 +116,10 @@ class EmbeddedItemsService extends Service {
         this.modifyVideosRepository(video, this.endpoint.postRequest, successCallback, errorCallback);
     }
 
+    getVideoStructure(callback) {
+        callback(VIDEO_STRUCTURE);
+    }
+
     /*
      * Sounds
      */
@@ -118,6 +138,11 @@ class EmbeddedItemsService extends Service {
             type: 'sound'
         });
     }
+
+    getSoundStructure(callback) {
+        callback(SOUND_STRUCTURE);
+    }
 }
 
+export {VIDEO_STRUCTURE, SOUND_STRUCTURE, EmbeddedItemsService};
 export default EmbeddedItemsService;

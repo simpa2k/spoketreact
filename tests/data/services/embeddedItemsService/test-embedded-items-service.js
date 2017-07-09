@@ -1,10 +1,12 @@
 const expect = require('chai').expect;
 const sinon = require('sinon');
 
+import {VIDEO_STRUCTURE, SOUND_STRUCTURE, EmbeddedItemsService} from '../../../../src/data/services/EmbeddedItemsService';
+
 const helperFunctions = require('../../../helpers/helper-functions');
-import EmbeddedItemsService from '../../../../src/data/services/EmbeddedItemsService';
 
 const assertCallDelegatedProperly = helperFunctions.assertCallDelegatedProperly;
+const assertCallbackCalledWithFormStructure = helperFunctions.assertCallbackCalledWithFormStructure;
 
 describe('EmbeddedItemsService', () => {
 
@@ -179,6 +181,10 @@ describe('EmbeddedItemsService', () => {
 
     });
 
+    describe('getVideoStructure', () => {
+        assertCallbackCalledWithFormStructure(VIDEO_STRUCTURE, embeddedItemsService.getVideoStructure);
+    });
+
     /*
      * Sounds
      */
@@ -189,5 +195,9 @@ describe('EmbeddedItemsService', () => {
         assertCallsSuccessCallback('getRequest', embeddedItemsService.getSounds, 'sound');
         assertSetsExternalIds(embeddedItemsService.getSounds, SAMPLE_SOUNDS);
 
+    });
+
+    describe('getSoundStructure', () => {
+       assertCallbackCalledWithFormStructure(SOUND_STRUCTURE, embeddedItemsService.getSoundStructure);
     });
 });
