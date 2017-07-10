@@ -126,4 +126,63 @@ describe('Data', () => {
             assertFunctionCalledWithSingleCallback(data.embeddedItemsService, 'getSoundStructure', data.getSoundStructure);
         });
     });
+
+    describe('Gigs', () => {
+
+        const SAMPLE_GIG = {};
+
+        const assertGigsServiceMethodCalled = (methodToStub, methodUnderTest, sampleGig) => {
+            assertServiceMethodCalled(data.gigsService, 'service', methodToStub, methodUnderTest, sampleGig);
+        };
+
+        describe('getGigs', () => {
+            assertGigsServiceMethodCalled('getGigs', data.getGigs);
+        });
+
+        describe('putGig', () => {
+            assertGigsServiceMethodCalled('putGig', data.putGig, SAMPLE_GIG);
+        });
+
+        describe('postGig', () => {
+            assertGigsServiceMethodCalled('postGig', data.postGig, SAMPLE_GIG);
+        });
+
+        describe('deleteGig', () => {
+            assertGigsServiceMethodCalled('deleteGig', data.deleteGig, SAMPLE_GIG);
+        });
+    });
+
+    describe('Galleries', () => {
+
+        const SAMPLE_GALLERY = {};
+        const SAMPLE_IMAGE = {};
+
+        const assertGalleriesServiceMethodCalled = (methodToStub, methodUnderTest, sampleGallery) => {
+            assertServiceMethodCalled(data.galleriesService, 'service', methodToStub, methodUnderTest, sampleGallery);
+        };
+
+        describe('getGalleries', () => {
+            assertGalleriesServiceMethodCalled('getGalleries', data.getGalleries);
+        });
+
+        describe('putGallery', () => {
+            assertGalleriesServiceMethodCalled('putGallery', data.putGallery, SAMPLE_GALLERY);
+        });
+
+        describe('putGallery', () => {
+            assertGalleriesServiceMethodCalled('postGallery', data.postGallery, SAMPLE_GALLERY);
+        });
+
+        describe('deleteGallery', () => {
+            assertGalleriesServiceMethodCalled('deleteGallery', data.deleteGallery, SAMPLE_GALLERY);
+        });
+
+        describe('deleteImage', () => {
+            assertGalleriesServiceMethodCalled('deleteImage', data.deleteImage, SAMPLE_IMAGE);
+        });
+
+        describe('getGalleryStructure', () => {
+            assertFunctionCalledWithSingleCallback(data.galleriesService, 'getGalleryStructure', data.getGalleryStructure);
+        });
+    });
 });

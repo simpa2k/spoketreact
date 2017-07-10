@@ -16,6 +16,7 @@ import GigsService from './services/GigsService';
 import ContactPersonsService from "./services/ContactPersonsService";
 import DescriptionService from "./services/DescriptionService";
 import EmbeddedItemsService from "./services/EmbeddedItemsService";
+import GalleriesService from "./services/GalleriesService";
 
 class Data {
 
@@ -35,6 +36,7 @@ class Data {
         this.descriptionService = new DescriptionService();
         this.embeddedItemsService = new EmbeddedItemsService();
         this.gigsService = new GigsService();
+        this.galleriesService = new GalleriesService();
 
         this.bindContactPersonsFunctions();
         this.bindDescriptionFunctions();
@@ -91,6 +93,9 @@ class Data {
     bindImagesFunctions() {
         
         this.getGalleries = this.getGalleries.bind(this);
+        this.putGallery = this.putGallery.bind(this);
+        this.postGallery = this.postGallery.bind(this);
+        this.deleteGallery = this.deleteGallery.bind(this);
         this.deleteImage = this.deleteImage.bind(this);
         this.getGalleryStructure = this.getGalleryStructure.bind(this);
         
@@ -220,50 +225,33 @@ class Data {
      */
 
     getGalleries(successCallback, errorCallback) {
-
-        this.galleriesEndpoint.getRequest((galleries) => {
-
-            let formattedGalleries = [];
-
-            for (const GALLERY_NAME in galleries) {
-
-                let gallery = Object.assign({}, galleries[GALLERY_NAME]);
-
-                gallery.name = GALLERY_NAME;
-                gallery.images = [];
-
-                let images = galleries[GALLERY_NAME].images;
-                for (const IMAGE_ID in images) {
-                    gallery.images.push(images[IMAGE_ID]);
-                }
-
-                formattedGalleries.push(gallery);
-
-            }
-            successCallback(formattedGalleries);
-
-        }, errorCallback);
+        this.galleriesService.getGalleries(successCallback, errorCallback);
     }
 
     putGallery(gallery, successCallback, errorCallback) {
-        this.galleriesEndpoint.putRequest(gallery, successCallback, errorCallback);
+        //this.galleriesEndpoint.putRequest(gallery, successCallback, errorCallback);
+        this.galleriesService.putGallery(gallery, successCallback, errorCallback);
     }
 
     postGallery(gallery, successCallback, errorCallback) {
-        this.galleriesEndpoint.postRequest(gallery, successCallback, errorCallback);
+        //this.galleriesEndpoint.postRequest(gallery, successCallback, errorCallback);
+        this.galleriesService.postGallery(gallery, successCallback, errorCallback);
     }
 
     deleteImage(image, successCallback, errorCallback) {
-        console.log(image);
+        //console.log(image);
+        this.galleriesService.deleteImage(image, successCallback, errorCallback);
     }
 
     deleteGallery(gallery, successCallback, errorCallback) {
-        this.galleriesEndpoint.deleteRequest(gallery, successCallback, errorCallback);
+        //this.galleriesEndpoint.deleteRequest(gallery, successCallback, errorCallback);
+        this.galleriesService.deleteGallery(gallery, successCallback, errorCallback);
     }
 
     getGalleryStructure(callback) {
 
-        callback([
+        this.galleriesService.getGalleryStructure(callback);
+        /*callback([
             {
                 label: 'Galleriomslag:',
                 fields: {
@@ -300,7 +288,7 @@ class Data {
                     name: text
                 }
             }
-        ]);
+        ]);*/
     }
 
     /*
