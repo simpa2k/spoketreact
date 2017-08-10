@@ -185,4 +185,33 @@ describe('Data', () => {
             assertFunctionCalledWithSingleCallback(data.galleriesService, 'getGalleryStructure', data.getGalleryStructure);
         });
     });
+
+    describe('Members', () => {
+
+        const SAMPLE_MEMBER = {};
+
+        const assertMembersServiceMethodCalled = (methodToStub, methodUnderTest, sampleMember) => {
+            assertServiceMethodCalled(data.membersService, 'service', methodToStub, methodUnderTest, sampleMember);
+        };
+
+        describe('getMembers', () => {
+            assertMembersServiceMethodCalled('getMembers', data.getMembers);
+        });
+
+        describe('putMember', () => {
+            assertMembersServiceMethodCalled('putMember', data.putMember, SAMPLE_MEMBER);
+        });
+
+        describe('postMember', () => {
+            assertMembersServiceMethodCalled('postMember', data.postMember, SAMPLE_MEMBER);
+        });
+
+        describe('deleteMember', () => {
+            assertMembersServiceMethodCalled('deleteMember', data.deleteMember, SAMPLE_MEMBER);
+        });
+
+        describe('getMemberStructure', () => {
+            assertFunctionCalledWithSingleCallback(data.membersService, 'getMemberStructure', data.getMemberStructure);
+        });
+    });
 });

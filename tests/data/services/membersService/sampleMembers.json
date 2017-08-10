@@ -1,0 +1,62 @@
+[
+  {
+    "instrument": "fiol",
+    "firstname": "Clara",
+    "id": "1",
+    "lastname": "Tesch"
+  },
+  {
+    "instrument": "fl\u00f6jter, vevlira, s\u00e5ng",
+    "firstname": "Mads",
+    "id": "2",
+    "lastname": "Kj\u00f8ller-Henningsen"
+  },
+  {
+    "instrument": "piano",
+    "firstname": "Emma",
+    "id": "3",
+    "lastname": "Engstr\u00f6m"
+  },
+  {
+    "instrument": "bas",
+    "firstname": "Erik",
+    "id": "4",
+    "lastname": "Bengtsson"
+  },
+  {
+    "instrument": "dragspel",
+    "firstname": "Troels",
+    "id": "5",
+    "lastname": "Strange Lorentzen"
+  },
+  {
+    "instrument": "gitarr, banjo, mandolin, stomp, s\u00e5ng",
+    "firstname": "Nisse",
+    "id": "6",
+    "lastname": "Blomster"
+  },
+  {
+    "instrument": "trumpet",
+    "firstname": "Albin",
+    "id": "7",
+    "lastname": "Lagg"
+  },
+  {
+    "instrument": "trombon",
+    "firstname": "Ella",
+    "id": "8",
+    "lastname": "Wennerberg"
+  },
+  {
+    "instrument": "barytonsax, altsax",
+    "firstname": "Henrik",
+    "id": "9",
+    "lastname": "B\u00fcller"
+  },
+  {
+    "instrument": "tenorsax, klarinett",
+    "firstname": "Erik",
+    "id": "10",
+    "lastname": "Larsson"
+  }
+]

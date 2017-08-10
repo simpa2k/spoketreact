@@ -17,6 +17,7 @@ import ContactPersonsService from "./services/ContactPersonsService";
 import DescriptionService from "./services/DescriptionService";
 import EmbeddedItemsService from "./services/EmbeddedItemsService";
 import GalleriesService from "./services/GalleriesService";
+import MembersService from "./services/MembersService";
 
 class Data {
 
@@ -37,6 +38,7 @@ class Data {
         this.embeddedItemsService = new EmbeddedItemsService();
         this.gigsService = new GigsService();
         this.galleriesService = new GalleriesService();
+        this.membersService = new MembersService();
 
         this.bindContactPersonsFunctions();
         this.bindDescriptionFunctions();
@@ -296,33 +298,23 @@ class Data {
      */
 
     getMembers(successCallback, errorCallback) {
-        this.membersEndpoint.getRequest(successCallback, errorCallback);
+        this.membersService.getMembers(successCallback, errorCallback);
     }
 
     putMember(member, successCallback, errorCallback) {
-        this.membersEndpoint.putRequest(member, successCallback, errorCallback);
+        this.membersService.putMember(member, successCallback, errorCallback);
     }
 
     postMember(member, successCallback, errorCallback) {
-        this.membersEndpoint.postRequest(member, successCallback, errorCallback);
+        this.membersService.postMember(member, successCallback, errorCallback);
     }
 
     deleteMember(member, successCallback, errorCallback) {
-        this.membersEndpoint.deleteRequest(member, successCallback, errorCallback);
+        this.membersService.deleteMember(member, successCallback, errorCallback);
     }
 
     getMemberStructure(callback) {
-
-        callback([
-            {
-                label: '',
-                fields: {
-                    firstname: text,
-                    lastname: text,
-                    instrument: text
-                }
-            }
-        ]);
+        this.membersService.getMemberStructure(callback);
     }
 
     /*
