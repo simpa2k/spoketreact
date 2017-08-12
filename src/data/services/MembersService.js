@@ -37,15 +37,15 @@ class MembersService extends Service {
     }
 
     putMember(member, successCallback, errorCallback) {
-
+        this.endpoint.putRequest(member, successCallback, errorCallback);
     }
 
     postMember(member, successCallback, errorCallback) {
-
+        this.endpoint.postRequest(member, successCallback, errorCallback);
     }
 
     deleteMember(member, successCallback,  errorCallback) {
-
+        this.endpoint.deleteRequest(member, successCallback, errorCallback);
     }
 
     getMemberStructure(callback) {
@@ -53,4 +53,5 @@ class MembersService extends Service {
     }
 }
 
+export {MEMBER_STRUCTURE, MembersService};
 export default MembersService;

@@ -55,7 +55,18 @@ const GALLERY_STRUCTURE = [
 class GalleriesService extends Service {
 
     constructor() {
+
         super(new Endpoint('images/galleries', true, true, true));
+        this.bindFunctions();
+
+    }
+
+    bindFunctions() {
+
+        this.putGallery = this.putGallery.bind(this);
+        this.postGallery = this.postGallery.bind(this);
+        this.deleteGallery = this.deleteGallery.bind(this);
+
     }
 
     getGalleries(successCallback, errorCallback) {
@@ -85,15 +96,15 @@ class GalleriesService extends Service {
     }
 
     putGallery(gallery, successCallback, errorCallback) {
-
+        this.endpoint.putRequest(gallery, successCallback, errorCallback);
     }
 
     postGallery(gallery, successCallback, errorCallback) {
-
+        this.endpoint.postRequest(gallery, successCallback, errorCallback);
     }
 
     deleteGallery(gallery, successCallback, errorCallback) {
-
+        this.endpoint.deleteRequest(gallery, successCallback, errorCallback);
     }
 
     deleteImage(image, successCallback, errorCallback) {

@@ -18,6 +18,7 @@ import DescriptionService from "./services/DescriptionService";
 import EmbeddedItemsService from "./services/EmbeddedItemsService";
 import GalleriesService from "./services/GalleriesService";
 import MembersService from "./services/MembersService";
+import UsersService from "./services/UsersService";
 
 class Data {
 
@@ -39,6 +40,7 @@ class Data {
         this.gigsService = new GigsService();
         this.galleriesService = new GalleriesService();
         this.membersService = new MembersService();
+        this.usersService = new UsersService();
 
         this.bindContactPersonsFunctions();
         this.bindDescriptionFunctions();
@@ -231,66 +233,23 @@ class Data {
     }
 
     putGallery(gallery, successCallback, errorCallback) {
-        //this.galleriesEndpoint.putRequest(gallery, successCallback, errorCallback);
         this.galleriesService.putGallery(gallery, successCallback, errorCallback);
     }
 
     postGallery(gallery, successCallback, errorCallback) {
-        //this.galleriesEndpoint.postRequest(gallery, successCallback, errorCallback);
         this.galleriesService.postGallery(gallery, successCallback, errorCallback);
     }
 
     deleteImage(image, successCallback, errorCallback) {
-        //console.log(image);
         this.galleriesService.deleteImage(image, successCallback, errorCallback);
     }
 
     deleteGallery(gallery, successCallback, errorCallback) {
-        //this.galleriesEndpoint.deleteRequest(gallery, successCallback, errorCallback);
         this.galleriesService.deleteGallery(gallery, successCallback, errorCallback);
     }
 
     getGalleryStructure(callback) {
-
         this.galleriesService.getGalleryStructure(callback);
-        /*callback([
-            {
-                label: 'Galleriomslag:',
-                fields: {
-                    galleryCover: image
-                }
-            },
-            {
-                label: 'Omodifierade bilder:',
-                fields: {
-                    images: imageCollection
-                }
-            },
-            {
-                label: 'Tillagda bilder:',
-                fields: {
-                    addedImages: temporaryImageCollection
-                }
-            },
-            {
-                label: 'Borttagna bilder:',
-                fields: {
-                    deleted: deletedImageCollection
-                }
-            },
-            {
-                label: 'Lägg till ny(a) bild(er):',
-                fields: {
-                    addImages: imageUpload
-                }
-            },
-            {
-                label: 'Galleriets namn:',
-                fields: {
-                    name: text
-                }
-            }
-        ]);*/
     }
 
     /*
@@ -322,11 +281,7 @@ class Data {
      */
 
     getUser(username, password, successCallback, errorCallback) {
-
-        this.usersEndpoint.getRequest(successCallback, errorCallback, null, {
-            username: username,
-            password: password
-        });
+        this.usersService.getUser(username, password, successCallback, errorCallback);
     }
 }
 

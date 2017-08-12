@@ -1,7 +1,11 @@
 const expect = require('chai').expect;
 const sinon = require('sinon');
 
-import {GalleriesService} from "../../../../src/data/services/GalleriesService";
+import {GALLERY_STRUCTURE, GalleriesService} from "../../../../src/data/services/GalleriesService";
+
+const helperFunctions = require('../../../helpers/helper-functions');
+const assertCallDelegatedProperly = helperFunctions.assertCallDelegatedProperly;
+const assertCallbackCalledWithFormStructure = helperFunctions.assertCallbackCalledWithFormStructure;
 
 describe('GalleriesService', () => {
 
@@ -13,6 +17,10 @@ describe('GalleriesService', () => {
     afterEach(() => {
         getRequest.restore();
     });
+
+    const assertGalleriesEndpointFunctionCalled = (functionToStub, functionUnderTest, sampleGallery) => {
+        assertCallDelegatedProperly(galleriesService.endpoint, 'endpoint', functionToStub, functionUnderTest, sampleGallery);
+    };
 
     describe('getGalleries', () => {
 
@@ -57,5 +65,21 @@ describe('GalleriesService', () => {
             galleriesService.getGalleries(successCallback, null);
 
         });
+    });
+
+    describe('putGallery', () => {
+        assertGalleriesEndpointFunctionCalled('putRequest', galleriesService.putGallery, SAMPLE_GALLERIES[0]);
+    });
+
+    describe('postGallery', () => {
+        assertGalleriesEndpointFunctionCalled('postRequest', galleriesService.postGallery, SAMPLE_GALLERIES[0]);
+    });
+
+    describe('deleteGallery', () => {
+        assertGalleriesEndpointFunctionCalled('deleteRequest', galleriesService.deleteGallery, SAMPLE_GALLERIES[0]);
+    });
+
+    describe('getGalleryStructure', () => {
+        assertCallbackCalledWithFormStructure(GALLERY_STRUCTURE, galleriesService.getGalleryStructure);
     });
 });

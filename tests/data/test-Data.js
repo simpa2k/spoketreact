@@ -214,4 +214,25 @@ describe('Data', () => {
             assertFunctionCalledWithSingleCallback(data.membersService, 'getMemberStructure', data.getMemberStructure);
         });
     });
+
+    describe('Users', () => {
+
+       it('should call service method with username, password, success callback and error callback', () => {
+
+           let stub = sinon.stub(data.usersService, 'getUser');
+
+           let username = 'user';
+           let password = 'password';
+
+           let successCallback = sinon.spy();
+           let errorCallback = sinon.spy();
+
+           data.getUser(username, password, successCallback, errorCallback);
+
+           sinon.assert.calledWith(stub, username, password, successCallback, errorCallback);
+
+           stub.restore();
+
+       });
+    });
 });

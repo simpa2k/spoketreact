@@ -67,6 +67,6 @@ module.exports = {
 
     assertCallDelegatedProperly: assertCallDelegatedProperly,
     assertFunctionCalledWithSingleCallback: assertFunctionCalledWithSingleCallback,
-    assertCallbackCalledWithFormStructure
+    assertCallbackCalledWithFormStructure: assertCallbackCalledWithFormStructure
 
 };

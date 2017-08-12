@@ -1,10 +1,11 @@
 const expect = require('chai').expect;
 const sinon = require('sinon');
 
-import MembersService from "../../../../src/data/services/MembersService";
+import {MEMBER_STRUCTURE, MembersService} from "../../../../src/data/services/MembersService";
 
 const helperFunctions = require('../../../helpers/helper-functions');
 const assertCallDelegatedProperly = helperFunctions.assertCallDelegatedProperly;
+const assertCallbackCalledWithFormStructure = helperFunctions.assertCallbackCalledWithFormStructure;
 
 describe('MembersService', () => {
 
@@ -31,6 +32,22 @@ describe('MembersService', () => {
             sinon.assert.calledOnce(successCallback);
 
         });
+    });
+
+    describe('putMember', () => {
+        assertMembersEndpointFunctionCalled('putRequest', membersService.putMember, SAMPLE_MEMBERS[0]);
+    });
+
+    describe('postMember', () => {
+        assertMembersEndpointFunctionCalled('postRequest', membersService.postMember, SAMPLE_MEMBERS[0]);
+    });
+
+    describe('deleteMember', () => {
+        assertMembersEndpointFunctionCalled('deleteRequest', membersService.deleteMember, SAMPLE_MEMBERS[0]);
+    });
+
+    describe('getMemberStructure', () => {
+        assertCallbackCalledWithFormStructure(MEMBER_STRUCTURE, membersService.getMemberStructure);
     });
 });
 
