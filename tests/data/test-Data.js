@@ -12,20 +12,7 @@ import Data from '../../src/data/Data.js';
 
 describe('Data', () => {
 
-    let endpoints = {
-
-        contactPersonsEndpoint: new Endpoint('contactpersons', true, true, true),
-        descriptionEndpoint: new Endpoint('description', true, false, false),
-        embeddedItemsEndpoint: new Endpoint('embeddeditems', true, true, true),
-        gigsEndpoint: new Endpoint('gigs', true, true, true),
-        imagesEndpoint: new Endpoint('images', true, true, true),
-        membersEndpoint: new Endpoint('members', true, true, true),
-        usersEndpoint: new Endpoint('users', false, false, false),
-        venuesEndpoint: new Endpoint('venues', true, true, false)
-
-    };
-
-    let data = new Data(endpoints);
+    let data = new Data();
 
     describe('Contact persons', () => {
 
