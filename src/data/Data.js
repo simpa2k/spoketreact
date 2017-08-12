@@ -1,17 +1,3 @@
-import {
-
-    text,
-    AutocompletedText,
-    datetime,
-    textarea,
-    image,
-    imageCollection,
-    temporaryImageCollection,
-    deletedImageCollection,
-    imageUpload
-
-} from './formStructure/inputs';
-
 import GigsService from './services/GigsService';
 import ContactPersonsService from "./services/ContactPersonsService";
 import DescriptionService from "./services/DescriptionService";
@@ -22,17 +8,7 @@ import UsersService from "./services/UsersService";
 
 class Data {
 
-    constructor(endpoints) {
-
-        this.contactPersonsEndpoint = endpoints.contactPersonsEndpoint;
-        this.descriptionEndpoint = endpoints.descriptionEndpoint;
-        this.embeddedItemsEndpoint = endpoints.embeddedItemsEndpoint;
-        this.gigsEndpoint = endpoints.gigsEndpoint;
-        this.imagesEndpoint = endpoints.imagesEndpoint;
-        this.galleriesEndpoint = endpoints.galleriesEndpoint;
-        this.membersEndpoint = endpoints.membersEndpoint;
-        this.usersEndpoint = endpoints.usersEndpoint;
-        this.venuesEndpoint = endpoints.venuesEndpoint;
+    constructor() {
 
         this.contactPersonsService = new ContactPersonsService();
         this.descriptionService = new DescriptionService();
