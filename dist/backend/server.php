@@ -8,13 +8,13 @@ $prefix = ucfirst($request->urlElements[1]);
 $controllerName = $prefix . 'Controller';
 $modelName = $prefix . 'Model';
 
-error_log(print_r($request, true));
 if(class_exists($controllerName) && class_exists($modelName)) {
 
     $controller = new $controllerName(new $modelName());
     $actionName = strtolower($request->verb) . 'Action';
     $results = $controller->$actionName($request);
     
+    error_log(print_r($results, true));
     $viewName = ucfirst($request->format) . 'View';
 
     if(class_exists($viewName)) {

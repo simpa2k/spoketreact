@@ -10,7 +10,8 @@
     "build": "./node_modules/.bin/webpack",
     "watch": "./node_modules/.bin/webpack --watch",
     "start": "./node_modules/.bin/webpack-dev-server --progress",
-    "test": "./node_modules/mocha/bin/mocha --require tests/helpers/browser.js --recursive ./tests/*"
+    "test": "./node_modules/mocha/bin/mocha --require tests/helpers/browser.js --recursive ./tests/unit/*",
+    "integration_test": "./node_modules/mocha/bin/mocha --require tests/helpers/browser.js --recursive ./tests/integration/*"
   },
   "keywords": [],
   "author": "",
@@ -18,7 +19,9 @@
   "dependencies": {
     "animate.css": "^3.5.2",
     "bootstrap": "^3.3.7",
+    "es6-promise": "^4.1.1",
     "history": "^4.6.1",
+    "isomorphic-fetch": "^2.2.1",
     "moment": "^2.18.1",
     "react": "^15.5.4",
     "react-bootstrap": "^0.31.0",

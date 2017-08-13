@@ -6,7 +6,7 @@ const EMAIL  = 'spoketikoket@gmail.com';
 class ContactPersonsService extends Service {
 
     constructor() {
-        super(new Endpoint('contactPersons', true, true, true));
+        super(new Endpoint('contactpersons', true, true, true));
     }
 
     getRequest(successCallback, errorCallback) {

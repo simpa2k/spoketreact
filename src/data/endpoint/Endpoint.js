@@ -13,6 +13,12 @@ const HOST = 'http://localhost:8080/backend/server.php/';
 const Endpoint = function(endpointName, puttable, postable, deleteable) {
 
     this.endpointName = HOST + endpointName;
+    this.requests = {
+        getRequest: getRequest,
+        putRequest: putRequest,
+        postRequest: postRequest,
+        deleteRequest: deleteRequest
+    };
 
     this.sendObject = (sendFunction, object, parameters, options, successCallback, errorCallback, format) => {
 
@@ -24,15 +30,16 @@ const Endpoint = function(endpointName, puttable, postable, deleteable) {
     };
 
     this.getRequest = (successCallback, errorCallback, responseFormat, parameters = {}) => {
-        getRequest(this.endpointName, parameters, {}, successCallback, errorCallback, responseFormat);
+        //getRequest(this.endpointName, parameters, {}, successCallback, errorCallback, responseFormat);
+        this.requests.getRequest(this.endpointName, parameters, {}, successCallback, errorCallback, responseFormat);
     };
 
     this.putRequest = puttable ? (object, successCallback, errorCallback, responseFormat) => {
-        this.sendObject(putRequest, object, {}, {}, successCallback, errorCallback, responseFormat);
+        this.sendObject(this.requests.putRequest, object, {}, {}, successCallback, errorCallback, responseFormat);
     } : undefined;
 
     this.postRequest = postable ? (object, successCallback, errorCallback, responseFormat) => {
-        this.sendObject(postRequest, object, {}, {}, successCallback, errorCallback, responseFormat);
+        this.sendObject(this.requests.postRequest, object, {}, {}, successCallback, errorCallback, responseFormat);
     } : undefined;
 
     this.deleteRequest = deleteable ? (object, successCallback, errorCallback, responseFormat) => {
@@ -40,7 +47,7 @@ const Endpoint = function(endpointName, puttable, postable, deleteable) {
         let parameters = {};
         Object.assign(parameters, object);
 
-        deleteRequest(this.endpointName, parameters, {}, successCallback, errorCallback, responseFormat);
+        this.requests.deleteRequest(this.endpointName, parameters, {}, successCallback, errorCallback, responseFormat);
 
     } : undefined;
 };

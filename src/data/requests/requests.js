@@ -1,10 +1,12 @@
-require('whatwg-fetch');
+//require('whatwg-fetch');
+import fetch from 'isomorphic-fetch';
 let isSet = require('../../utils/isSet');
 
 const getRequest = function(endpoint, parameters, options, successCallback, errorCallback, format) {
 
+    console.log('in requests');
     options.method = 'GET';
-    request(endpoint, parameters, options, successCallback, errorCallback, format);
+    return request(endpoint, parameters, options, successCallback, errorCallback, format);
 
 };
 
@@ -54,7 +56,8 @@ const request = function(endpoint, parameters, options, successCallback, errorCa
 
     const URI = buildUri(endpoint, parameters);
 
-    window.fetch(URI, options).then((response) => {
+    //return window.fetch(URI, options).then((response) => {
+    return fetch(URI, options).then((response) => {
 
         if ((typeof(format) === 'undefined') || (format === null)) {
             return response.json();
