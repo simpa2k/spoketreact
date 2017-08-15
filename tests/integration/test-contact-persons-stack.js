@@ -68,6 +68,9 @@ describe('Contact Persons Stack', () => {
         });
     });
 
+    /*
+     * ToDo: Fix assertions in error callbacks.
+     */
     describe('Modify Contact Person', () => {
 
         let contactPerson = {
@@ -76,9 +79,6 @@ describe('Contact Persons Stack', () => {
             "country": "SE"
         };
 
-        /*
-         * ToDo: Fix assertions in error callbacks.
-         */
         it('should post contact person when provided with correct arguments', (done) => {
 
             let options = {
