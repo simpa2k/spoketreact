@@ -4,7 +4,6 @@ let isSet = require('../../utils/isSet');
 
 const getRequest = function(endpoint, parameters, options, successCallback, errorCallback, format) {
 
-    console.log('in requests');
     options.method = 'GET';
     return request(endpoint, parameters, options, successCallback, errorCallback, format);
 
@@ -20,7 +19,7 @@ const putRequest = function(endpoint, parameters, options, successCallback, erro
 const postRequest = function(endpoint, parameters, options, successCallback, errorCallback, format) {
 
     options.method = 'POST';
-    authenticatedRequest(endpoint, parameters, options, successCallback, errorCallback, format);
+    return authenticatedRequest(endpoint, parameters, options, successCallback, errorCallback, format);
 
 };
 
@@ -48,7 +47,7 @@ const authenticatedRequest = function(endpoint, parameters, options, successCall
         });
 
     } else {
-        request(endpoint, parameters, options, successCallback, errorCallback, format);
+        return request(endpoint, parameters, options, successCallback, errorCallback, format);
     }
 };
 

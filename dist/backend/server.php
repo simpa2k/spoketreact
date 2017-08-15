@@ -14,7 +14,6 @@ if(class_exists($controllerName) && class_exists($modelName)) {
     $actionName = strtolower($request->verb) . 'Action';
     $results = $controller->$actionName($request);
     
-    error_log(print_r($results, true));
     $viewName = ucfirst($request->format) . 'View';
 
     if(class_exists($viewName)) {

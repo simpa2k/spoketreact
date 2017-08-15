@@ -1,3 +1,6 @@
+let sampleUsername = require('../../src/secrets').sampleUsername;
+let sampleToken = require('../../src/secrets').sampleToken;
+
 // From https://semaphoreci.com/community/tutorials/testing-react-components-with-enzyme-and-mocha
 // With minor modifications.
 require('babel-register')();
@@ -24,8 +27,8 @@ Object.keys(document.defaultView).forEach((property) => {
 if (!global.window.localStorage) {
 
     let credentials = {
-        username: 'mockUsername',
-        authToken: 'mockAuthToken'
+        username: sampleUsername,
+        authToken: sampleToken
     };
 
     global.window.localStorage = {

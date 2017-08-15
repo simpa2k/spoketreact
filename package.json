@@ -11,7 +11,7 @@
     "watch": "./node_modules/.bin/webpack --watch",
     "start": "./node_modules/.bin/webpack-dev-server --progress",
     "test": "./node_modules/mocha/bin/mocha --require tests/helpers/browser.js --recursive ./tests/unit/*",
-    "integration_test": "./node_modules/mocha/bin/mocha --require tests/helpers/browser.js --recursive ./tests/integration/*"
+    "test_integration": "./node_modules/mocha/bin/mocha --require tests/helpers/browser.js --recursive ./tests/integration/*"
   },
   "keywords": [],
   "author": "",
