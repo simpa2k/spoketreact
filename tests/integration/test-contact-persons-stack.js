@@ -1,5 +1,5 @@
 import Data from "../../src/data/Data";
-import {getRequest, postRequest} from "../../src/data/requests/requests";
+import {getRequest, postRequest, deleteRequest} from "../../src/data/requests/requests";
 
 const expect = require('chai').expect;
 const sinon = require('sinon');
@@ -68,9 +68,18 @@ describe('Contact Persons Stack', () => {
         });
     });
 
-    describe('Post Contact Person', () => {
+    describe('Modify Contact Person', () => {
 
-        it('should post contact person when provided with correct arguments', () => {
+        let contactPerson = {
+            "phonenumber": "123 456 789",
+            "name": "Test Testsson",
+            "country": "SE"
+        };
+
+        /*
+         * ToDo: Fix assertions in error callbacks.
+         */
+        it('should post contact person when provided with correct arguments', (done) => {
 
             let options = {
 
@@ -82,9 +91,33 @@ describe('Contact Persons Stack', () => {
                 })
             };
 
-            return postRequest(SERVER_ROOT + endpoint, {}, options, () => {}, (error) => {
+            postRequest(SERVER_ROOT + endpoint, {}, options, () => {
+
+                getRequest(SERVER_ROOT + endpoint, {}, {}, (contactInfo) => {
+
+                    /*
+                     * Wouldn't it be nice if the backend just returned the id of the newly created item?
+                     * Yes, it would.
+                     */
+                    contactPerson = contactInfo.find((person) => {
+                        return person.phonenumber === contactPerson.phonenumber && person.name === contactPerson.name && person.country === contactPerson.country;
+                    });
+
+                    expect(contactPerson.id).to.not.equal(undefined);
+
+                    done();
+
+                }, (error) => {
+
+                    console.log(error);
+                    done();
+
+                });
+
+            }, (error) => {
 
                 console.log('Error: ', error);
+                done();
 
             }, (response) => {
 
@@ -93,9 +126,17 @@ describe('Contact Persons Stack', () => {
 
             });
         });
+
+        it('should delete contact person when provided with correct arguments', () => {
+
+            console.log('Deleting', contactPerson);
+
+            return deleteRequest(SERVER_ROOT + endpoint, contactPerson, {}, () => {
+
+            }, (error) => {
+
+            });
+        });
     });
 
-    describe('should put contact person when provided with correct arguments', () => {
-
-    });
 });
