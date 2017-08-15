@@ -3,7 +3,7 @@ const sinon = require('sinon');
 
 import {VIDEO_STRUCTURE, SOUND_STRUCTURE, EmbeddedItemsService} from '../../../../../src/data/services/EmbeddedItemsService';
 
-const helperFunctions = require('../../../../helpers/helper-functions');
+const helperFunctions = require('../../../../helpers/helpers');
 
 const assertCallDelegatedProperly = helperFunctions.assertCallDelegatedProperly;
 const assertCallbackCalledWithFormStructure = helperFunctions.assertCallbackCalledWithFormStructure;

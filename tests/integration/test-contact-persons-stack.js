@@ -129,12 +129,12 @@ describe('Contact Persons Stack', () => {
 
         it('should delete contact person when provided with correct arguments', () => {
 
-            console.log('Deleting', contactPerson);
-
             return deleteRequest(SERVER_ROOT + endpoint, contactPerson, {}, () => {
 
             }, (error) => {
 
+            }, (response) => {
+                expect(response.status).to.equal(200);
             });
         });
     });

@@ -2,7 +2,7 @@ const chai = require('chai');
 const expect = require('chai').expect;
 const sinon = require('sinon');
 
-const helperFunctions = require('../../helpers/helper-functions');
+const helperFunctions = require('../../helpers/helpers');
 
 const assertFunctionCalledWithSingleCallback = helperFunctions.assertFunctionCalledWithSingleCallback;
 const assertServiceMethodCalled = helperFunctions.assertCallDelegatedProperly;

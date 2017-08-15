@@ -1,6 +1,18 @@
 const expect = require('chai').expect;
 const sinon = require('sinon');
 
+let secrets = require('../../secrets');
+
+let credentials = {
+    username: secrets.sampleUsername,
+    authToken: secrets.sampleToken
+};
+
+localStorage = {
+    getItem(key) { return credentials[key]; },
+    setItem() {}
+};
+
 const assertCallDelegatedProperly = (delegatee, delegateeName, functionToStub, functionUnderTest, sampleObject) => {
 
     let should = 'should call ' + delegateeName + ' function with ';
@@ -65,6 +77,9 @@ const assertCallbackCalledWithFormStructure = (formStructure, functionUnderTest)
 
 module.exports = {
 
+    sampleUsername: credentials.username,
+    sampleToken: credentials.authToken,
+    localStorage: localStorage,
     assertCallDelegatedProperly: assertCallDelegatedProperly,
     assertFunctionCalledWithSingleCallback: assertFunctionCalledWithSingleCallback,
     assertCallbackCalledWithFormStructure: assertCallbackCalledWithFormStructure

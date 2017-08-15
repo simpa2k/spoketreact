@@ -7,7 +7,7 @@ import FileUpload from "../presentational/FileUpload.jsx";
 import { DateField } from 'react-date-picker';
 import 'react-date-picker/index.css'
 
-import secrets from '../../secrets';
+import secrets from '../../../secrets';
 
 class FormGroupVisitor {
 

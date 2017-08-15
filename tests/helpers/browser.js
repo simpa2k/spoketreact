@@ -1,5 +1,5 @@
-let sampleUsername = require('../../src/secrets').sampleUsername;
-let sampleToken = require('../../src/secrets').sampleToken;
+let helpers = require('./helpers');
+let localStorage = helpers.localStorage;
 
 // From https://semaphoreci.com/community/tutorials/testing-react-components-with-enzyme-and-mocha
 // With minor modifications.
@@ -25,16 +25,7 @@ Object.keys(document.defaultView).forEach((property) => {
  */
 
 if (!global.window.localStorage) {
-
-    let credentials = {
-        username: sampleUsername,
-        authToken: sampleToken
-    };
-
-    global.window.localStorage = {
-        getItem(key) { return credentials[key]; },
-        setItem() {}
-    };
+    global.window.localStorage = localStorage;
 }
 
 global.navigator = {

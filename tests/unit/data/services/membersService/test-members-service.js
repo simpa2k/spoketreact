@@ -3,7 +3,7 @@ const sinon = require('sinon');
 
 import {MEMBER_STRUCTURE, MembersService} from "../../../../../src/data/services/MembersService";
 
-const helperFunctions = require('../../../../helpers/helper-functions');
+const helperFunctions = require('../../../../helpers/helpers');
 const assertCallDelegatedProperly = helperFunctions.assertCallDelegatedProperly;
 const assertCallbackCalledWithFormStructure = helperFunctions.assertCallbackCalledWithFormStructure;
 

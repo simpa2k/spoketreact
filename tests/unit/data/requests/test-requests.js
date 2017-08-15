@@ -1,6 +1,10 @@
 const expect = require('chai').expect;
 const sinon = require('sinon');
 
+let helpers = require('../../../helpers/helpers');
+const MOCK_USERNAME = helpers.sampleUsername;
+const MOCK_TOKEN = helpers.sampleToken;
+
 // window.fetch polyfill
 require('whatwg-fetch');
 
@@ -64,8 +68,8 @@ describe('Requests', () => {
         let fetchStub = sinon.stub(window, 'fetch');
 
         fetchStub.withArgs(HOST + 'gigs', {method: 'GET'}).returns(jsonOk(sampleGig()));
-        fetchStub.withArgs(HOST + 'gigs?username=mockUsername&token=mockAuthToken', sampleRequestOptions('POST')).returns(Promise.resolve(jsonOk({})));
-        fetchStub.withArgs(HOST + 'gigs?id=1&username=mockUsername&token=mockAuthToken', sampleRequestOptions('PUT')).returns(Promise.resolve(jsonOk({})));
+        fetchStub.withArgs(HOST + 'gigs?username=' + MOCK_USERNAME + '&token=' + MOCK_TOKEN, sampleRequestOptions('POST')).returns(Promise.resolve(jsonOk({})));
+        fetchStub.withArgs(HOST + 'gigs?id=1&username=' + MOCK_USERNAME + '&token=' + MOCK_TOKEN, sampleRequestOptions('PUT')).returns(Promise.resolve(jsonOk({})));
 
     });
 
@@ -97,6 +101,9 @@ describe('Requests', () => {
 
         it('should return OK on valid POST to /gigs', () => {
 
+            /*
+             * ToDo: This doesn't fail if the success callback is never called, such as when credentials don't match those specified with withArgs.
+             */
             requests.postRequest(HOST + 'gigs', {}, sampleRequestOptions(), null, null, (response) => {
 
                expect(response.status).to.equal(200);

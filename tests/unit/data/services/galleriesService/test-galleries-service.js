@@ -3,7 +3,7 @@ const sinon = require('sinon');
 
 import {GALLERY_STRUCTURE, GalleriesService} from "../../../../../src/data/services/GalleriesService";
 
-const helperFunctions = require('../../../../helpers/helper-functions');
+const helperFunctions = require('../../../../helpers/helpers');
 const assertCallDelegatedProperly = helperFunctions.assertCallDelegatedProperly;
 const assertCallbackCalledWithFormStructure = helperFunctions.assertCallbackCalledWithFormStructure;
 
