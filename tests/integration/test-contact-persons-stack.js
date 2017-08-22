@@ -1,13 +1,40 @@
 import Data from "../../src/data/Data";
-import {getRequest, postRequest, deleteRequest} from "../../src/data/requests/requests";
+import {getRequest, putRequest, postRequest, deleteRequest} from "../../src/data/requests/requests";
 
 const expect = require('chai').expect;
 const sinon = require('sinon');
 
+const helpers = require('../helpers/helpers');
+const assertProvidesCorrectArgumentsToRequestFunction = helpers.assertProvidesCorrectArgumentsToRequestFunction;
+
+/*
+ * The reason for splitting tests up, having separate
+ * test cases for performing the request and for making
+ * sure correct arguments are provided to the request
+ * functions, is that mocha requires returning the result
+ * of functions relying on promises. Since it's impractical
+ * to have the whole stack return the result of the calls
+ * further down when the mechanism actually used
+ * higher up is callbacks rather than promises
+ * the part that actually uses promises (that is, the
+ * requets module) will return them, whereas the
+ * modules higher up (Data, services and endpoints)
+ * will not.
+ */
 describe('Contact Persons Stack', () => {
 
     const SERVER_ROOT = 'http://localhost:8080/backend/server.php/';
     const endpoint = 'contactpersons';
+
+    const absolutePath = SERVER_ROOT + endpoint;
+
+    const createOptions = (contactPerson) => {
+
+        return {
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify(contactPerson)
+        }
+    };
 
     describe('Get Contact Persons', () => {
 
@@ -15,7 +42,7 @@ describe('Contact Persons Stack', () => {
          * Using fetch through node requires absolute paths.
          * Relative paths seem to work when using the browser
          * even though the same polyfill is being used.
-         * However, I've only tested this in firefox which supports
+         * However, I've only tested this in Firefox which supports
          * fetch natively. Might be an idea to check that it
          * works in browsers that do not support fetch as well.
          */
@@ -27,7 +54,7 @@ describe('Contact Persons Stack', () => {
             /*
              * Promises have to be returned for mocha to be able to handle them.
              */
-            return getRequest(SERVER_ROOT + endpoint, parameters, options, (contactInfo) => {
+            return getRequest(absolutePath, parameters, options, (contactInfo) => {
 
                 expect(contactInfo).to.be.an('array');
 
@@ -63,7 +90,7 @@ describe('Contact Persons Stack', () => {
             let errorCallback = () => {};
 
             data.getContactInfo(successCallback, errorCallback);
-            sinon.assert.calledWith(stubbedRequest, SERVER_ROOT + endpoint, {}, {}, sinon.match.any, errorCallback, undefined);
+            sinon.assert.calledWith(stubbedRequest, absolutePath, {}, {}, sinon.match.any, errorCallback, undefined);
 
         });
     });
@@ -81,19 +108,9 @@ describe('Contact Persons Stack', () => {
 
         it('should post contact person when provided with correct arguments', (done) => {
 
-            let options = {
+            postRequest(absolutePath, {}, createOptions(contactPerson), () => {
 
-                headers: {'Content-Type': 'application/json'},
-                body: JSON.stringify({
-                    "phonenumber": "123 456 789",
-                    "name": "Test Testsson",
-                    "country": "SE"
-                })
-            };
-
-            postRequest(SERVER_ROOT + endpoint, {}, options, () => {
-
-                getRequest(SERVER_ROOT + endpoint, {}, {}, (contactInfo) => {
+                getRequest(absolutePath, {}, {}, (contactInfo) => {
 
                     /*
                      * Wouldn't it be nice if the backend just returned the id of the newly created item?
@@ -127,9 +144,42 @@ describe('Contact Persons Stack', () => {
             });
         });
 
+        it('should put contact person when provided with correct arguments', (done) => {
+
+            let updatedContactPerson = Object.assign({}, contactPerson);
+            updatedContactPerson.name = "Testaren Testarensson";
+
+            putRequest(absolutePath, updatedContactPerson, {}, () => {
+
+                getRequest(absolutePath, {id: contactPerson.id}, {}, (contactInfo) => {
+
+                    let result = contactInfo[0];
+                    expect(result.name).to.equal(updatedContactPerson.name);
+
+                    done();
+
+                }, (error) => {
+
+                    console.log(error);
+                    done();
+
+                });
+            }, (error) => {
+
+                console.log(error);
+                done();
+
+            }, (response) => {
+
+                expect(response.status).to.equal(200);
+                return response.json();
+
+            });
+        });
+
         it('should delete contact person when provided with correct arguments', () => {
 
-            return deleteRequest(SERVER_ROOT + endpoint, contactPerson, {}, () => {
+            return deleteRequest(absolutePath, contactPerson, {}, () => {
 
             }, (error) => {
 
@@ -137,6 +187,23 @@ describe('Contact Persons Stack', () => {
                 expect(response.status).to.equal(200);
             });
         });
-    });
 
+        describe('Provide correct arguments for modification requests', () => {
+
+            let data = new Data();
+
+            let contactPerson = {
+                "phonenumber": "123 456 789",
+                "name": "Test Testsson",
+                "country": "SE"
+            };
+
+            let contactPersonWithId = Object.assign({id: 1}, contactPerson);
+
+            assertProvidesCorrectArgumentsToRequestFunction.objectAsOptions(data.contactPersonsService, 'post', data.postContactPerson, contactPerson);
+            assertProvidesCorrectArgumentsToRequestFunction.objectAsOptions(data.contactPersonsService, 'put', data.putContactPerson, contactPersonWithId);
+            assertProvidesCorrectArgumentsToRequestFunction.objectAsParameters(data.contactPersonsService, 'delete', data.deleteContactPerson, contactPersonWithId);
+
+        });
+    });
 });

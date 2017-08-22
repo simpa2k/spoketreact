@@ -72,7 +72,42 @@ const assertCallbackCalledWithFormStructure = (formStructure, functionUnderTest)
         sinon.assert.calledWith(successCallbackSpy, formStructure);
 
     });
+};
 
+const createOptions = (objectToSend) => {
+
+    return {
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify(objectToSend)
+    }
+};
+
+const assertRequestCalledWith = (serviceToStub, requestMethod, functionUnderTest, objectToBeSent, parameters, options) => {
+
+    it('should provide correct arguments for ' + requestMethod, () => {
+
+        let stubbedRequest = sinon.stub(serviceToStub.endpoint.requests, requestMethod.toLowerCase() + 'Request');
+
+        let successCallback = () => {};
+        let errorCallback = () => {};
+
+        if (objectToBeSent) {
+            functionUnderTest(objectToBeSent, successCallback, errorCallback);
+        }
+
+        sinon.assert.calledWith(stubbedRequest, serviceToStub.endpoint.endpointName, parameters, options, successCallback, errorCallback, undefined);
+
+    });
+};
+
+const assertProvidesCorrectArgumentsToRequestFunction = {
+
+    objectAsParameters: (serviceToStub, requestMethod, functionUnderTest, objectToBeSent) => {
+        assertRequestCalledWith(serviceToStub, requestMethod, functionUnderTest, objectToBeSent, objectToBeSent, {});
+    },
+    objectAsOptions: (serviceToStub, requestMethod, functionUnderTest, objectToBeSent) => {
+        assertRequestCalledWith(serviceToStub, requestMethod, functionUnderTest, objectToBeSent, {}, createOptions(objectToBeSent));
+    }
 };
 
 module.exports = {
@@ -82,6 +117,7 @@ module.exports = {
     localStorage: localStorage,
     assertCallDelegatedProperly: assertCallDelegatedProperly,
     assertFunctionCalledWithSingleCallback: assertFunctionCalledWithSingleCallback,
-    assertCallbackCalledWithFormStructure: assertCallbackCalledWithFormStructure
+    assertCallbackCalledWithFormStructure: assertCallbackCalledWithFormStructure,
+    assertProvidesCorrectArgumentsToRequestFunction: assertProvidesCorrectArgumentsToRequestFunction
 
 };
