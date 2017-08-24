@@ -22,6 +22,28 @@ class GigsService extends Service {
         this.venuesEndpoint = new Endpoint('venues', true, true, false);
 
     }
+    
+    bindGigFunctions () {
+        
+        this.getGigs = this.getGigs.bind(this);
+        this.prepareGigModification = this.prepareGigModification.bind(this);
+        this.putGig = this.putGig.bind(this);
+        this.postGig = this.postGig.bind(this);
+        this.deleteGig = this.deleteGig.bind(this);
+        this.getGigsStructure = this.getGigsStructure.bind(this);
+        
+    }
+    
+    bindVenueFunctions() {
+        
+        this.setVenues = this.setVenues.bind(this);
+        this.modifyVenueAndUpdate = this.modifyVenueAndUpdate.bind(this);
+        this.sendVenue = this.sendVenue.bind(this);
+        this.getVenues = this.getVenues.bind(this);
+        this.postVenue = this.postVenue.bind(this);
+        this.putVenue = this.putVenue.bind(this);
+        
+    }
 
     /*
      * Gigs
