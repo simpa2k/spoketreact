@@ -23,8 +23,8 @@ const assertProvidesCorrectArgumentsToRequestFunction = helpers.assertProvidesCo
  */
 describe('Contact Persons Stack', () => {
 
-    const SERVER_ROOT = 'http://localhost:8080/backend/server.php/';
-    const endpoint = 'contactpersons';
+    const SERVER_ROOT = helpers.serverRoot;
+    const endpoint = '/contactpersons';
 
     const absolutePath = SERVER_ROOT + endpoint;
 
@@ -35,6 +35,20 @@ describe('Contact Persons Stack', () => {
             body: JSON.stringify(contactPerson)
         }
     };
+
+    before((done) => {
+
+        helpers.login(() => {
+
+            done();
+
+        }, (error) => {
+
+            console.error('Could not login. Error: ', error);
+            done();
+
+        });
+    });
 
     describe('Get Contact Persons', () => {
 
@@ -77,7 +91,7 @@ describe('Contact Persons Stack', () => {
                 }
 
             }, (error) => {
-                console.log('Error: ', error);
+                console.error('Error: ', error);
             });
         });
 
@@ -126,14 +140,14 @@ describe('Contact Persons Stack', () => {
 
                 }, (error) => {
 
-                    console.log(error);
+                    console.error(error);
                     done();
 
                 });
 
             }, (error) => {
 
-                console.log('Error: ', error);
+                console.error('Error: ', error);
                 done();
 
             }, (response) => {
@@ -160,13 +174,13 @@ describe('Contact Persons Stack', () => {
 
                 }, (error) => {
 
-                    console.log(error);
+                    console.error(error);
                     done();
 
                 });
             }, (error) => {
 
-                console.log(error);
+                console.error(error);
                 done();
 
             }, (response) => {

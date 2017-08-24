@@ -1,7 +1,10 @@
 const expect = require('chai').expect;
 const sinon = require('sinon');
+const fetch = require('isomorphic-fetch');
 
 let secrets = require('../../secrets');
+
+const SERVER_ROOT = 'http://localhost:8080/backend/server.php';
 
 let credentials = {
     username: secrets.sampleUsername,
@@ -110,14 +113,37 @@ const assertProvidesCorrectArgumentsToRequestFunction = {
     }
 };
 
+/*
+ * It might have been an idea to just use the requests library.
+ * However, since these are test helpers they shouldn't be using
+ * the code that is being tested.
+ */
+const login = (successCallback, errorCallback) => {
+
+    fetch(SERVER_ROOT + '/users?username=' + secrets.sampleUsername + '&password=' + secrets.samplePassword, {
+        method: 'GET'
+    }).then((response) => {
+        return response.json();
+    }).then((json) => {
+
+        credentials.authToken = json.token;
+        successCallback(json.token);
+
+    }).catch((error) => {
+        errorCallback(error);
+    });
+};
+
 module.exports = {
 
+    serverRoot: SERVER_ROOT,
     sampleUsername: credentials.username,
     sampleToken: credentials.authToken,
     localStorage: localStorage,
     assertCallDelegatedProperly: assertCallDelegatedProperly,
     assertFunctionCalledWithSingleCallback: assertFunctionCalledWithSingleCallback,
     assertCallbackCalledWithFormStructure: assertCallbackCalledWithFormStructure,
-    assertProvidesCorrectArgumentsToRequestFunction: assertProvidesCorrectArgumentsToRequestFunction
+    assertProvidesCorrectArgumentsToRequestFunction: assertProvidesCorrectArgumentsToRequestFunction,
+    login: login
 
 };
