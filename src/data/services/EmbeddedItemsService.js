@@ -21,7 +21,7 @@ class EmbeddedItemsService extends Service {
 
     constructor() {
 
-        super(new Endpoint('embeddedItems', true, true, true));
+        super(new Endpoint('embeddeditems', true, true, true));
 
         this.bindEmbeddedItemFunctions();
         this.bindVideoFunctions();

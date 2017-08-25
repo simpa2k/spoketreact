@@ -7,7 +7,7 @@ const sinon = require('sinon');
 const helpers = require('../helpers/helpers');
 const assertProvidesCorrectArgumentsToRequestFunction = helpers.assertProvidesCorrectArgumentsToRequestFunction;
 
-describe('Gig Stack', () => {
+describe('Gigs Stack', () => {
 
     const SERVER_ROOT = helpers.serverRoot;
     const endpoint = '/gigs';
