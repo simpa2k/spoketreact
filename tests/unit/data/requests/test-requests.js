@@ -8,7 +8,7 @@ const MOCK_TOKEN = helpers.sampleToken;
 // window.fetch polyfill
 require('whatwg-fetch');
 
-const requests = require('../../../../src/data/requests/requests');
+let requests = require('../../../../src/data/requests/requests');
 
 // The following test helper and stubbing of window.fetch was taken from https://rjzaworski.com/2015/06/testing-api-requests-from-window-fetch
 const jsonOk = function(body) {
@@ -65,7 +65,8 @@ describe('Requests', () => {
 
     beforeEach(() => {
 
-        let fetchStub = sinon.stub(window, 'fetch');
+        //let fetchStub = sinon.stub(window, 'fetch');
+        let fetchStub = sinon.stub(global, 'fetch'); // When requiring isomorphic fetch it gets added as a global
 
         fetchStub.withArgs(HOST + 'gigs', {method: 'GET'}).returns(jsonOk(sampleGig()));
         fetchStub.withArgs(HOST + 'gigs?username=' + MOCK_USERNAME + '&token=' + MOCK_TOKEN, sampleRequestOptions('POST')).returns(Promise.resolve(jsonOk({})));
@@ -74,7 +75,8 @@ describe('Requests', () => {
     });
 
     afterEach(() => {
-        window.fetch.restore();
+        //window.fetch.restore();
+        global.fetch.restore();
     });
 
     describe('/gigs', () => {

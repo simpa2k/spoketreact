@@ -22,6 +22,15 @@ const Endpoint = function(endpointName, puttable, postable, deleteable) {
 
     this.sendObject = (sendFunction, object, parameters, options, successCallback, errorCallback, format) => {
 
+        options.body = object;
+        options.headers = {'Content-Type': 'application/json'};
+
+        sendFunction(this.endpointName, parameters, options, successCallback, errorCallback, format);
+
+    };
+
+    this.sendStringifiedObject = (sendFunction, object, parameters, options, successCallback, errorCallback, format) => {
+
         options.body = JSON.stringify(object);
         options.headers = {'Content-Type': 'application/json'};
 
@@ -35,11 +44,17 @@ const Endpoint = function(endpointName, puttable, postable, deleteable) {
     };
 
     this.putRequest = puttable ? (object, successCallback, errorCallback, responseFormat) => {
-        this.sendObject(this.requests.putRequest, object, {}, {}, successCallback, errorCallback, responseFormat);
+        //this.sendObject(this.requests.putRequest, object, {}, {}, successCallback, errorCallback, responseFormat);
+        this.sendStringifiedObject(this.requests.putRequest, object, {}, {}, successCallback, errorCallback, responseFormat);
     } : undefined;
 
     this.postRequest = postable ? (object, successCallback, errorCallback, responseFormat) => {
-        this.sendObject(this.requests.postRequest, object, {}, {}, successCallback, errorCallback, responseFormat);
+        //this.sendObject(this.requests.postRequest, object, {}, {}, successCallback, errorCallback, responseFormat);
+        this.sendStringifiedObject(this.requests.postRequest, object, {}, {}, successCallback, errorCallback, responseFormat);
+    } : undefined;
+
+    this.postForm = postable ? (formData, successCallback, errorCallback, responseFormat) => {
+        this.sendObject(this.requests.postRequest, formData, {}, {}, successCallback, errorCallback, responseFormat);
     } : undefined;
 
     this.deleteRequest = deleteable ? (object, successCallback, errorCallback, responseFormat) => {

@@ -1,3 +1,4 @@
+let isSet = require('../../utils/isSet');
 import Service from "./Service";
 
 import {
@@ -93,6 +94,22 @@ class GalleriesService extends Service {
              successCallback(formattedGalleries);
 
          }, errorCallback);
+    }
+
+    createFormData(images) {
+
+        if (!isSet(images) || images.constructor !== Array) {
+            throw new TypeError('Images must be an array');
+        }
+
+        let formData = new window.FormData();
+
+        for (let image of images) {
+            formData.append('files[]', image);
+        }
+
+        return formData;
+
     }
 
     putGallery(gallery, successCallback, errorCallback) {

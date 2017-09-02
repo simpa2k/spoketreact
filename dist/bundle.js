@@ -7956,6 +7956,14 @@ var Endpoint = function Endpoint(endpointName, puttable, postable, deleteable) {
 
     this.sendObject = function (sendFunction, object, parameters, options, successCallback, errorCallback, format) {
 
+        options.body = object;
+        options.headers = { 'Content-Type': 'application/json' };
+
+        sendFunction(_this.endpointName, parameters, options, successCallback, errorCallback, format);
+    };
+
+    this.sendStringifiedObject = function (sendFunction, object, parameters, options, successCallback, errorCallback, format) {
+
         options.body = JSON.stringify(object);
         options.headers = { 'Content-Type': 'application/json' };
 
@@ -7970,11 +7978,17 @@ var Endpoint = function Endpoint(endpointName, puttable, postable, deleteable) {
     };
 
     this.putRequest = puttable ? function (object, successCallback, errorCallback, responseFormat) {
-        _this.sendObject(_this.requests.putRequest, object, {}, {}, successCallback, errorCallback, responseFormat);
+        //this.sendObject(this.requests.putRequest, object, {}, {}, successCallback, errorCallback, responseFormat);
+        _this.sendStringifiedObject(_this.requests.putRequest, object, {}, {}, successCallback, errorCallback, responseFormat);
     } : undefined;
 
     this.postRequest = postable ? function (object, successCallback, errorCallback, responseFormat) {
-        _this.sendObject(_this.requests.postRequest, object, {}, {}, successCallback, errorCallback, responseFormat);
+        //this.sendObject(this.requests.postRequest, object, {}, {}, successCallback, errorCallback, responseFormat);
+        _this.sendStringifiedObject(_this.requests.postRequest, object, {}, {}, successCallback, errorCallback, responseFormat);
+    } : undefined;
+
+    this.postForm = postable ? function (formData, successCallback, errorCallback, responseFormat) {
+        _this.sendObject(_this.requests.postRequest, formData, {}, {}, successCallback, errorCallback, responseFormat);
     } : undefined;
 
     this.deleteRequest = deleteable ? function (object, successCallback, errorCallback, responseFormat) {
@@ -44623,6 +44637,7 @@ function warnNoop(publicInstance, callerName) {
  * This is the abstract API for an update queue.
  */
 var ReactNoopUpdateQueue = {
+
   /**
    * Checks whether or not this composite component is mounted.
    * @param {ReactClass} publicInstance The instance we want to test.
@@ -46173,16 +46188,12 @@ exports.default = FileUpload;
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
+/* WEBPACK VAR INJECTION */(function(global) {
 
-
-var _isomorphicFetch = __webpack_require__(522);
-
-var _isomorphicFetch2 = _interopRequireDefault(_isomorphicFetch);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-var isSet = __webpack_require__(176); //require('whatwg-fetch');
-
+//require('whatwg-fetch');
+//import fetch from 'isomorphic-fetch';
+var fetch = __webpack_require__(522);
+var isSet = __webpack_require__(176);
 
 var getRequest = function getRequest(endpoint, parameters, options, successCallback, errorCallback, format) {
 
@@ -46233,7 +46244,8 @@ var request = function request(endpoint, parameters, options, successCallback, e
     var URI = buildUri(endpoint, parameters);
 
     //return window.fetch(URI, options).then((response) => {
-    return (0, _isomorphicFetch2.default)(URI, options).then(function (response) {
+    //return fetch(URI, options).then((response) => {
+    return global.fetch(URI, options).then(function (response) {
 
         if (typeof format === 'undefined' || format === null) {
             return response.json();
@@ -46278,12 +46290,14 @@ var buildUri = function buildUri(endpoint, parameters) {
 
 module.exports = {
 
+    fetch: fetch,
     getRequest: getRequest,
     putRequest: putRequest,
     postRequest: postRequest,
     deleteRequest: deleteRequest
 
 };
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(52)))
 
 /***/ }),
 /* 413 */
@@ -46662,6 +46676,9 @@ function _possibleConstructorReturn(self, call) { if (!self) { throw new Referen
 
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
+var isSet = __webpack_require__(176);
+
+
 var Endpoint = __webpack_require__(44);
 
 var GALLERY_STRUCTURE = [{
@@ -46741,6 +46758,43 @@ var GalleriesService = function (_Service) {
                 }
                 successCallback(formattedGalleries);
             }, errorCallback);
+        }
+    }, {
+        key: 'createFormData',
+        value: function createFormData(images) {
+
+            if (!isSet(images) || images.constructor !== Array) {
+                throw new TypeError('Images must be an array');
+            }
+
+            var formData = new window.FormData();
+
+            var _iteratorNormalCompletion = true;
+            var _didIteratorError = false;
+            var _iteratorError = undefined;
+
+            try {
+                for (var _iterator = images[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
+                    var _image = _step.value;
+
+                    formData.append('files[]', _image);
+                }
+            } catch (err) {
+                _didIteratorError = true;
+                _iteratorError = err;
+            } finally {
+                try {
+                    if (!_iteratorNormalCompletion && _iterator.return) {
+                        _iterator.return();
+                    }
+                } finally {
+                    if (_didIteratorError) {
+                        throw _iteratorError;
+                    }
+                }
+            }
+
+            return formData;
         }
     }, {
         key: 'putGallery',

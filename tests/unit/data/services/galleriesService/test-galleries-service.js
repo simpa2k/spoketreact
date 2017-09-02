@@ -67,6 +67,55 @@ describe('GalleriesService', () => {
         });
     });
 
+    describe('createFormData', () => {
+
+        const SEVERAL_IMAGES = 5;
+
+        let base64Image = 'data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD//gA8Q1JFQVRPUjogZ2QtanBlZyB2MS4wICh1c2luZyBJSkcgSlBFRyB2NjIpLCBxdWFsaXR5ID0gMTAwCv/bAEMAAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAf/bAEMBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAf/AABEIBDgHgAMBIgACEQEDEQH/xAAfAAABBQEBAQEBAQAAAAAAAAAAAQIDBAUGBwgJCgv/xAC1EAACAQMDAgQDBQUEBAAAAX0BAgMABBEFEiExQQYTUWEHInEUMoGRoQgjQrHBFVLR8CQzYnKCCQoWFxgZGiUmJygpKjQ1Njc4OTpDREVGR0hJSlNUVVZXWFlaY2RlZmdoaWpzdHV2d3h5eoOEhYaHiImKkpOUlZaXmJmaoqOkpaanqKmqsrO0tba3uLm6wsPExcbHyMnK0tPU1dbX2Nna4eLj5OXm5+jp6vHy8/T19vf4+fr/xAAfAQADAQEBAQEBAQEBAAAAAAAAAQIDBAUGBwgJCgv/xAC1EQACAQIEBAMEBwUEBAABAncAAQIDEQQFITEGEkFRB2FxEyIygQgUQpGhscEJIzNS8BVictEKFiQ04SXxFxgZGiYnKCkqNTY3ODk6Q0RFRkdISUpTVFVWV1hZWmNkZWZnaGlqc3R1dnd4eXqCg4SFhoeIiYqSk5SVlpeYmZqio6Slpqeoqaqys7S1tre4ubrCw8TFxsfIycrS09TV1tfY2dri4+Tl5ufo6ery8/T19vf4+fr/2gAMAwEAAhEDEQA/AOfF9E128M935ty9zN5avJFBKsEUzIAFRkBVZCyIqs1xPiR/L8oS1gagt3I0s/kRX';
+        let images;
+
+        beforeEach(() => {
+            images = [];
+        });
+
+        it('should append single image', () => {
+
+            images.push(base64Image);
+
+            let formData = galleriesService.createFormData(images);
+
+            expect(formData.getAll('files[]').length).to.equal(1);
+
+        });
+
+        it('should append several images', () => {
+
+            for (let i = 0; i < SEVERAL_IMAGES; i++) {
+                images.push(base64Image);
+            }
+
+            let formData = galleriesService.createFormData(images);
+
+            expect(formData.getAll('files[]').length).to.equal(SEVERAL_IMAGES);
+
+        });
+
+        it('should throw type error if array is not passed', () => {
+
+            expect(() => {
+                galleriesService.createFormData()
+            }).to.throw(TypeError, 'Images must be an array');
+
+            expect(() => {
+                galleriesService.createFormData(null)
+            }).to.throw(TypeError, 'Images must be an array');
+
+            expect(() => {
+                galleriesService.createFormData('string')
+            }).to.throw(TypeError, 'Images must be an array');
+        });
+    });
+
     describe('putGallery', () => {
         assertGalleriesEndpointFunctionCalled('putRequest', galleriesService.putGallery, SAMPLE_GALLERIES[0]);
     });
