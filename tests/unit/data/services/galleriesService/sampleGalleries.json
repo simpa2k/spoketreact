@@ -1,1 +1,125 @@
-{"Folk at Heart - 15":{"images":{"2":{"full":"images\/galleries\/Folk at Heart - 15\/FaH 1.jpg","thumb":"images\/galleries\/Folk at Heart - 15\/thumbnails\/FaH 1.jpg"},"3":{"full":"images\/galleries\/Folk at Heart - 15\/FaH 2.jpg","thumb":"images\/galleries\/Folk at Heart - 15\/thumbnails\/FaH 2.jpg"},"4":{"full":"images\/galleries\/Folk at Heart - 15\/FaH 3.jpg","thumb":"images\/galleries\/Folk at Heart - 15\/thumbnails\/FaH 3.jpg"},"5":{"full":"images\/galleries\/Folk at Heart - 15\/FaH 4.jpg","thumb":"images\/galleries\/Folk at Heart - 15\/thumbnails\/FaH 4.jpg"},"6":{"full":"images\/galleries\/Folk at Heart - 15\/FaH 5.jpg","thumb":"images\/galleries\/Folk at Heart - 15\/thumbnails\/FaH 5.jpg"}},"galleryCover":"images\/galleries\/Folk at Heart - 15\/galleryCover\/FaH 1.jpg"},"Pressfoto Mars - 15":{"images":{"4":{"full":"images\/galleries\/Pressfoto Mars - 15\/spoketpentry.jpg","thumb":"images\/galleries\/Pressfoto Mars - 15\/thumbnails\/spoketpentry.jpg"},"5":{"full":"images\/galleries\/Pressfoto Mars - 15\/spoketrepar1.jpg","thumb":"images\/galleries\/Pressfoto Mars - 15\/thumbnails\/spoketrepar1.jpg"},"6":{"full":"images\/galleries\/Pressfoto Mars - 15\/spoketrepar2.jpg","thumb":"images\/galleries\/Pressfoto Mars - 15\/thumbnails\/spoketrepar2.jpg"},"7":{"full":"images\/galleries\/Pressfoto Mars - 15\/spoketrepar3.jpg","thumb":"images\/galleries\/Pressfoto Mars - 15\/thumbnails\/spoketrepar3.jpg"},"8":{"full":"images\/galleries\/Pressfoto Mars - 15\/spoketrepar6.jpg","thumb":"images\/galleries\/Pressfoto Mars - 15\/thumbnails\/spoketrepar6.jpg"},"9":{"full":"images\/galleries\/Pressfoto Mars - 15\/spoketrepar7.jpg","thumb":"images\/galleries\/Pressfoto Mars - 15\/thumbnails\/spoketrepar7.jpg"},"10":{"full":"images\/galleries\/Pressfoto Mars - 15\/spokettaket2.jpg","thumb":"images\/galleries\/Pressfoto Mars - 15\/thumbnails\/spokettaket2.jpg"},"11":{"full":"images\/galleries\/Pressfoto Mars - 15\/spokettaket3.jpg","thumb":"images\/galleries\/Pressfoto Mars - 15\/thumbnails\/spokettaket3.jpg"},"12":{"full":"images\/galleries\/Pressfoto Mars - 15\/spokettaket4.jpg","thumb":"images\/galleries\/Pressfoto Mars - 15\/thumbnails\/spokettaket4.jpg"},"13":{"full":"images\/galleries\/Pressfoto Mars - 15\/spokettaket5.jpg","thumb":"images\/galleries\/Pressfoto Mars - 15\/thumbnails\/spokettaket5.jpg"}},"galleryCover":"images\/galleries\/Pressfoto Mars - 15\/galleryCover\/spoketpentry.jpg"},"Stallet Maj - 15":{"images":{"2":{"full":"images\/galleries\/Stallet Maj - 15\/1.jpg","thumb":"images\/galleries\/Stallet Maj - 15\/thumbnails\/1.jpg"},"3":{"full":"images\/galleries\/Stallet Maj - 15\/1akrobatiklogotyp.jpg","thumb":"images\/galleries\/Stallet Maj - 15\/thumbnails\/1akrobatiklogotyp.jpg"},"4":{"full":"images\/galleries\/Stallet Maj - 15\/1svartvitlogga.jpg","thumb":"images\/galleries\/Stallet Maj - 15\/thumbnails\/1svartvitlogga.jpg"},"5":{"full":"images\/galleries\/Stallet Maj - 15\/2.jpg","thumb":"images\/galleries\/Stallet Maj - 15\/thumbnails\/2.jpg"},"6":{"full":"images\/galleries\/Stallet Maj - 15\/20.jpg","thumb":"images\/galleries\/Stallet Maj - 15\/thumbnails\/20.jpg"},"7":{"full":"images\/galleries\/Stallet Maj - 15\/22.jpg","thumb":"images\/galleries\/Stallet Maj - 15\/thumbnails\/22.jpg"},"8":{"full":"images\/galleries\/Stallet Maj - 15\/23.jpg","thumb":"images\/galleries\/Stallet Maj - 15\/thumbnails\/23.jpg"},"9":{"full":"images\/galleries\/Stallet Maj - 15\/24.jpg","thumb":"images\/galleries\/Stallet Maj - 15\/thumbnails\/24.jpg"},"10":{"full":"images\/galleries\/Stallet Maj - 15\/25.jpg","thumb":"images\/galleries\/Stallet Maj - 15\/thumbnails\/25.jpg"},"11":{"full":"images\/galleries\/Stallet Maj - 15\/26.jpg","thumb":"images\/galleries\/Stallet Maj - 15\/thumbnails\/26.jpg"},"12":{"full":"images\/galleries\/Stallet Maj - 15\/27.jpg","thumb":"images\/galleries\/Stallet Maj - 15\/thumbnails\/27.jpg"},"13":{"full":"images\/galleries\/Stallet Maj - 15\/28.jpg","thumb":"images\/galleries\/Stallet Maj - 15\/thumbnails\/28.jpg"}},"galleryCover":"images\/galleries\/Stallet Maj - 15\/galleryCover\/20.jpg"}}
+{
+  "Folk at Heart - 15": {
+    "images": {
+      "2": {
+        "full": "images\/galleries\/Folk at Heart - 15\/FaH 1.jpg",
+        "thumb": "images\/galleries\/Folk at Heart - 15\/thumbnails\/FaH 1.jpg"
+      },
+      "3": {
+        "full": "images\/galleries\/Folk at Heart - 15\/FaH 2.jpg",
+        "thumb": "images\/galleries\/Folk at Heart - 15\/thumbnails\/FaH 2.jpg"
+      },
+      "4": {
+        "full": "images\/galleries\/Folk at Heart - 15\/FaH 3.jpg",
+        "thumb": "images\/galleries\/Folk at Heart - 15\/thumbnails\/FaH 3.jpg"
+      },
+      "5": {
+        "full": "images\/galleries\/Folk at Heart - 15\/FaH 4.jpg",
+        "thumb": "images\/galleries\/Folk at Heart - 15\/thumbnails\/FaH 4.jpg"
+      },
+      "6": {
+        "full": "images\/galleries\/Folk at Heart - 15\/FaH 5.jpg",
+        "thumb": "images\/galleries\/Folk at Heart - 15\/thumbnails\/FaH 5.jpg"
+      }
+    },
+    "galleryCover": "images\/galleries\/Folk at Heart - 15\/galleryCover\/FaH 1.jpg"
+  },
+  "Pressfoto Mars - 15": {
+    "images": {
+      "4": {
+        "full": "images\/galleries\/Pressfoto Mars - 15\/spoketpentry.jpg",
+        "thumb": "images\/galleries\/Pressfoto Mars - 15\/thumbnails\/spoketpentry.jpg"
+      },
+      "5": {
+        "full": "images\/galleries\/Pressfoto Mars - 15\/spoketrepar1.jpg",
+        "thumb": "images\/galleries\/Pressfoto Mars - 15\/thumbnails\/spoketrepar1.jpg"
+      },
+      "6": {
+        "full": "images\/galleries\/Pressfoto Mars - 15\/spoketrepar2.jpg",
+        "thumb": "images\/galleries\/Pressfoto Mars - 15\/thumbnails\/spoketrepar2.jpg"
+      },
+      "7": {
+        "full": "images\/galleries\/Pressfoto Mars - 15\/spoketrepar3.jpg",
+        "thumb": "images\/galleries\/Pressfoto Mars - 15\/thumbnails\/spoketrepar3.jpg"
+      },
+      "8": {
+        "full": "images\/galleries\/Pressfoto Mars - 15\/spoketrepar6.jpg",
+        "thumb": "images\/galleries\/Pressfoto Mars - 15\/thumbnails\/spoketrepar6.jpg"
+      },
+      "9": {
+        "full": "images\/galleries\/Pressfoto Mars - 15\/spoketrepar7.jpg",
+        "thumb": "images\/galleries\/Pressfoto Mars - 15\/thumbnails\/spoketrepar7.jpg"
+      },
+      "10": {
+        "full": "images\/galleries\/Pressfoto Mars - 15\/spokettaket2.jpg",
+        "thumb": "images\/galleries\/Pressfoto Mars - 15\/thumbnails\/spokettaket2.jpg"
+      },
+      "11": {
+        "full": "images\/galleries\/Pressfoto Mars - 15\/spokettaket3.jpg",
+        "thumb": "images\/galleries\/Pressfoto Mars - 15\/thumbnails\/spokettaket3.jpg"
+      },
+      "12": {
+        "full": "images\/galleries\/Pressfoto Mars - 15\/spokettaket4.jpg",
+        "thumb": "images\/galleries\/Pressfoto Mars - 15\/thumbnails\/spokettaket4.jpg"
+      },
+      "13": {
+        "full": "images\/galleries\/Pressfoto Mars - 15\/spokettaket5.jpg",
+        "thumb": "images\/galleries\/Pressfoto Mars - 15\/thumbnails\/spokettaket5.jpg"
+      }
+    },
+    "galleryCover": "images\/galleries\/Pressfoto Mars - 15\/galleryCover\/spoketpentry.jpg"
+  },
+  "Stallet Maj - 15": {
+    "images": {
+      "2": {
+        "full": "images\/galleries\/Stallet Maj - 15\/1.jpg",
+        "thumb": "images\/galleries\/Stallet Maj - 15\/thumbnails\/1.jpg"
+      },
+      "3": {
+        "full": "images\/galleries\/Stallet Maj - 15\/1akrobatiklogotyp.jpg",
+        "thumb": "images\/galleries\/Stallet Maj - 15\/thumbnails\/1akrobatiklogotyp.jpg"
+      },
+      "4": {
+        "full": "images\/galleries\/Stallet Maj - 15\/1svartvitlogga.jpg",
+        "thumb": "images\/galleries\/Stallet Maj - 15\/thumbnails\/1svartvitlogga.jpg"
+      },
+      "5": {
+        "full": "images\/galleries\/Stallet Maj - 15\/2.jpg",
+        "thumb": "images\/galleries\/Stallet Maj - 15\/thumbnails\/2.jpg"
+      },
+      "6": {
+        "full": "images\/galleries\/Stallet Maj - 15\/20.jpg",
+        "thumb": "images\/galleries\/Stallet Maj - 15\/thumbnails\/20.jpg"
+      },
+      "7": {
+        "full": "images\/galleries\/Stallet Maj - 15\/22.jpg",
+        "thumb": "images\/galleries\/Stallet Maj - 15\/thumbnails\/22.jpg"
+      },
+      "8": {
+        "full": "images\/galleries\/Stallet Maj - 15\/23.jpg",
+        "thumb": "images\/galleries\/Stallet Maj - 15\/thumbnails\/23.jpg"
+      },
+      "9": {
+        "full": "images\/galleries\/Stallet Maj - 15\/24.jpg",
+        "thumb": "images\/galleries\/Stallet Maj - 15\/thumbnails\/24.jpg"
+      },
+      "10": {
+        "full": "images\/galleries\/Stallet Maj - 15\/25.jpg",
+        "thumb": "images\/galleries\/Stallet Maj - 15\/thumbnails\/25.jpg"
+      },
+      "11": {
+        "full": "images\/galleries\/Stallet Maj - 15\/26.jpg",
+        "thumb": "images\/galleries\/Stallet Maj - 15\/thumbnails\/26.jpg"
+      },
+      "12": {
+        "full": "images\/galleries\/Stallet Maj - 15\/27.jpg",
+        "thumb": "images\/galleries\/Stallet Maj - 15\/thumbnails\/27.jpg"
+      },
+      "13": {
+        "full": "images\/galleries\/Stallet Maj - 15\/28.jpg",
+        "thumb": "images\/galleries\/Stallet Maj - 15\/thumbnails\/28.jpg"
+      }
+    },
+    "galleryCover": "images\/galleries\/Stallet Maj - 15\/galleryCover\/20.jpg"
+  }
+}
