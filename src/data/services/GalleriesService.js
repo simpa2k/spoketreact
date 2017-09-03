@@ -67,6 +67,7 @@ class GalleriesService extends Service {
         this.putGallery = this.putGallery.bind(this);
         this.postGallery = this.postGallery.bind(this);
         this.deleteGallery = this.deleteGallery.bind(this);
+        this.postImages = this.postImages.bind(this);
 
     }
 
@@ -112,16 +113,44 @@ class GalleriesService extends Service {
 
     }
 
+    /**
+     * Updates a gallery. This includes both adding and removing images.
+     *
+     * @param gallery a gallery object of the following format:
+     * {
+     *  galleryName: '',
+     *  images: [],
+     *  addedImages: [],
+     *  removedImages: []
+     * }
+     *
+     * @param successCallback
+     * @param errorCallback
+     */
     putGallery(gallery, successCallback, errorCallback) {
-        this.endpoint.putRequest(gallery, successCallback, errorCallback);
+
+        this.postImages(gallery.galleryName, gallery.addedImages);
+        //this.endpoint.putRequest(gallery, successCallback, errorCallback);
     }
 
     postGallery(gallery, successCallback, errorCallback) {
-        this.endpoint.postRequest(gallery, successCallback, errorCallback);
+        this.postImages(gallery.galleryName, gallery.addedImages, successCallback, errorCallback);
     }
 
     deleteGallery(gallery, successCallback, errorCallback) {
         this.endpoint.deleteRequest(gallery, successCallback, errorCallback);
+    }
+
+    postImages(galleryName, images, successCallback, errorCallback) {
+
+        let formData = this.createFormData(images);
+
+        let parameters = {
+            galleryName: galleryName
+        };
+
+        this.endpoint.postForm(formData, parameters, successCallback, errorCallback);
+
     }
 
     deleteImage(image, successCallback, errorCallback) {

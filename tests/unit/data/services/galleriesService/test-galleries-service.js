@@ -10,6 +10,44 @@ const assertCallbackCalledWithFormStructure = helperFunctions.assertCallbackCall
 describe('GalleriesService', () => {
 
     const SAMPLE_GALLERIES = require('./sampleGalleries.json');
+    const BASE_64_IMAGE = 'data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD//gA8Q1JFQVRPUjogZ2QtanBlZyB2MS4wICh1c2luZyBJSkcgSlBFRyB2NjIpLCBxdWFsaXR5ID0gMTAwCv/bAEMAAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAf/bAEMBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAf/AABEIBDgHgAMBIgACEQEDEQH/xAAfAAABBQEBAQEBAQAAAAAAAAAAAQIDBAUGBwgJCgv/xAC1EAACAQMDAgQDBQUEBAAAAX0BAgMABBEFEiExQQYTUWEHInEUMoGRoQgjQrHBFVLR8CQzYnKCCQoWFxgZGiUmJygpKjQ1Njc4OTpDREVGR0hJSlNUVVZXWFlaY2RlZmdoaWpzdHV2d3h5eoOEhYaHiImKkpOUlZaXmJmaoqOkpaanqKmqsrO0tba3uLm6wsPExcbHyMnK0tPU1dbX2Nna4eLj5OXm5+jp6vHy8/T19vf4+fr/xAAfAQADAQEBAQEBAQEBAAAAAAAAAQIDBAUGBwgJCgv/xAC1EQACAQIEBAMEBwUEBAABAncAAQIDEQQFITEGEkFRB2FxEyIygQgUQpGhscEJIzNS8BVictEKFiQ04SXxFxgZGiYnKCkqNTY3ODk6Q0RFRkdISUpTVFVWV1hZWmNkZWZnaGlqc3R1dnd4eXqCg4SFhoeIiYqSk5SVlpeYmZqio6Slpqeoqaqys7S1tre4ubrCw8TFxsfIycrS09TV1tfY2dri4+Tl5ufo6ery8/T19vf4+fr/2gAMAwEAAhEDEQA/AOfF9E128M935ty9zN5avJFBKsEUzIAFRkBVZCyIqs1xPiR/L8oS1gagt3I0s/kRX';
+
+    const SAMPLE_NEW_GALLERY = {
+        galleryName: 'Test gallery',
+        addedImages: [BASE_64_IMAGE, BASE_64_IMAGE, BASE_64_IMAGE]
+    };
+
+    const SAMPLE_UPDATED_GALLERY = {
+        galleryName: 'Test gallery',
+        images: [
+            {
+                full: "images\/galleries\/Folk at Heart - 15\/FaH 1.jpg",
+                thumb: "images\/galleries\/Folk at Heart - 15\/thumbnails\/FaH 1.jpg"
+            },
+            {
+                full: "images\/galleries\/Folk at Heart - 15\/FaH 2.jpg",
+                thumb: "images\/galleries\/Folk at Heart - 15\/thumbnails\/FaH 2.jpg"
+            },
+            {
+                full: "images\/galleries\/Folk at Heart - 15\/FaH 3.jpg",
+                thumb: "images\/galleries\/Folk at Heart - 15\/thumbnails\/FaH 3.jpg"
+            },
+        ],
+        addedImages: [BASE_64_IMAGE, BASE_64_IMAGE, BASE_64_IMAGE],
+        removedImages: [
+            {
+                full: "images\/galleries\/Folk at Heart - 15\/FaH 4.jpg",
+                thumb: "images\/galleries\/Folk at Heart - 15\/thumbnails\/FaH 4.jpg"
+            },
+            {
+                full: "images\/galleries\/Folk at Heart - 15\/FaH 5.jpg",
+                thumb: "images\/galleries\/Folk at Heart - 15\/thumbnails\/FaH 5.jpg"
+            }
+        ],
+        galleryCover: "images\/galleries\/Folk at Heart - 15\/galleryCover\/FaH 1.jpg"
+    };
+
+
     let galleriesService = new GalleriesService();
 
     let getRequest;
@@ -71,7 +109,6 @@ describe('GalleriesService', () => {
 
         const SEVERAL_IMAGES = 5;
 
-        let base64Image = 'data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD//gA8Q1JFQVRPUjogZ2QtanBlZyB2MS4wICh1c2luZyBJSkcgSlBFRyB2NjIpLCBxdWFsaXR5ID0gMTAwCv/bAEMAAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAf/bAEMBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAf/AABEIBDgHgAMBIgACEQEDEQH/xAAfAAABBQEBAQEBAQAAAAAAAAAAAQIDBAUGBwgJCgv/xAC1EAACAQMDAgQDBQUEBAAAAX0BAgMABBEFEiExQQYTUWEHInEUMoGRoQgjQrHBFVLR8CQzYnKCCQoWFxgZGiUmJygpKjQ1Njc4OTpDREVGR0hJSlNUVVZXWFlaY2RlZmdoaWpzdHV2d3h5eoOEhYaHiImKkpOUlZaXmJmaoqOkpaanqKmqsrO0tba3uLm6wsPExcbHyMnK0tPU1dbX2Nna4eLj5OXm5+jp6vHy8/T19vf4+fr/xAAfAQADAQEBAQEBAQEBAAAAAAAAAQIDBAUGBwgJCgv/xAC1EQACAQIEBAMEBwUEBAABAncAAQIDEQQFITEGEkFRB2FxEyIygQgUQpGhscEJIzNS8BVictEKFiQ04SXxFxgZGiYnKCkqNTY3ODk6Q0RFRkdISUpTVFVWV1hZWmNkZWZnaGlqc3R1dnd4eXqCg4SFhoeIiYqSk5SVlpeYmZqio6Slpqeoqaqys7S1tre4ubrCw8TFxsfIycrS09TV1tfY2dri4+Tl5ufo6ery8/T19vf4+fr/2gAMAwEAAhEDEQA/AOfF9E128M935ty9zN5avJFBKsEUzIAFRkBVZCyIqs1xPiR/L8oS1gagt3I0s/kRX';
         let images;
 
         beforeEach(() => {
@@ -80,7 +117,7 @@ describe('GalleriesService', () => {
 
         it('should append single image', () => {
 
-            images.push(base64Image);
+            images.push(BASE_64_IMAGE);
 
             let formData = galleriesService.createFormData(images);
 
@@ -91,7 +128,7 @@ describe('GalleriesService', () => {
         it('should append several images', () => {
 
             for (let i = 0; i < SEVERAL_IMAGES; i++) {
-                images.push(base64Image);
+                images.push(BASE_64_IMAGE);
             }
 
             let formData = galleriesService.createFormData(images);
@@ -117,15 +154,79 @@ describe('GalleriesService', () => {
     });
 
     describe('putGallery', () => {
-        assertGalleriesEndpointFunctionCalled('putRequest', galleriesService.putGallery, SAMPLE_GALLERIES[0]);
+
+        it('should call postImages with gallery name and added images', () => {
+
+            let stubbedMethod = sinon.stub(galleriesService, 'postImages');
+
+            galleriesService.putGallery(SAMPLE_UPDATED_GALLERY);
+
+            sinon.assert.calledWith(stubbedMethod,
+                SAMPLE_UPDATED_GALLERY.galleryName, SAMPLE_UPDATED_GALLERY.addedImages);
+
+            stubbedMethod.restore();
+
+        });
+
+        it('should call delete image with all deleted images', () => {
+
+            let stubbedMethod = sinon.stub(galleriesService, 'deleteImage');
+
+            let counter = 0;
+
+            let deleteImages = (index) => {
+
+                galleriesService.deleteImage(SAMPLE_UPDATED_GALLERY.removedImages[counter], () => {
+                    deleteImages(++index);
+                });
+            };
+
+            stubbedMethod.restore();
+
+        });
+        //assertGalleriesEndpointFunctionCalled('putRequest', galleriesService.putGallery, SAMPLE_GALLERIES[0]);
     });
 
     describe('postGallery', () => {
-        assertGalleriesEndpointFunctionCalled('postRequest', galleriesService.postGallery, SAMPLE_GALLERIES[0]);
+
+        it('should call postImages with gallery name, images, success callback and error callback', () => {
+
+            let stubbedMethod = sinon.stub(galleriesService, 'postImages');
+
+            let successCallback = () => {};
+            let errorCallback = () => {};
+
+            galleriesService.postGallery(SAMPLE_NEW_GALLERY, successCallback, errorCallback);
+
+            sinon.assert.calledWith(stubbedMethod,
+                SAMPLE_NEW_GALLERY.galleryName, SAMPLE_NEW_GALLERY.addedImages,
+                successCallback, errorCallback);
+
+            stubbedMethod.restore();
+
+        });
     });
 
     describe('deleteGallery', () => {
         assertGalleriesEndpointFunctionCalled('deleteRequest', galleriesService.deleteGallery, SAMPLE_GALLERIES[0]);
+    });
+
+    describe('postImages', () => {
+
+        it('should convert images to FormData and pass it to endpoint function', () => {
+
+            let stubbedRequest = sinon.stub(galleriesService.endpoint, 'postForm');
+            let formData = galleriesService.createFormData(SAMPLE_NEW_GALLERY.addedImages);
+
+            galleriesService.postImages(SAMPLE_NEW_GALLERY.galleryName, SAMPLE_NEW_GALLERY.addedImages);
+
+            sinon.assert.calledWith(stubbedRequest,
+                formData, {galleryName: 'Test gallery'},
+                undefined, undefined);
+
+            stubbedRequest.restore();
+
+        });
     });
 
     describe('getGalleryStructure', () => {

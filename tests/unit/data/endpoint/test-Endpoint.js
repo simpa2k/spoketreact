@@ -103,7 +103,7 @@ describe('Endpoint', () => {
             ENDPOINT_WITH_COMPLETE_SET_OF_FUNCTIONS.postForm(formData);
 
             sinon.assert.calledWith(stubbedRequest, ENDPOINT_WITH_COMPLETE_SET_OF_FUNCTIONS.requests.postRequest,
-                formData, {}, {}, undefined, undefined, undefined);
+                formData, undefined, {}, undefined, undefined, undefined);
 
             stubbedRequest.restore();
 

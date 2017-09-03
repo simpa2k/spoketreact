@@ -53,8 +53,8 @@ const Endpoint = function(endpointName, puttable, postable, deleteable) {
         this.sendStringifiedObject(this.requests.postRequest, object, {}, {}, successCallback, errorCallback, responseFormat);
     } : undefined;
 
-    this.postForm = postable ? (formData, successCallback, errorCallback, responseFormat) => {
-        this.sendObject(this.requests.postRequest, formData, {}, {}, successCallback, errorCallback, responseFormat);
+    this.postForm = postable ? (formData, parameters, successCallback, errorCallback, responseFormat) => {
+        this.sendObject(this.requests.postRequest, formData, parameters, {}, successCallback, errorCallback, responseFormat);
     } : undefined;
 
     this.deleteRequest = deleteable ? (object, successCallback, errorCallback, responseFormat) => {
