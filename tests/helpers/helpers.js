@@ -11,7 +11,7 @@ let credentials = {
     authToken: secrets.sampleToken
 };
 
-localStorage = {
+let localStorage = {
     getItem(key) { return credentials[key]; },
     setItem() {}
 };

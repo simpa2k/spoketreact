@@ -32,4 +32,5 @@ global.navigator = {
     userAgent: 'node.js'
 };
 
-documentRef = document;
+// Added this let to make tests work in WebStorm. It wasn't there earlier.
+let documentRef = document;

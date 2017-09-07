@@ -58,6 +58,8 @@ class GalleriesService extends Service {
     constructor() {
 
         super(new Endpoint('images/galleries', true, true, true));
+
+        this.imagesEndpoint = new Endpoint('images', false, true, true);
         this.bindFunctions();
 
     }
@@ -129,16 +131,26 @@ class GalleriesService extends Service {
      */
     putGallery(gallery, successCallback, errorCallback) {
 
-        this.postImages(gallery.galleryName, gallery.addedImages);
+        this.postImages(gallery.name, gallery.addedImages);
+
+        for (let i = 0; i < gallery.removedImages.length; i++) {
+            this.deleteImage(gallery.removedImages[0]);
+        }
         //this.endpoint.putRequest(gallery, successCallback, errorCallback);
     }
 
     postGallery(gallery, successCallback, errorCallback) {
-        this.postImages(gallery.galleryName, gallery.addedImages, successCallback, errorCallback);
+        this.postImages(gallery.name, gallery.addedImages, successCallback, errorCallback);
     }
 
     deleteGallery(gallery, successCallback, errorCallback) {
-        this.endpoint.deleteRequest(gallery, successCallback, errorCallback);
+
+        let galleryWithOnlyName = {
+            name: gallery.name
+        };
+
+        this.endpoint.deleteRequest(galleryWithOnlyName, successCallback, errorCallback);
+
     }
 
     postImages(galleryName, images, successCallback, errorCallback) {
@@ -146,15 +158,15 @@ class GalleriesService extends Service {
         let formData = this.createFormData(images);
 
         let parameters = {
-            galleryName: galleryName
+            name: galleryName
         };
 
-        this.endpoint.postForm(formData, parameters, successCallback, errorCallback);
+        this.imagesEndpoint.postForm(formData, parameters, successCallback, errorCallback);
 
     }
 
     deleteImage(image, successCallback, errorCallback) {
-
+        this.imagesEndpoint.deleteRequest(image, successCallback, errorCallback);
     }
 
     getGalleryStructure(callback) {
