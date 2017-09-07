@@ -1,1 +1,4 @@
 /secrets.js
+dist/backend/core/
+.idea
+.DS_Store

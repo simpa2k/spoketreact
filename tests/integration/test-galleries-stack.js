@@ -113,9 +113,9 @@ describe('Galleries Stack', () => {
     describe('Modify gallery', () => {
 
         let gallery = {};
-        let images = ['/home/simon/www/spoketreact/tests/unit/data/services/galleriesService/sampleImage.jpg',
-                      '/home/simon/www/spoketreact/tests/unit/data/services/galleriesService/sampleImage.jpg',
-                      '/home/simon/www/spoketreact/tests/unit/data/services/galleriesService/sampleImage.jpg'];
+        let images = [process.cwd() + '/tests/unit/data/services/galleriesService/sampleImage.jpg',
+                      process.cwd() + '/tests/unit/data/services/galleriesService/sampleImage.jpg',
+                      process.cwd() + '/tests/unit/data/services/galleriesService/sampleImage.jpg'];
 
         let SAMPLE_NEW_GALLERY = {
             name: 'Test gallery',
@@ -131,9 +131,9 @@ describe('Galleries Stack', () => {
 
         };
 
-        fileReader.readAsDataURL(new File(images[0]));
-        fileReader.readAsDataURL(new File(images[1]));
-        fileReader.readAsDataURL(new File(images[2]));
+        for (let imagePath of images) {
+            fileReader.readAsDataURL(new File(imagePath));
+        }
 
         /*it('should post gallery', (done) => {
 
