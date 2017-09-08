@@ -2,6 +2,7 @@ import Data from "../../src/data/Data";
 import {getRequest, putRequest, postRequest, deleteRequest} from "../../src/data/requests/requests";
 
 const expect = require('chai').expect;
+const assert = require('chai').assert;
 const sinon = require('sinon');
 
 const fs = require('fs');
@@ -16,25 +17,6 @@ const assertProvidesCorrectArgumentsToRequestFunction = helpers.assertProvidesCo
 describe('Galleries Stack', () => {
 
     let data = new Data();
-
-    /*let base64Encode = (file) => {
-
-        let bitmap = fs.readFileSync(file);
-        return new Buffer(bitmap).toString('base64');
-
-    };
-
-    let encodeFiles = (files) => {
-
-        let encodedFiles = [];
-
-        for (let file of files) {
-            encodedFiles.push(base64Encode(file));
-        }
-
-        return encodedFiles;
-
-    };*/
 
     let readFiles = (files, handler) => {
 
@@ -71,8 +53,7 @@ describe('Galleries Stack', () => {
 
         }, (error) => {
 
-            console.error('Could not login. Error: ', error);
-            done();
+            done(error);
 
         });
     });
@@ -117,51 +98,59 @@ describe('Galleries Stack', () => {
                       process.cwd() + '/tests/unit/data/services/galleriesService/sampleImage.jpg',
                       process.cwd() + '/tests/unit/data/services/galleriesService/sampleImage.jpg'];
 
-        let SAMPLE_NEW_GALLERY = {
+        let sampleNewGallery = {
             name: 'Test gallery',
             addedImages: []
         };
 
-        let fileReader = new FileReader();
+        it('should post gallery', (done) => {
 
-        fileReader.onload = (event) => {
+            let fileReader = new FileReader();
 
-            SAMPLE_NEW_GALLERY.addedImages.push(event.target.result);
-            console.log(SAMPLE_NEW_GALLERY.addedImages.length);
+            fileReader.onload = (event) => {
 
-        };
+                sampleNewGallery.addedImages.push(event.target.result);
 
-        for (let imagePath of images) {
-            fileReader.readAsDataURL(new File(imagePath));
-        }
+                if (sampleNewGallery.addedImages.length === images.length) {
 
-        /*it('should post gallery', (done) => {
+                    data.postGallery(sampleNewGallery, () => {
 
-            data.postGallery(SAMPLE_NEW_GALLERY, () => {
+                        data.getGalleries((galleries) => {
 
-                data.getGalleries((galleries) => {
+                            gallery = galleries.find((retrievedGallery) => {
+                                return retrievedGallery.name === sampleNewGallery.name;
+                            });
 
-                    gallery = galleries.find((retrievedGallery) => {
-                        return retrievedGallery.name === SAMPLE_NEW_GALLERY.name;
+                            expect(gallery.name).to.equal(sampleNewGallery.name);
+
+                            done();
+
+                        }, (error) => {
+
+                            console.log('Error while getting galleries after posting gallery: ', error);
+                            done();
+
+                        });
+
+                    }, (error) => {
+
+                        console.log('Error while posting gallery: ', error);
+                        done();
+
                     });
+                }
+            };
 
-                    expect(gallery.name).to.equal(SAMPLE_NEW_GALLERY.name);
+            for (let imagePath of images) {
+                fileReader.readAsDataURL(new File(imagePath));
+            }
+        });
+    });
 
-                    done();
+    let performAssertions = (sampleNewGallery) => {
 
-                }, (error) => {
+        it('should post gallery', (done) => {
 
-                    console.log('Error while getting galleries after posting gallery: ', error);
-                    done();
-
-                });
-
-            }, (error) => {
-
-                console.log('Error while posting gallery: ', error);
-                done();
-
-            });
         });
 
         it('should put gallery', (done) => {
@@ -205,6 +194,6 @@ describe('Galleries Stack', () => {
             }, (error) => {
                 console.log('Error while deleting gallery: ', error);
             });
-        });*/
-    });
+        });
+    }
 });
