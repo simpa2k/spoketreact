@@ -182,8 +182,9 @@ class FormGroupVisitor {
         }, null, null, additionalProps);
     }
 
-    createTemporaryEditableImageAsArrayItem(base64Image, index, images, additionalProps) {
+    createTemporaryEditableImageAsArrayItem(image, index, images, additionalProps) {
 
+        let base64Image = image.url;
         let fieldName = this.currentFieldName;
 
         return this.createEditableImage(base64Image, base64Image, () => {

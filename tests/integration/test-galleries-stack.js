@@ -94,6 +94,10 @@ describe('Galleries Stack', () => {
     describe('Modify gallery', () => {
 
         let gallery = {};
+        /*let images = [new File(process.cwd() + '/tests/unit/data/services/galleriesService/sampleImage.jpg'),
+                      new File(process.cwd() + '/tests/unit/data/services/galleriesService/sampleImage.jpg'),
+                      new File(process.cwd() + '/tests/unit/data/services/galleriesService/sampleImage.jpg')];*/
+
         let images = [process.cwd() + '/tests/unit/data/services/galleriesService/sampleImage.jpg',
                       process.cwd() + '/tests/unit/data/services/galleriesService/sampleImage.jpg',
                       process.cwd() + '/tests/unit/data/services/galleriesService/sampleImage.jpg'];
@@ -103,15 +107,42 @@ describe('Galleries Stack', () => {
             addedImages: []
         };
 
+        let currentImage;
+
+        window.FormData = require('form-data'); // Switch FormData implementation
+
         it('should post gallery', (done) => {
 
             let fileReader = new FileReader();
 
             fileReader.onload = (event) => {
 
-                sampleNewGallery.addedImages.push(event.target.result);
+                let image = {
+                    url: event.target.result,
+                    file: fs.createReadStream(currentImage)
+                };
+
+                sampleNewGallery.addedImages.push(image);
 
                 if (sampleNewGallery.addedImages.length === images.length) {
+
+                    /*let FormData = require('form-data');
+                    let fetch = require('isomorphic-fetch');
+
+                    let formData = new FormData();
+
+                    formData.append('files[]', fs.createReadStream(process.cwd() + '/tests/unit/data/services/galleriesService/sampleImage.jpg'));
+
+                    fetch('http://localhost:8080/backend/server.php/images', {
+                        method: 'POST',
+                        body: formData
+                    }).then((response) => {
+                        console.log(response);
+                        done();
+                    }).catch((error) => {
+                        console.log(error);
+                        done();
+                    });*/
 
                     data.postGallery(sampleNewGallery, () => {
 
@@ -141,8 +172,11 @@ describe('Galleries Stack', () => {
                 }
             };
 
-            for (let imagePath of images) {
-                fileReader.readAsDataURL(new File(imagePath));
+            for (let image of images) {
+
+                currentImage = image;
+                fileReader.readAsDataURL(image);
+
             }
         });
     });

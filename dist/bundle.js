@@ -45416,9 +45416,10 @@ var FormGroupVisitor = function () {
         }
     }, {
         key: 'createTemporaryEditableImageAsArrayItem',
-        value: function createTemporaryEditableImageAsArrayItem(base64Image, index, images, additionalProps) {
+        value: function createTemporaryEditableImageAsArrayItem(image, index, images, additionalProps) {
             var _this6 = this;
 
+            var base64Image = image.url;
             var fieldName = this.currentFieldName;
 
             return this.createEditableImage(base64Image, base64Image, function () {
@@ -46154,7 +46155,12 @@ var FileUpload = function (_React$Component) {
 
                 reader.onload = function (event) {
 
-                    _this2.props.handleFile(event.target.result);
+                    var fileWithUrl = {
+                        url: event.target.result,
+                        file: file
+                    };
+
+                    _this2.props.handleFile(fileWithUrl);
                     readFile(++index);
                 };
                 reader.readAsDataURL(file);
@@ -46778,7 +46784,7 @@ var GalleriesService = function (_Service) {
                 for (var _iterator = images[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
                     var _image = _step.value;
 
-                    formData.append('files[]', _image);
+                    formData.append('files[]', _image.file);
                 }
             } catch (err) {
                 _didIteratorError = true;
@@ -81291,16 +81297,17 @@ module.exports = function(module) {
 /* 820 */
 /***/ (function(module, exports) {
 
+let tinyMCEAPIKey = '6ujau4i72ut2bdnnsawnnlwz8r9tdh0wvy1p7cwsg8ez3ze4';
 let sampleUsername = 'ghostmaster';
 let samplePassword = 'kolfiber2000';
-let sampleToken = 'ea5abda3758311173cc8b37e624a39eb';
+let sampleToken = 'e4e11c27ec23bce6d615314f2b3fb794';
 
 module.exports = {
+    tinyMCEAPIKey: tinyMCEAPIKey,
     sampleUsername: sampleUsername,
     samplePassword: samplePassword,
     sampleToken: sampleToken
 };
-
 
 /***/ })
 /******/ ]);

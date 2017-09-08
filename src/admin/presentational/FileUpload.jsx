@@ -21,7 +21,12 @@ class FileUpload extends React.Component {
 
             reader.onload = (event) => {
 
-                this.props.handleFile(event.target.result);
+                let fileWithUrl = {
+                    url: event.target.result,
+                    file: file
+                };
+
+                this.props.handleFile(fileWithUrl);
                 readFile(++index);
 
             };

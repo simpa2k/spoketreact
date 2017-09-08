@@ -108,7 +108,7 @@ class GalleriesService extends Service {
         let formData = new window.FormData();
 
         for (let image of images) {
-            formData.append('files[]', image);
+            formData.append('files[]', image.file);
         }
 
         return formData;
