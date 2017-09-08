@@ -93,91 +93,63 @@ describe('Galleries Stack', () => {
 
     describe('Modify gallery', () => {
 
-        let gallery = {};
-        /*let images = [new File(process.cwd() + '/tests/unit/data/services/galleriesService/sampleImage.jpg'),
-                      new File(process.cwd() + '/tests/unit/data/services/galleriesService/sampleImage.jpg'),
-                      new File(process.cwd() + '/tests/unit/data/services/galleriesService/sampleImage.jpg')];*/
-
-        let images = [process.cwd() + '/tests/unit/data/services/galleriesService/sampleImage.jpg',
-                      process.cwd() + '/tests/unit/data/services/galleriesService/sampleImage.jpg',
-                      process.cwd() + '/tests/unit/data/services/galleriesService/sampleImage.jpg'];
+        /*
+         * The FormData implementation has to be switched as isomorphic-fetch won't add headers
+         * automatically if we're not using node form-data. This is due to the fact that it relies
+         * on getBoundary() to set the boundary on multipart/form-requests, which window.FormData
+         * does not have. See:
+         *
+         * node_modules/node-fetch/index.js, rows 87-89.
+         *
+         * window.FormData will work fine in the actual browser, however.
+         */
+        window.FormData = require('form-data');
 
         let sampleNewGallery = {
+
             name: 'Test gallery',
-            addedImages: []
+
+            /*
+             * node form-data expects streams rather than File objects.
+             * Also, only setting the file attribute as the url property
+             * is only needed for displaying images in the browser temporarily.
+             * See for example FileUpload.jsx.
+             */
+            addedImages: [{file: fs.createReadStream(process.cwd() + '/tests/unit/data/services/galleriesService/sampleImage.jpg')},
+                          {file: fs.createReadStream(process.cwd() + '/tests/unit/data/services/galleriesService/sampleImage.jpg')},
+                          {file: fs.createReadStream(process.cwd() + '/tests/unit/data/services/galleriesService/sampleImage.jpg')}]
+
         };
 
-        let currentImage;
-
-        window.FormData = require('form-data'); // Switch FormData implementation
+        let gallery = {};
 
         it('should post gallery', (done) => {
 
-            let fileReader = new FileReader();
+            data.postGallery(sampleNewGallery, () => {
 
-            fileReader.onload = (event) => {
+                data.getGalleries((galleries) => {
 
-                let image = {
-                    url: event.target.result,
-                    file: fs.createReadStream(currentImage)
-                };
-
-                sampleNewGallery.addedImages.push(image);
-
-                if (sampleNewGallery.addedImages.length === images.length) {
-
-                    /*let FormData = require('form-data');
-                    let fetch = require('isomorphic-fetch');
-
-                    let formData = new FormData();
-
-                    formData.append('files[]', fs.createReadStream(process.cwd() + '/tests/unit/data/services/galleriesService/sampleImage.jpg'));
-
-                    fetch('http://localhost:8080/backend/server.php/images', {
-                        method: 'POST',
-                        body: formData
-                    }).then((response) => {
-                        console.log(response);
-                        done();
-                    }).catch((error) => {
-                        console.log(error);
-                        done();
-                    });*/
-
-                    data.postGallery(sampleNewGallery, () => {
-
-                        data.getGalleries((galleries) => {
-
-                            gallery = galleries.find((retrievedGallery) => {
-                                return retrievedGallery.name === sampleNewGallery.name;
-                            });
-
-                            expect(gallery.name).to.equal(sampleNewGallery.name);
-
-                            done();
-
-                        }, (error) => {
-
-                            console.log('Error while getting galleries after posting gallery: ', error);
-                            done();
-
-                        });
-
-                    }, (error) => {
-
-                        console.log('Error while posting gallery: ', error);
-                        done();
-
+                    gallery = galleries.find((retrievedGallery) => {
+                        return retrievedGallery.name === sampleNewGallery.name;
                     });
-                }
-            };
 
-            for (let image of images) {
+                    expect(gallery.name).to.equal(sampleNewGallery.name);
 
-                currentImage = image;
-                fileReader.readAsDataURL(image);
+                    done();
 
-            }
+                }, (error) => {
+
+                    console.log('Error while getting galleries after posting gallery: ', error);
+                    done();
+
+                });
+
+            }, (error) => {
+
+                console.log('Error while posting gallery: ', error);
+                done();
+
+            });
         });
     });
 
