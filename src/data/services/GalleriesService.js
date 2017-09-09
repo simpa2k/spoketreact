@@ -116,7 +116,8 @@ class GalleriesService extends Service {
     }
 
     /**
-     * Updates a gallery. This includes both adding and removing images.
+     * Updates a gallery. This includes both adding and removing images
+     * as well as changing the gallery name.
      *
      * @param gallery a gallery object of the following format:
      * {
