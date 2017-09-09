@@ -48,6 +48,15 @@ describe('GalleriesService', () => {
 
     };
 
+    const GALLERY_WITH_NULL_ARRAYS = {
+
+        galleryname: 'Test gallery',
+        images: null,
+        addedImages: null,
+        removedImages: null
+
+    };
+
     const SAMPLE_NEW_GALLERY = {
 
         galleryname: 'Test gallery',
@@ -247,6 +256,17 @@ describe('GalleriesService', () => {
 
         });
 
+        it('should not call postImages if addedImages is null', () => {
+
+            let stubbedMethod = sinon.stub(galleriesService, 'postImages');
+
+            galleriesService.putGallery(GALLERY_WITH_NULL_ARRAYS);
+            sinon.assert.notCalled(stubbedMethod);
+
+            stubbedMethod.restore();
+
+        });
+
         it('should not call postImages if addedImages is empty', () => {
 
             let stubbedMethod = sinon.stub(galleriesService, 'postImages');
@@ -274,6 +294,17 @@ describe('GalleriesService', () => {
             let stubbedMethod = sinon.stub(galleriesService, 'deleteImage');
 
             galleriesService.putGallery(SAMPLE_UNMODIFIED_GALLERY);
+            sinon.assert.notCalled(stubbedMethod);
+
+            stubbedMethod.restore();
+
+        });
+
+        it('should not call delete image if removedImages is null', () => {
+
+            let stubbedMethod = sinon.stub(galleriesService, 'deleteImage');
+
+            galleriesService.putGallery(GALLERY_WITH_NULL_ARRAYS);
             sinon.assert.notCalled(stubbedMethod);
 
             stubbedMethod.restore();
