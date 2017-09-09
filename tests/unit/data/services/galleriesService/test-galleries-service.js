@@ -14,14 +14,14 @@ describe('GalleriesService', () => {
 
     const SAMPLE_NEW_GALLERY = {
 
-        name: 'Test gallery',
+        galleryname: 'Test gallery',
         addedImages: [BASE_64_IMAGE, BASE_64_IMAGE, BASE_64_IMAGE]
 
     };
 
     const SAMPLE_UPDATED_GALLERY = {
 
-        name: 'Test gallery',
+        galleryname: 'Test gallery',
         images: [
             {
                 full: "images\/galleries\/Folk at Heart - 15\/FaH 1.jpg",
@@ -53,7 +53,7 @@ describe('GalleriesService', () => {
 
     const SAMPLE_GALLERY_TO_DELETE = {
 
-        name: 'Test gallery',
+        galleryname: 'Test gallery',
         images: [
             {
                 full: "images\/galleries\/Folk at Heart - 15\/FaH 1.jpg",
@@ -194,7 +194,7 @@ describe('GalleriesService', () => {
             galleriesService.putGallery(SAMPLE_UPDATED_GALLERY);
 
             sinon.assert.calledWith(stubbedMethod,
-                SAMPLE_UPDATED_GALLERY.galleryName, SAMPLE_UPDATED_GALLERY.addedImages);
+                SAMPLE_UPDATED_GALLERY.galleryname, SAMPLE_UPDATED_GALLERY.addedImages);
 
             stubbedMethod.restore();
 
@@ -210,9 +210,6 @@ describe('GalleriesService', () => {
             stubbedMethod.restore();
 
         });
-
-        //assertGalleriesEndpointFunctionCalled('putRequest', galleriesService.putGallery, SAMPLE_GALLERIES[0]);
-
     });
 
     describe('postGallery', () => {
@@ -227,7 +224,7 @@ describe('GalleriesService', () => {
             galleriesService.postGallery(SAMPLE_NEW_GALLERY, successCallback, errorCallback);
 
             sinon.assert.calledWith(stubbedMethod,
-                SAMPLE_NEW_GALLERY.galleryName, SAMPLE_NEW_GALLERY.addedImages,
+                SAMPLE_NEW_GALLERY.galleryname, SAMPLE_NEW_GALLERY.addedImages,
                 successCallback, errorCallback);
 
             stubbedMethod.restore();
@@ -239,7 +236,7 @@ describe('GalleriesService', () => {
 
         let stubbedRequest = sinon.stub(galleriesService.endpoint, 'deleteRequest');
         let galleryWithOnlyName = {
-            galleryName: SAMPLE_GALLERY_TO_DELETE.galleryName
+            galleryname: SAMPLE_GALLERY_TO_DELETE.galleryname
         };
 
         galleriesService.deleteGallery(SAMPLE_GALLERY_TO_DELETE);
@@ -247,7 +244,7 @@ describe('GalleriesService', () => {
         sinon.assert.calledWith(stubbedRequest, galleryWithOnlyName);
 
         stubbedRequest.restore();
-        //assertGalleriesEndpointFunctionCalled('deleteRequest', galleriesService.deleteGallery, SAMPLE_GALLERY_TO_DELETE);
+
     });
 
     describe('postImages', () => {
@@ -257,10 +254,10 @@ describe('GalleriesService', () => {
             let stubbedRequest = sinon.stub(galleriesService.imagesEndpoint, 'postForm');
             let formData = galleriesService.createFormData(SAMPLE_NEW_GALLERY.addedImages);
 
-            galleriesService.postImages(SAMPLE_NEW_GALLERY.galleryName, SAMPLE_NEW_GALLERY.addedImages);
+            galleriesService.postImages(SAMPLE_NEW_GALLERY.galleryname, SAMPLE_NEW_GALLERY.addedImages);
 
             sinon.assert.calledWith(stubbedRequest,
-                formData, {galleryName: 'Test gallery'},
+                formData, {galleryname: 'Test gallery'},
                 undefined, undefined);
 
             stubbedRequest.restore();

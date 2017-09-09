@@ -131,22 +131,22 @@ class GalleriesService extends Service {
      */
     putGallery(gallery, successCallback, errorCallback) {
 
-        this.postImages(gallery.name, gallery.addedImages);
+        this.postImages(gallery.galleryname, gallery.addedImages);
 
-        for (let i = 0; i < gallery.removedImages.length; i++) {
+        /*for (let i = 0; i < gallery.removedImages.length; i++) {
             this.deleteImage(gallery.removedImages[0]);
-        }
+        }*/
         //this.endpoint.putRequest(gallery, successCallback, errorCallback);
     }
 
     postGallery(gallery, successCallback, errorCallback) {
-        this.postImages(gallery.name, gallery.addedImages, successCallback, errorCallback);
+        this.postImages(gallery.galleryname, gallery.addedImages, successCallback, errorCallback);
     }
 
     deleteGallery(gallery, successCallback, errorCallback) {
 
         let galleryWithOnlyName = {
-            name: gallery.name
+            galleryname: gallery.galleryname
         };
 
         this.endpoint.deleteRequest(galleryWithOnlyName, successCallback, errorCallback);
@@ -158,7 +158,7 @@ class GalleriesService extends Service {
         let formData = this.createFormData(images);
 
         let parameters = {
-            name: galleryName
+            galleryname: galleryName
         };
 
         this.imagesEndpoint.postForm(formData, parameters, successCallback, errorCallback);

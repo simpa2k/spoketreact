@@ -209,6 +209,8 @@ class ImagesModel extends BaseModel {
 
                     $gallery = new Gallery($galleryPath, $galleryMetaData, true);
 
+                } else {
+                    $gallery = $this->galleries[$galleryName];
                 }
 
                 $success = $gallery->addImage($file['tmp_name'], basename($file['name']));

@@ -51,7 +51,6 @@ describe('Endpoint', () => {
 
         sinon.assert.calledWith(stubbedRequest, ENDPOINT_WITH_COMPLETE_SET_OF_FUNCTIONS.endpointName, {}, {
             body: SAMPLE_OBJECT,
-            headers: {'Content-Type': 'application/json'}
         }, undefined, undefined, undefined);
 
         stubbedRequest.restore();
