@@ -131,7 +131,7 @@ class GalleriesService extends Service {
      */
     putGallery(gallery, successCallback, errorCallback) {
 
-        this.postImages(gallery.galleryname, gallery.addedImages);
+        this.postImages(gallery.galleryname, gallery.addedImages, successCallback, errorCallback);
 
         /*for (let i = 0; i < gallery.removedImages.length; i++) {
             this.deleteImage(gallery.removedImages[0]);

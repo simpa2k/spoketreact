@@ -34,8 +34,6 @@ class Request {
             parse_str($_SERVER['QUERY_STRING'], $parameters);
         }
 
-        error_log(print_r($_FILES, true));
-
         if(!empty($_FILES)) {
             foreach ($_FILES as $key => $value) {
                 $parameters[$key] = $value;

@@ -144,7 +144,7 @@ describe('Galleries Stack', () => {
             });
         });
 
-        /*it('should put gallery', (done) => {
+        it('should put gallery', (done) => {
 
             let updatedGallery = Object.assign({}, gallery);
             updatedGallery.addedImages = [createGalleryFile('sample_image_3.jpg')];
@@ -155,9 +155,8 @@ describe('Galleries Stack', () => {
 
                 data.getGalleries((galleries) => {
 
-                    console.log(galleries);
                     let result = galleries.find((retrievedGallery) => {
-                        return retrievedGallery.name === updatedGallery.name;
+                        return retrievedGallery.name === updatedGallery.galleryname;
                     });
 
                     expect(result.images.length).to.equal(updatedGallery.images.length + updatedGallery.addedImages.length);
@@ -171,7 +170,7 @@ describe('Galleries Stack', () => {
             }, (error) => {
                 done(error);
             });
-        });*/
+        });
 
         it('should delete gallery', (done) => {
 
