@@ -12,6 +12,42 @@ describe('GalleriesService', () => {
     const SAMPLE_GALLERIES = require('./sampleGalleries.json');
     const BASE_64_IMAGE = 'data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD//gA8Q1JFQVRPUjogZ2QtanBlZyB2MS4wICh1c2luZyBJSkcgSlBFRyB2NjIpLCBxdWFsaXR5ID0gMTAwCv/bAEMAAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAf/bAEMBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAf/AABEIBDgHgAMBIgACEQEDEQH/xAAfAAABBQEBAQEBAQAAAAAAAAAAAQIDBAUGBwgJCgv/xAC1EAACAQMDAgQDBQUEBAAAAX0BAgMABBEFEiExQQYTUWEHInEUMoGRoQgjQrHBFVLR8CQzYnKCCQoWFxgZGiUmJygpKjQ1Njc4OTpDREVGR0hJSlNUVVZXWFlaY2RlZmdoaWpzdHV2d3h5eoOEhYaHiImKkpOUlZaXmJmaoqOkpaanqKmqsrO0tba3uLm6wsPExcbHyMnK0tPU1dbX2Nna4eLj5OXm5+jp6vHy8/T19vf4+fr/xAAfAQADAQEBAQEBAQEBAAAAAAAAAQIDBAUGBwgJCgv/xAC1EQACAQIEBAMEBwUEBAABAncAAQIDEQQFITEGEkFRB2FxEyIygQgUQpGhscEJIzNS8BVictEKFiQ04SXxFxgZGiYnKCkqNTY3ODk6Q0RFRkdISUpTVFVWV1hZWmNkZWZnaGlqc3R1dnd4eXqCg4SFhoeIiYqSk5SVlpeYmZqio6Slpqeoqaqys7S1tre4ubrCw8TFxsfIycrS09TV1tfY2dri4+Tl5ufo6ery8/T19vf4+fr/2gAMAwEAAhEDEQA/AOfF9E128M935ty9zN5avJFBKsEUzIAFRkBVZCyIqs1xPiR/L8oS1gagt3I0s/kRX';
 
+    const SAMPLE_UNMODIFIED_GALLERY = {
+
+        galleryname: 'Test gallery',
+        images: [
+            {
+                full: "images\/galleries\/Folk at Heart - 15\/FaH 1.jpg",
+                thumb: "images\/galleries\/Folk at Heart - 15\/thumbnails\/FaH 1.jpg"
+            },
+            {
+                full: "images\/galleries\/Folk at Heart - 15\/FaH 2.jpg",
+                thumb: "images\/galleries\/Folk at Heart - 15\/thumbnails\/FaH 2.jpg"
+            },
+            {
+                full: "images\/galleries\/Folk at Heart - 15\/FaH 3.jpg",
+                thumb: "images\/galleries\/Folk at Heart - 15\/thumbnails\/FaH 3.jpg"
+            },
+            {
+                full: "images\/galleries\/Folk at Heart - 15\/FaH 4.jpg",
+                thumb: "images\/galleries\/Folk at Heart - 15\/thumbnails\/FaH 4.jpg"
+            },
+            {
+                full: "images\/galleries\/Folk at Heart - 15\/FaH 5.jpg",
+                thumb: "images\/galleries\/Folk at Heart - 15\/thumbnails\/FaH 5.jpg"
+            }
+        ]
+    };
+
+    const GALLERY_WITH_EMPTY_ARRAYS = {
+
+        galleryname: 'Test gallery',
+        images: [],
+        addedImages: [],
+        removedImages: []
+
+    };
+
     const SAMPLE_NEW_GALLERY = {
 
         galleryname: 'Test gallery',
@@ -200,12 +236,56 @@ describe('GalleriesService', () => {
 
         });
 
+        it('should not call postImages if addedImages is undefined', () => {
+
+            let stubbedMethod = sinon.stub(galleriesService, 'postImages');
+
+            galleriesService.putGallery(SAMPLE_UNMODIFIED_GALLERY);
+            sinon.assert.notCalled(stubbedMethod);
+
+            stubbedMethod.restore();
+
+        });
+
+        it('should not call postImages if addedImages is empty', () => {
+
+            let stubbedMethod = sinon.stub(galleriesService, 'postImages');
+
+            galleriesService.putGallery(GALLERY_WITH_EMPTY_ARRAYS);
+            sinon.assert.notCalled(stubbedMethod);
+
+            stubbedMethod.restore();
+
+        });
+
         it('should call delete image with all deleted images', () => {
 
             let stubbedMethod = sinon.stub(galleriesService, 'deleteImage');
 
             galleriesService.putGallery(SAMPLE_UPDATED_GALLERY);
             expect(stubbedMethod.callCount).to.equal(SAMPLE_UPDATED_GALLERY.removedImages.length);
+
+            stubbedMethod.restore();
+
+        });
+
+        it('should not call delete image if removedImages is undefined', () => {
+
+            let stubbedMethod = sinon.stub(galleriesService, 'deleteImage');
+
+            galleriesService.putGallery(SAMPLE_UNMODIFIED_GALLERY);
+            sinon.assert.notCalled(stubbedMethod);
+
+            stubbedMethod.restore();
+
+        });
+
+        it('should not call delete image if removedImages is empty', () => {
+
+            let stubbedMethod = sinon.stub(galleriesService, 'deleteImage');
+
+            galleriesService.putGallery(GALLERY_WITH_EMPTY_ARRAYS);
+            sinon.assert.notCalled(stubbedMethod);
 
             stubbedMethod.restore();
 

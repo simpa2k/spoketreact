@@ -129,13 +129,18 @@ class GalleriesService extends Service {
      * @param successCallback
      * @param errorCallback
      */
-    putGallery(gallery, successCallback, errorCallback) {
+    putGallery(gallery, successCallback, errorCallback) { // ToDo: callbacks will be called several times, maybe use image post, image delete and name change hooks instead?
 
-        this.postImages(gallery.galleryname, gallery.addedImages, successCallback, errorCallback);
+        if (isSet(gallery.addedImages) && gallery.addedImages.length > 0) {
+            this.postImages(gallery.galleryname, gallery.addedImages, successCallback, errorCallback);
+        }
 
-        /*for (let i = 0; i < gallery.removedImages.length; i++) {
-            this.deleteImage(gallery.removedImages[0]);
-        }*/
+        if (isSet(gallery.removedImages)) {
+
+            for (let i = 0; i < gallery.removedImages.length; i++) {
+                this.deleteImage(gallery.removedImages[0]);
+            }
+        }
         //this.endpoint.putRequest(gallery, successCallback, errorCallback);
     }
 
