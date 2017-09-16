@@ -7984,8 +7984,6 @@ var Endpoint = function Endpoint(endpointName, puttable, postable, deleteable) {
     this.sendObject = function (sendFunction, object, parameters, options, successCallback, errorCallback, format) {
 
         options.body = object;
-        //options.headers = {'Content-Type': 'application/json'};
-
         sendFunction(_this.endpointName, parameters, options, successCallback, errorCallback, format);
     };
 
@@ -44932,6 +44930,15 @@ var map = {
 	"./galleries/Stallet Maj - 15/thumbnails/26.jpg": 811,
 	"./galleries/Stallet Maj - 15/thumbnails/27.jpg": 812,
 	"./galleries/Stallet Maj - 15/thumbnails/28.jpg": 813,
+	"./galleries/Test gallery/galleryCover/sample_image.jpg": 822,
+	"./galleries/Test gallery/metadata": 821,
+	"./galleries/Test gallery/metadata.json": 821,
+	"./galleries/Test gallery/sample_image.jpg": 823,
+	"./galleries/Test gallery/sample_image_2.jpg": 824,
+	"./galleries/Test gallery/sample_image_3.jpg": 825,
+	"./galleries/Test gallery/thumbnails/sample_image.jpg": 826,
+	"./galleries/Test gallery/thumbnails/sample_image_2.jpg": 827,
+	"./galleries/Test gallery/thumbnails/sample_image_3.jpg": 828,
 	"./socialmedia/facebooklogga_29.png": 396,
 	"./socialmedia/spotify_29.png": 397,
 	"./socialmedia/yt29.png": 398,
@@ -46805,7 +46812,8 @@ var GalleriesService = function (_Service) {
         }
 
         /**
-         * Updates a gallery. This includes both adding and removing images.
+         * Updates a gallery. This includes both adding and removing images
+         * as well as changing the gallery name.
          *
          * @param gallery a gallery object of the following format:
          * {
@@ -46822,25 +46830,31 @@ var GalleriesService = function (_Service) {
     }, {
         key: 'putGallery',
         value: function putGallery(gallery, successCallback, errorCallback) {
+            // ToDo: callbacks will be called several times, maybe use image post, image delete and name change hooks instead?
 
-            this.postImages(gallery.name, gallery.addedImages);
+            if (isSet(gallery.addedImages) && gallery.addedImages.length > 0) {
+                this.postImages(gallery.galleryname, gallery.addedImages, successCallback, errorCallback);
+            }
 
-            for (var i = 0; i < gallery.removedImages.length; i++) {
-                this.deleteImage(gallery.removedImages[0]);
+            if (isSet(gallery.removedImages)) {
+
+                for (var i = 0; i < gallery.removedImages.length; i++) {
+                    this.deleteImage(gallery.removedImages[i], successCallback, errorCallback);
+                }
             }
             //this.endpoint.putRequest(gallery, successCallback, errorCallback);
         }
     }, {
         key: 'postGallery',
         value: function postGallery(gallery, successCallback, errorCallback) {
-            this.postImages(gallery.name, gallery.addedImages, successCallback, errorCallback);
+            this.postImages(gallery.galleryname, gallery.addedImages, successCallback, errorCallback);
         }
     }, {
         key: 'deleteGallery',
         value: function deleteGallery(gallery, successCallback, errorCallback) {
 
             var galleryWithOnlyName = {
-                name: gallery.name
+                galleryname: gallery.galleryname
             };
 
             this.endpoint.deleteRequest(galleryWithOnlyName, successCallback, errorCallback);
@@ -46852,7 +46866,7 @@ var GalleriesService = function (_Service) {
             var formData = this.createFormData(images);
 
             var parameters = {
-                name: galleryName
+                galleryname: galleryName
             };
 
             this.imagesEndpoint.postForm(formData, parameters, successCallback, errorCallback);
@@ -81308,6 +81322,54 @@ module.exports = {
     samplePassword: samplePassword,
     sampleToken: sampleToken
 };
+
+/***/ }),
+/* 821 */
+/***/ (function(module, exports) {
+
+throw new Error("Module build failed: Error: ENOENT: no such file or directory, open '/home/simon/www/spoketreact/dist/images/galleries/Test gallery/metadata.json'\n    at Error (native)");
+
+/***/ }),
+/* 822 */
+/***/ (function(module, exports) {
+
+throw new Error("Module build failed: Error: ENOENT: no such file or directory, open '/home/simon/www/spoketreact/dist/images/galleries/Test gallery/galleryCover/sample_image.jpg'\n    at Error (native)");
+
+/***/ }),
+/* 823 */
+/***/ (function(module, exports) {
+
+throw new Error("Module build failed: Error: ENOENT: no such file or directory, open '/home/simon/www/spoketreact/dist/images/galleries/Test gallery/sample_image.jpg'\n    at Error (native)");
+
+/***/ }),
+/* 824 */
+/***/ (function(module, exports) {
+
+throw new Error("Module build failed: Error: ENOENT: no such file or directory, open '/home/simon/www/spoketreact/dist/images/galleries/Test gallery/sample_image_2.jpg'\n    at Error (native)");
+
+/***/ }),
+/* 825 */
+/***/ (function(module, exports) {
+
+throw new Error("Module build failed: Error: ENOENT: no such file or directory, open '/home/simon/www/spoketreact/dist/images/galleries/Test gallery/sample_image_3.jpg'\n    at Error (native)");
+
+/***/ }),
+/* 826 */
+/***/ (function(module, exports) {
+
+throw new Error("Module build failed: Error: ENOENT: no such file or directory, open '/home/simon/www/spoketreact/dist/images/galleries/Test gallery/thumbnails/sample_image.jpg'\n    at Error (native)");
+
+/***/ }),
+/* 827 */
+/***/ (function(module, exports) {
+
+throw new Error("Module build failed: Error: ENOENT: no such file or directory, open '/home/simon/www/spoketreact/dist/images/galleries/Test gallery/thumbnails/sample_image_2.jpg'\n    at Error (native)");
+
+/***/ }),
+/* 828 */
+/***/ (function(module, exports) {
+
+throw new Error("Module build failed: Error: ENOENT: no such file or directory, open '/home/simon/www/spoketreact/dist/images/galleries/Test gallery/thumbnails/sample_image_3.jpg'\n    at Error (native)");
 
 /***/ })
 /******/ ]);

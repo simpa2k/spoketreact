@@ -139,7 +139,7 @@ class GalleriesService extends Service {
         if (isSet(gallery.removedImages)) {
 
             for (let i = 0; i < gallery.removedImages.length; i++) {
-                this.deleteImage(gallery.removedImages[0]);
+                this.deleteImage(gallery.removedImages[i], successCallback, errorCallback);
             }
         }
         //this.endpoint.putRequest(gallery, successCallback, errorCallback);

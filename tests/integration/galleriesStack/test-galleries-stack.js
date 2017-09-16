@@ -19,6 +19,23 @@ describe('Galleries Stack', () => {
 
     let data = new Data();
 
+    /*
+     * From: https://stackoverflow.com/questions/31887967/javascript-move-objects-from-one-array-to-another-best-approach
+     */
+    let moveElements = (source, target, moveCheck) => {
+
+        for (let i = 0; i < source.length; i++) {
+
+            let element = source[i];
+
+            if (moveCheck(element)) {
+                source.splice(i, 1);
+                target.push(element);
+                i--;
+            }
+        }
+    };
+
     let createReadStream = (imageName) => {
         return fs.createReadStream(path.join(__dirname, imageName));
     };
@@ -144,10 +161,42 @@ describe('Galleries Stack', () => {
             });
         });
 
-        it('should put gallery', (done) => {
+        it('should add image to gallery', (done) => {
 
             let updatedGallery = Object.assign({}, gallery);
             updatedGallery.addedImages = [createGalleryFile('sample_image_3.jpg')];
+
+            updatedGallery = retrievedGalleryToSentGallery(updatedGallery);
+
+            data.putGallery(updatedGallery, () => {
+
+                data.getGalleries((galleries) => {
+
+                    gallery = galleries.find((retrievedGallery) => {
+                        return retrievedGallery.name === updatedGallery.galleryname;
+                    });
+
+                    expect(gallery.images.length).to.equal(updatedGallery.images.length + updatedGallery.addedImages.length);
+
+                    done();
+
+                }, (error) => {
+                    done(error);
+                });
+
+            }, (error) => {
+                done(error);
+            });
+        });
+
+        it('should remove image from gallery', (done) => {
+
+            let updatedGallery = Object.assign({}, gallery);
+            updatedGallery.removedImages = [];
+
+            moveElements(updatedGallery.images, updatedGallery.removedImages, (image) => {
+               return image.full.split('/').pop() === 'sample_image_2.jpg';
+            });
 
             updatedGallery = retrievedGalleryToSentGallery(updatedGallery);
 
@@ -159,7 +208,7 @@ describe('Galleries Stack', () => {
                         return retrievedGallery.name === updatedGallery.galleryname;
                     });
 
-                    expect(result.images.length).to.equal(updatedGallery.images.length + updatedGallery.addedImages.length);
+                    expect(result.images.length).to.equal(updatedGallery.images.length);
 
                     done();
 

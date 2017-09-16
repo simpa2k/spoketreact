@@ -289,7 +289,7 @@ class ImagesModel extends BaseModel {
             /*
              * $imageVariant[2] is the actual path to the image.
              */
-            unlink($imageVariant[2]);
+            unlink("../" . $imageVariant[2]); // ToDo: Do not hardcode path elements like this.
             
         }  
         

@@ -23,8 +23,6 @@ const Endpoint = function(endpointName, puttable, postable, deleteable) {
     this.sendObject = (sendFunction, object, parameters, options, successCallback, errorCallback, format) => {
 
         options.body = object;
-        //options.headers = {'Content-Type': 'application/json'};
-
         sendFunction(this.endpointName, parameters, options, successCallback, errorCallback, format);
 
     };
